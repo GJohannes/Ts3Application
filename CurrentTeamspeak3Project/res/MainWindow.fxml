@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.beans.property.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefWidth="1350" prefHeight="700"
+	fx:controller="application.MainWindowController" xmlns:fx="http://javafx.com/fxml">
+	<fx:define>
+		<Font fx:id="FONT" size="18" />
+	</fx:define>
+	<VBox spacing="10" alignment="TOP_LEFT" prefWidth="1350"
+		prefHeight="700">
+		<HBox spacing="10" alignment="CENTER">
+			<HBox spacing="10" alignment="CENTER">
+				<Label text="User Name:" prefWidth="100" font="$FONT" />
+				<StackPane alignment="CENTER">
+					<Rectangle fill="TRANSPARENT" stroke="GRAY" width="250"
+						height="50" />
+					<Text fx:id="userName" font="$FONT" />
+				</StackPane>
+			</HBox>
+			<HBox spacing="10" alignment="CENTER">
+				<Label text="Server Query Name:" prefWidth="200" font="$FONT" />
+				<StackPane alignment="CENTER">
+					<Rectangle fill="TRANSPARENT" stroke="GRAY" width="250"
+						height="50" />
+					<Text fx:id="serverQueryName" font="$FONT" />
+				</StackPane>
+			</HBox>
+			<HBox spacing="10" alignment="CENTER">
+				<Label text="Server Query Password:" prefWidth="200" font="$FONT" />
+				<StackPane alignment="CENTER">
+					<Rectangle fill="TRANSPARENT" stroke="GRAY" width="250"
+						height="50" />
+					<Text fx:id="serverQueryPassword" font="$FONT" />
+				</StackPane>
+			</HBox>
+		</HBox>
+		<HBox spacing="10" alignment="CENTER">
+			<HBox spacing="10" alignment="CENTER">
+				<Label text="UId:" prefWidth="50" font="$FONT" />
+				<StackPane alignment="CENTER">
+					<Rectangle fill="TRANSPARENT" stroke="GRAY" width="300"
+						height="50" />
+					<Text fx:id="uId" font="$FONT" />
+				</StackPane>
+			</HBox>
+			<HBox spacing="10" alignment="CENTER">
+				<Label text="Ts Ip Adresse:" prefWidth="200" font="$FONT" />
+				<StackPane alignment="CENTER">
+					<Rectangle fill="TRANSPARENT" stroke="GRAY" width="250"
+						height="50" />
+					<Text fx:id="ipAdress" font="$FONT" />
+				</StackPane>
+			</HBox>
+			<HBox spacing="10" alignment="CENTER">
+				<Label text="Serverport:" prefWidth="200" font="$FONT" />
+				<StackPane alignment="CENTER">
+					<Rectangle fill="TRANSPARENT" stroke="GRAY" width="250"
+						height="50" />
+					<Text fx:id="serverPort" font="$FONT" />
+				</StackPane>
+			</HBox>
+		</HBox>
+		<HBox spacing="10" alignment="CENTER">
+			<StackPane alignment="CENTER">
+				<Rectangle fill="TRANSPARENT" stroke="GRAY" width="1200"
+					height="50" />
+				<Text fx:id="infoBox" font="$FONT" />
+			</StackPane>
+		</HBox>
+		<VBox spacing="10" alignment="TOP_LEFT" prefWidth="1000"
+			prefHeight="400">
+			<HBox spacing="10" alignment="TOP_LEFT">
+				<StackPane alignment="TOP_LEFT"/>
+				<Label text="" prefWidth="200" font="$FONT" />
+				<Button text="Start MusikOnMove" prefWidth="200" font="$FONT"
+					onAction="#startStopMusikOnMove" />
+				<Button text="Placeholder" prefWidth="200" font="$FONT"
+					onAction="#empty">
+					<tooltip>
+						<Tooltip text="This button does nothing yet" />
+					</tooltip>
+				</Button>
+			</HBox>
+			<HBox spacing="10" alignment="TOP_LEFT">
+				<StackPane alignment="TOP_LEFT" />
+				<Label text="Audio File Name:" prefWidth="200" font="$FONT" />
+				<TextField fx:id="audioFileNameTextField" text="couldNotReadValue"
+					prefWidth="200" font="$FONT" />
+			</HBox>
+			<HBox spacing="10" alignment="TOP_LEFT">
+				<StackPane alignment="TOP_LEFT" />
+				<Label text="Audio File Lenght:" prefWidth="200" font="$FONT" />
+				<TextField fx:id="audioFileLenghtTextField" text="couldNotReadValue"
+					prefWidth="200" font="$FONT" />
+			</HBox>
+			<HBox spacing="10" alignment="CENTER">
+				<StackPane alignment="TOP_LEFT" />
+				<Button text="Exit Program" prefWidth="200" font="$FONT"
+					onAction="#exitSystem" />
+				<Button text="Save Current Values" prefWidth="200" font="$FONT"
+					onAction="#saveData" />
+			</HBox>
+		</VBox>
+	</VBox>
+</AnchorPane>

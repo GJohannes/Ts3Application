@@ -1,0 +1,1 @@
+start C:"\Program Files\TeamSpeak 3 Client\ts3client_win64.exe"
