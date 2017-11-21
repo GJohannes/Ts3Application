@@ -64,6 +64,7 @@ public class MusicOnMove {
 					soundPlaying = true;
 					try {
 						System.out.println("TS input: VLC");
+						// empty line
 						
 						Robot robot = new Robot();
 						robot.keyPress(KeyEvent.VK_F3);
