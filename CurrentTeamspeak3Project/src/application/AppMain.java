@@ -8,7 +8,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 import java.util.logging.Level;
 
 import javax.sound.sampled.AudioFileFormat;
@@ -56,7 +55,10 @@ public class AppMain extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-
+		
+		
+		
+		
 		// Parent root =
 		// FXMLLoader.load(getClass().getResource("/MainWindow.fxml")); Start
 		// after login
@@ -76,36 +78,34 @@ public class AppMain extends Application {
 	public static void main(String[] args) {
 		launch(args);
 
-
-
-		//
-		// Ts3Client test = new Ts3Client();
-		//
-		// test.startTs3Client("C:/Program Files/TeamSpeak 3
-		// Client/ts3client_win64.exe");
-
-		// String uId = "giwLzOcXMB1fi+DVtV6uSDzCqGo=";
-		// TS3Config config = new TS3Config();
-		// TS3Query query = new TS3Query(config);
-		// TS3Api api = query.getApi();
-		// // TsConection Settings
-		// config.setHost("127.0.0.1");
-		// config.setDebugLevel(Level.ALL);
-		//
-		// query.connect();
-		//
-		// api.login("QueryTester", "cdgT5HY9");
-		// api.selectVirtualServerByPort(Integer.valueOf(9987));
-		// api.setNickname("QueryTester");
-		// api.registerAllEvents();
-		// api.sendServerMessage("QueryTester is now online!");
-		//
-		// System.out.println(api.getClientsByName("Zephira").get(0).getChannelId());
-		//
-		//
-		// System.out.println(api.getClientByUId(uId));
-		//
-		//
-		// LookUserInChannel test = new LookUserInChannel();
+		
+//
+//		Ts3Client test = new Ts3Client();
+//		
+//		test.startTs3Client("C:/Program Files/TeamSpeak 3 Client/ts3client_win64.exe");
+		
+//		String uId = "giwLzOcXMB1fi+DVtV6uSDzCqGo=";
+//		TS3Config config = new TS3Config();
+//		TS3Query query = new TS3Query(config);
+//		TS3Api api = query.getApi();
+//		// TsConection Settings
+//		config.setHost("127.0.0.1");
+//		config.setDebugLevel(Level.ALL);
+//
+//		query.connect();
+//
+//		api.login("QueryTester", "cdgT5HY9");
+//		api.selectVirtualServerByPort(Integer.valueOf(9987));
+//		api.setNickname("QueryTester");
+//		api.registerAllEvents();
+//		api.sendServerMessage("QueryTester is now online!");
+//		
+//		System.out.println(api.getClientsByName("Zephira").get(0).getChannelId());
+//		
+//		
+//		System.out.println(api.getClientByUId(uId));
+//		
+//		
+//		LookUserInChannel test = new LookUserInChannel();
 	}
 }
