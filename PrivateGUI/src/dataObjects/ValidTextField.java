@@ -1,0 +1,24 @@
+package dataObjects;
+
+import javafx.scene.control.TextField;
+
+public class ValidTextField extends TextField {
+
+	private boolean isTextFieldInputValid = false;
+
+	public void nowValid() {
+		this.isTextFieldInputValid = true;
+		// #7FE817 color hummingbird green 
+		this.setStyle("-fx-background-color: #7FE817;");
+	}
+
+	public void nowInValid() {
+		this.isTextFieldInputValid = false;
+		// #F75D59 color light red
+		this.setStyle("-fx-background-color: #F75D59;");
+	}
+	
+	public boolean isValid() {
+		return this.isTextFieldInputValid;
+	}
+}

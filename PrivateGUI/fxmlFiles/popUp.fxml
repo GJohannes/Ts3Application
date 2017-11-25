@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.beans.property.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.collections.FXCollections ?>
+<?import dataObjects.ValidTextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.Button?>
+
+<AnchorPane fx:controller="application.popUpController"
+	xmlns:fx="http://javafx.com/fxml" style="-fx-background-color: #5E82AB;">
+	<VBox>
+		<VBox>
+			<Text>I have done nothing but</Text>
+		</VBox>
+		<VBox>
+			<Text>teleport bread for three days.</Text>
+		</VBox>
+		<VBox alignment="CENTER">
+			<Button fx:id="emptyButton" text=""></Button>
+		</VBox>
+		
+	</VBox>
+</AnchorPane>
+	
