@@ -72,9 +72,7 @@ public class AppMain extends Application {
 
 	}
 
-	public static void main(String[] args) {
-		System.out.println("adhasd");
-		
+	public static void main(String[] args) {		
 		launch(args);
 
 		

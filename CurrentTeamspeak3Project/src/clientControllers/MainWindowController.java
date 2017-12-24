@@ -2,6 +2,7 @@ package clientControllers;
 
 import java.awt.Label;
 import java.awt.Window;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -107,7 +108,9 @@ public class MainWindowController implements Initializable{
     	MusicOnMove musikMove = new MusicOnMove();
     	
     	try {
-			writerReaderObject.writeAudioBatch(audioFileNameTextField.getText().toString(), "StartAudio.bat");
+
+    		File audioFile = new File(audioFileNameTextField.getText());
+			writerReaderObject.writeAudioBatch(audioFile.getAbsolutePath(), "StartAudio.bat");
 			String startStopText = ((Button)event.getSource()).getText();
 	    	if(startStopText.equals("Start MusikOnMove")){ 
 	    		api = musikMove.activateMusikOnMove(api, userName.getText().toString(), Integer.valueOf(audioFileLenghtTextField.getText().toString()), true);

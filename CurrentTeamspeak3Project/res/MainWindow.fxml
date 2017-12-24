@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <AnchorPane prefWidth="1350" prefHeight="700"
-	fx:controller="application.MainWindowController" xmlns:fx="http://javafx.com/fxml">
+	fx:controller="clientControllers.MainWindowController" xmlns:fx="http://javafx.com/fxml">
 	<fx:define>
 		<Font fx:id="FONT" size="18" />
 	</fx:define>

@@ -15,7 +15,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 
-<AnchorPane prefWidth="500" prefHeight="500" fx:controller="application.LoginController" xmlns:fx="http://javafx.com/fxml" fx:id="rootPane">
+<AnchorPane prefWidth="500" prefHeight="500" fx:controller="login.LoginController" xmlns:fx="http://javafx.com/fxml" fx:id="rootPane">
 	<fx:define>
 		<Font fx:id="FONT" size="18" />
 	</fx:define>
@@ -26,14 +26,14 @@
 			<Text fx:id="infoBox" font="$FONT" />
 		</StackPane>
 		<HBox spacing="10" alignment="CENTER">
-			<Button fx:id="serverLoginButton" text="Client Login" prefWidth="200" font="$FONT"
-				onAction="#serverLogin">
+			<Button fx:id="clientLoginButton" text="Client Login" prefWidth="200" font="$FONT"
+				onAction="#clientLogin">
 				<tooltip>
 					<Tooltip text="Login to Server" />
 				</tooltip>
 			</Button>
 			<Button fx:id="serverLoginButton" text="Server Login" prefWidth="200" font="$FONT"
-				onAction="#clientLogin">
+				onAction="#serverLogin">
 				<tooltip>
 					<Tooltip text="Login to Server" />
 				</tooltip>

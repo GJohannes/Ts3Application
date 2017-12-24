@@ -2,6 +2,7 @@ package application;
 
 import java.awt.Label;
 import java.awt.Window;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -83,9 +84,12 @@ public class Controller implements Initializable{
     @FXML
     private void startStopMusikOnMove(ActionEvent event) throws Exception {
     	String startStopText = ((Button)event.getSource()).getText();
+    	System.out.println("button pressed");
     	if(startStopText.equals("Start MusikOnMove")){
     		FileInputOutput writerReaderObject = new FileInputOutput();
-    		writerReaderObject.writeAudioBatch(audioFileNameTextField.getText().toString());
+    		
+    				
+    		writerReaderObject.writeAudioBatch(audioFileNameTextField.getText());
         	playMusikOnMove moveMusikObject = new playMusikOnMove();  
         	MusikOnMove = moveMusikObject.playMusicOnClientMove(api, userNameTextField.getText().toString(), (Integer.parseInt(audioFileLenghtTextField.getText().toString())));
         	api.addTS3Listeners(MusikOnMove);

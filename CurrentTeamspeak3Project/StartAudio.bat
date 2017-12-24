@@ -1,1 +1,1 @@
-start %~dp0Doh.mp3
+"C:\GitRepository\CurrentTeamspeak3Project\Doh.mp3"

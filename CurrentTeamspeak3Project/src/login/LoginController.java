@@ -24,6 +24,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 import miscellaneous.FileInputOutput;
+import serverControllers.ServerMainWindowController;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
@@ -65,13 +66,17 @@ public class LoginController implements Initializable {
 	private Button serverLoginButton;
 	
 	@FXML
+	private Button clientLoginButton;
+	
+	@FXML
 	private TextField ts3PathTextField;
 	
 	@FXML
 	private void clientLogin(ActionEvent event) throws IOException {
 		infoBox.setText("Trying to connect to server ....");
 		Image icon = new Image(this.getClass().getResourceAsStream("/waiting.gif"));
-		serverLoginButton.setGraphic(new ImageView(icon));
+		clientLoginButton.setGraphic(new ImageView(icon));
+		
 		Task<TS3Api> connectToServer = new Task<TS3Api>() {
             @Override
             protected TS3Api call() throws Exception {
@@ -93,7 +98,6 @@ public class LoginController implements Initializable {
         		api.sendServerMessage("QueryTester is now online!");
         
         		return api;
-
             }
         };
        
@@ -121,13 +125,13 @@ public class LoginController implements Initializable {
         		MainWindowController mainWindowController = Loader.getController();
         		
         		// Pass Data to new Controller
-        		mainWindowController.setUserName(userNameTextField.getText().toString());
-        		mainWindowController.setUId(uIdTextField.getText().toString());
-        		mainWindowController.setIpAdress(serverIpAdressTextField.getText().toString());
-        		mainWindowController.setServerPort(serverPortTextField.getText().toString());
-        		mainWindowController.setServerQueryName(serverQueryNameTextField.getText().toString());
-        		mainWindowController.setServerQueryPassword(serverQueryPasswordTextField.getText().toString());
-        		mainWindowController.setInfoBoxText("Succesfully connected to server: " + serverIpAdressTextField.getText().toString() + ":" + serverPortTextField.getText().toString());
+        		mainWindowController.setUserName(userNameTextField.getText());
+        		mainWindowController.setUId(uIdTextField.getText());
+        		mainWindowController.setIpAdress(serverIpAdressTextField.getText());
+        		mainWindowController.setServerPort(serverPortTextField.getText());
+        		mainWindowController.setServerQueryName(serverQueryNameTextField.getText());
+        		mainWindowController.setServerQueryPassword(serverQueryPasswordTextField.getText());
+        		mainWindowController.setInfoBoxText("Succesfully connected to server: " + serverIpAdressTextField.getText() + ":" + serverPortTextField.getText());
         		try {
 					mainWindowController.setApi(connectToServer.get());
 				} catch (InterruptedException | ExecutionException e1) {
@@ -136,6 +140,7 @@ public class LoginController implements Initializable {
         		
         		//Load the next FXML File in the same Window
         		Parent p = Loader.getRoot();
+        		
         		rootPane.getChildren().setAll(p);
         		rootPane.getScene().getWindow().sizeToScene();
         		
@@ -149,6 +154,18 @@ public class LoginController implements Initializable {
         new Thread(connectToServer).start();
 	}
 
+	@FXML
+	public void serverLogin(ActionEvent e){
+		ConnectToServer con = new ConnectToServer(	serverIpAdressTextField.getText(), 
+													serverQueryNameTextField.getText(),
+													serverQueryPasswordTextField.getText(),
+													Integer.parseInt(serverPortTextField.getText()),
+													rootPane
+													
+		);
+		new Thread(con).start();
+	}
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		FileInputOutput inOut = new FileInputOutput();
@@ -179,10 +196,7 @@ public class LoginController implements Initializable {
 	}
 	
 	
-	@FXML
-	public void serverLogin(ActionEvent e){
-		
-	}
+
 	
 	
 	public void saveLogin(ActionEvent e){

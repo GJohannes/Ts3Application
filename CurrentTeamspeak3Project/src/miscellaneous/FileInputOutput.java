@@ -28,8 +28,7 @@ public class FileInputOutput {
 
 	public void writeAudioBatch(String audioFileName, String filename) throws IOException {
 		FileWriter writer = new FileWriter(filename);
-		writer.write("start %~dp0" + audioFileName); // For Same Path
-		// writer.write(audioFileName);
+		writer.write("\"" +audioFileName +"\""); 
 		writer.flush();
 		writer.close();
 	}
