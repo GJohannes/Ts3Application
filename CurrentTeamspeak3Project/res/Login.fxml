@@ -26,8 +26,14 @@
 			<Text fx:id="infoBox" font="$FONT" />
 		</StackPane>
 		<HBox spacing="10" alignment="CENTER">
-			<Button fx:id="serverLoginButton" text="ServerLogin" prefWidth="200" font="$FONT"
-				onAction="#Login">
+			<Button fx:id="serverLoginButton" text="Client Login" prefWidth="200" font="$FONT"
+				onAction="#serverLogin">
+				<tooltip>
+					<Tooltip text="Login to Server" />
+				</tooltip>
+			</Button>
+			<Button fx:id="serverLoginButton" text="Server Login" prefWidth="200" font="$FONT"
+				onAction="#clientLogin">
 				<tooltip>
 					<Tooltip text="Login to Server" />
 				</tooltip>

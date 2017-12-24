@@ -1,4 +1,4 @@
-package application;
+package login;
 
 
 
@@ -23,6 +23,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
+import miscellaneous.FileInputOutput;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
@@ -30,6 +31,8 @@ import org.json.simple.parser.ParseException;
 import com.github.theholywaffle.teamspeak3.TS3Api;
 import com.github.theholywaffle.teamspeak3.TS3Config;
 import com.github.theholywaffle.teamspeak3.TS3Query;
+
+import clientControllers.MainWindowController;
 
 public class LoginController implements Initializable {
 
@@ -65,7 +68,7 @@ public class LoginController implements Initializable {
 	private TextField ts3PathTextField;
 	
 	@FXML
-	private void Login(ActionEvent event) throws IOException {
+	private void clientLogin(ActionEvent event) throws IOException {
 		infoBox.setText("Trying to connect to server ....");
 		Image icon = new Image(this.getClass().getResourceAsStream("/waiting.gif"));
 		serverLoginButton.setGraphic(new ImageView(icon));
@@ -174,6 +177,13 @@ public class LoginController implements Initializable {
 		
 		
 	}
+	
+	
+	@FXML
+	public void serverLogin(ActionEvent e){
+		
+	}
+	
 	
 	public void saveLogin(ActionEvent e){
 		FileInputOutput inOut = new FileInputOutput();

@@ -1,4 +1,4 @@
-package application;
+package miscellaneous;
 
 import java.io.FileReader;
 import java.io.FileWriter;

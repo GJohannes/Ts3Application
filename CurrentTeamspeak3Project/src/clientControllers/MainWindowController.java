@@ -1,4 +1,4 @@
-package application;
+package clientControllers;
 
 import java.awt.Label;
 import java.awt.Window;
@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
-import application.*;
+
 import clientFunctions.LookUserInChannel;
 import clientFunctions.MusicOnMove;
 import javafx.scene.control.TextField;
@@ -34,6 +34,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import miscellaneous.*;
 import javafx.scene.Node;
 
 

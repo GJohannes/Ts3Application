@@ -1,6 +1,8 @@
-package application;
+package login;
 
 import java.io.IOException;
+
+import miscellaneous.FileInputOutput;
 
 public class Ts3Client {
 	public void startTs3Client(String ts3Path) throws Exception {
@@ -19,5 +21,4 @@ public class Ts3Client {
 		
 		Runtime.getRuntime().exec("Ts3Starter.bat");
 	}
-
 }
