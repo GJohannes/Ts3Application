@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.Button?>
+
+<AnchorPane  prefWidth="500" prefHeight="500" xmlns:fx="http://javafx.com/fxml/1" fx:controller="serverControllers.ServerMainWindowController" fx:id="rootPane">
+	<HBox spacing="10" alignment="CENTER">
+			<Button fx:id="somethingButton" text="Do something Button" prefWidth="200" onAction="#doSomething"></Button>
+	</HBox>
+</AnchorPane>
+
+
