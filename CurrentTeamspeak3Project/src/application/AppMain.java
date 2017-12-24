@@ -43,7 +43,7 @@ import com.github.theholywaffle.teamspeak3.api.wrapper.Client;
 import com.github.theholywaffle.teamspeak3.api.wrapper.VirtualServer;
 import com.sun.javafx.collections.MappingChange.Map;
 
-import functions.LookUserInChannel;
+import clientFunctions.LookUserInChannel;
 
 import com.github.theholywaffle.teamspeak3.api.event.ChannelEditedEvent;
 import com.github.theholywaffle.teamspeak3.api.event.ClientJoinEvent;
@@ -55,9 +55,6 @@ public class AppMain extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		
-		
-		
 		
 		// Parent root =
 		// FXMLLoader.load(getClass().getResource("/MainWindow.fxml")); Start
@@ -76,6 +73,8 @@ public class AppMain extends Application {
 	}
 
 	public static void main(String[] args) {
+		System.out.println("adhasd");
+		
 		launch(args);
 
 		

@@ -1,4 +1,4 @@
-package functions;
+package clientFunctions;
 
 import com.github.theholywaffle.teamspeak3.*;
 import com.github.theholywaffle.teamspeak3.api.TextMessageTargetMode;

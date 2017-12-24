@@ -1,4 +1,4 @@
-package functions;
+package clientFunctions;
 
 import java.io.IOException;
 import java.util.logging.Level;
