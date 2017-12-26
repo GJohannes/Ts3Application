@@ -1,14 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.HBox?>
+<?import java.net.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.beans.property.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.paint.Color?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.StackPane?>
 
-<AnchorPane  prefWidth="500" prefHeight="500" xmlns:fx="http://javafx.com/fxml/1" fx:controller="serverControllers.ServerMainWindowController" fx:id="rootPane">
-	<HBox spacing="10" alignment="CENTER">
-			<Button fx:id="somethingButton" text="Do something Button" prefWidth="200" onAction="#doSomething"></Button>
-			<Button fx:id="printListButton" text="Print list to console" prefWidth="200" onAction="#printList"></Button>
-	</HBox>
+<AnchorPane prefWidth="500" prefHeight="500"
+	xmlns:fx="http://javafx.com/fxml/1" fx:controller="serverControllers.ServerMainWindowController"
+	fx:id="rootPane">
+	
+	<VBox spacing="10" alignment="CENTER" prefWidth="500" prefHeight="100">
+		<HBox alignment="CENTER" spacing="10">
+			<StackPane alignment="CENTER">
+				<Rectangle fill="TRANSPARENT" stroke="GRAY" width="200"
+					height="50" />
+				<Text fx:id="ipAdress" font="$FONT" />
+			</StackPane>
+			<StackPane alignment="CENTER">
+				<Rectangle fill="TRANSPARENT" stroke="GRAY" width="200"
+					height="50" />
+				<Text fx:id="serverPort" font="$FONT" />
+			</StackPane>
+
+		</HBox>
+		<VBox spacing="10" alignment="CENTER">
+			<Button fx:id="serverLogger" text="Start Logging" prefWidth="200"
+				onAction="#log"></Button>
+		</VBox>
+	</VBox>
+
 </AnchorPane>
 
 

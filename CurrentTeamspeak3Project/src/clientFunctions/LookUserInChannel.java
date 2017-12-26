@@ -6,8 +6,7 @@ import com.github.theholywaffle.teamspeak3.api.event.TS3EventAdapter;
 import com.github.theholywaffle.teamspeak3.api.event.ClientMovedEvent;
 
 public class LookUserInChannel {
-	private static TS3EventAdapter thisEventAdapter = new TS3EventAdapter() {
-	};
+	private static TS3EventAdapter thisEventAdapter = new TS3EventAdapter() {};
 	private static int currentChannelId = 0;
 
 	public TS3Api activateCatchMeIfYouCan(TS3Api api, String userName, boolean activate) {

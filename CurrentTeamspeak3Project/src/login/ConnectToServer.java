@@ -22,7 +22,9 @@ public class ConnectToServer extends Task<TS3Api> {
 	private String serverQueryName;
 	private String serverQueryPassword;
 	private int serverPort;
-
+	private String userName;
+	private String uniqueId;
+	
 	public ConnectToServer(String ipAdress, String serverQueryName, String serverQueryPassword, int serverPort,
 			AnchorPane rootPane, boolean connectAsServerSide) {
 		this.ipAdress = ipAdress;
@@ -49,6 +51,10 @@ public class ConnectToServer extends Task<TS3Api> {
 						e1.printStackTrace();
 					}
 
+					
+					serverMainWindowController.setIpAdress(ipAdress);
+					serverMainWindowController.setServerPort(serverPort);
+					
 					Parent p = loader.getRoot();
 					rootPane.getChildren().setAll(p);
 					rootPane.getScene().getWindow().sizeToScene();
@@ -79,13 +85,13 @@ public class ConnectToServer extends Task<TS3Api> {
 	        		MainWindowController mainWindowController = Loader.getController();
 	        		
 	        		// Pass Data to new Controller
-	        		mainWindowController.setUserName("TODO User name");
-	        		mainWindowController.setUId("TODO Unique Id");
 	        		mainWindowController.setIpAdress(ipAdress);
 	        		mainWindowController.setServerPort(Integer.toString(serverPort));
 	        		mainWindowController.setServerQueryName(serverQueryName);
 	        		mainWindowController.setServerQueryPassword(serverQueryPassword);
 	        		mainWindowController.setInfoBoxText("Succesfully connected to server: " + ipAdress + ":" + serverPort);
+	        		mainWindowController.setUserName(userName);
+	        		mainWindowController.setUId(uniqueId);
 	        		try {
 						mainWindowController.setApi(get());
 					} catch (InterruptedException | ExecutionException e1) {
@@ -125,5 +131,21 @@ public class ConnectToServer extends Task<TS3Api> {
 		api.registerAllEvents();
 		api.sendServerMessage("QueryTester is now online!");
 		return api;
+	}
+	
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getUniqueId() {
+		return uniqueId;
+	}
+
+	public void setUniqueId(String uniqueId) {
+		this.uniqueId = uniqueId;
 	}
 }

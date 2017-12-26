@@ -42,7 +42,7 @@ public class LoginController implements Initializable {
 		infoBox.setText("Trying to connect to server ....");
 		Image icon = new Image(this.getClass().getResourceAsStream("/waiting.gif"));
 		clientLoginButton.setGraphic(new ImageView(icon));
-		ConnectToServer con = new ConnectToServer(	serverIpAdressTextField.getText(), 
+		ConnectToServer connect = new ConnectToServer(	serverIpAdressTextField.getText(), 
 													serverQueryNameTextField.getText(),
 													serverQueryPasswordTextField.getText(),
 													Integer.parseInt(serverPortTextField.getText()), 
@@ -50,12 +50,17 @@ public class LoginController implements Initializable {
 													false
 
 		);
-		new Thread(con).start();
+		connect.setUserName(userNameTextField.getText());
+		connect.setUniqueId(uIdTextField.getText());
+		new Thread(connect).start();
 	}
 
 	@FXML
 	public void serverLogin(ActionEvent e) {
-		ConnectToServer con = new ConnectToServer(	serverIpAdressTextField.getText(), 
+		infoBox.setText("Trying to connect to server ....");
+		Image icon = new Image(this.getClass().getResourceAsStream("/waiting.gif"));
+		serverLoginButton.setGraphic(new ImageView(icon));
+		ConnectToServer connect = new ConnectToServer(	serverIpAdressTextField.getText(), 
 													serverQueryNameTextField.getText(),
 													serverQueryPasswordTextField.getText(),
 													Integer.parseInt(serverPortTextField.getText()), 
@@ -63,7 +68,7 @@ public class LoginController implements Initializable {
 													true
 
 		);
-		new Thread(con).start();
+		new Thread(connect).start();
 	}
 
 	@Override

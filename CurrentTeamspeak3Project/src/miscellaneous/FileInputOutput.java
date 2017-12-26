@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.json.simple.*;
@@ -52,34 +53,18 @@ public class FileInputOutput {
 	 * Add json t a text file that is 
 	 */
 	public void writeServerLog(JSONObject json) throws IOException {
-		StringBuilder fileName = new StringBuilder();
-		LocalDateTime now = LocalDateTime.now();
 		List<String> allLines;
-		
-		//build string for file name based on date
-		fileName.append("log/");
-		fileName.append(now.getYear());
-		fileName.append("-");
-		if(Integer.toString(now.getMonthValue()).length() == 1){
-			fileName.append("0");
-		}
-		fileName.append(now.getMonthValue()); //+1 since months seems to be counted with 0 at the beginning
-		fileName.append("-");
-		//case that day of month is only single digit
-		if(Integer.toString(now.getDayOfMonth()).length() == 1){
-			fileName.append("0");
-		}
-		fileName.append(now.getDayOfMonth());
-		fileName.append(".txt");
+		LocalDateTime now = LocalDateTime.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		String fileName = now.format(formatter);
+		fileName = "log/" + fileName + ".txt";
 		
 		File file = new File(fileName.toString());
 		if (!file.exists()) {
 		     file.createNewFile();
 		}
 		Path path = Paths.get(file.getAbsolutePath());
-		
 		allLines = Files.readAllLines(path);
-		
 		
 		FileWriter fileWriter = new FileWriter(file);
 		BufferedWriter writer = new BufferedWriter(fileWriter);
@@ -92,5 +77,21 @@ public class FileInputOutput {
 		writer.write(json.toJSONString());
 		writer.flush();
 		writer.close();
+		
+		//code if json date has to be read and difference calculated
+//		LocalDateTime now = LocalDateTime.now();
+//		System.out.println(now + " now");
+//		String s = now.toString();
+//		LocalDateTime later = LocalDateTime.parse(s);
+//		System.out.println(later + " later");
+//		
+//		try {
+//			Thread.sleep(3000);
+//			LocalDateTime later = LocalDateTime.now();
+//			System.out.println(now.until(later, ChronoUnit.SECONDS));
+//		} catch (InterruptedException e) {
+//			
+//			e.printStackTrace();
+//		}
 	}
 }

@@ -43,6 +43,7 @@ public class MusicOnMove {
 			public void onClientMoved(ClientMovedEvent e) {
 				System.out.println("MusikOnMove is alive");
 				if ((e.getClientId() == api.getClientsByName(userName).get(0).getId()) && !soundPlaying) {
+					System.out.println(e.toString());
 					soundPlaying = true;
 					try {
 						System.out.println("TS input: VLC");

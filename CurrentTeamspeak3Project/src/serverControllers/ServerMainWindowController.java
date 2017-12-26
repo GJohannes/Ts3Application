@@ -9,26 +9,30 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
 import serverFunctions.ServerLogger;
 
 public class ServerMainWindowController implements Initializable {
 	
 	@FXML private AnchorPane rootPane;
-	@FXML private Button somethingButton;
-	@FXML private Button printListButton;
-		
+	@FXML private Button serverLogger;
+	@FXML private Text ipAdress;	
+	@FXML private Text serverPort;
+	
 	private TS3Api api;
-		
+	
+	public void setIpAdress(String ipAdress) {
+		this.ipAdress.setText(ipAdress);
+	}
+
+	public void setServerPort(int port) {
+		serverPort.setText(Integer.toString(port));
+	}
+
 	@FXML
-	public void doSomething(){
+	public void log(){
 		ServerLogger logger = ServerLogger.getInstance(api);
 		logger.startServerLogging();
-		System.out.println("started server logger");
-	}
-	
-	@FXML
-	private void printList(){
-		System.out.println("hello worlds");
 	}
 	
 	@Override

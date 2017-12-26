@@ -22,6 +22,7 @@ public class ServerLogger {
 		if (instance == null) {
 			instance = new ServerLogger(api);
 			instance.api = api;
+			System.out.println("Now logging Join/Leav on server");
 		}
 		return instance;
 	}
