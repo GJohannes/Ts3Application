@@ -1,7 +1,5 @@
 package login;
 
-import java.io.IOException;
-
 import miscellaneous.FileInputOutput;
 
 public class Ts3Client {
@@ -15,7 +13,6 @@ public class Ts3Client {
 		parts[0] = parts[0] +":\""; 
 		parts[1] = parts[1] + "\"";
 		String execString = parts[0] + parts[1];
-		System.out.println(execString);
 		FileInputOutput writer = new FileInputOutput();
 		
 		writer.wirteTs3ClientBatch(execString,filename);

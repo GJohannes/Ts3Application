@@ -6,13 +6,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.json.simple.*;
@@ -56,15 +53,23 @@ public class FileInputOutput {
 	 */
 	public void writeServerLog(JSONObject json) throws IOException {
 		StringBuilder fileName = new StringBuilder();
-		GregorianCalendar cal = new GregorianCalendar();
+		LocalDateTime now = LocalDateTime.now();
 		List<String> allLines;
 		
+		//build string for file name based on date
 		fileName.append("log/");
-		fileName.append(cal.get(GregorianCalendar.YEAR));
+		fileName.append(now.getYear());
 		fileName.append("-");
-		fileName.append(cal.get(GregorianCalendar.MONTH)+1); //+1 since months seems to be counted with 0 at the beginning
+		if(Integer.toString(now.getMonthValue()).length() == 1){
+			fileName.append("0");
+		}
+		fileName.append(now.getMonthValue()); //+1 since months seems to be counted with 0 at the beginning
 		fileName.append("-");
-		fileName.append(cal.get(GregorianCalendar.DAY_OF_MONTH));
+		//case that day of month is only single digit
+		if(Integer.toString(now.getDayOfMonth()).length() == 1){
+			fileName.append("0");
+		}
+		fileName.append(now.getDayOfMonth());
 		fileName.append(".txt");
 		
 		File file = new File(fileName.toString());

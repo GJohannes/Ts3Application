@@ -1,7 +1,6 @@
 package serverControllers;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import com.github.theholywaffle.teamspeak3.TS3Api;
@@ -11,7 +10,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import serverFunctions.ServerLogger;
-import serverFunctions.UserLoggedInEntity;
 
 public class ServerMainWindowController implements Initializable {
 	

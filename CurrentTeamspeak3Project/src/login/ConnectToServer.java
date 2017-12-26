@@ -110,8 +110,6 @@ public class ConnectToServer extends Task<TS3Api> {
 
 	@Override
 	public TS3Api call() throws Exception {
-		System.out.println(this.ipAdress);
-
 		TS3Config config = new TS3Config();
 		TS3Query query = new TS3Query(config);
 		TS3Api api = query.getApi();

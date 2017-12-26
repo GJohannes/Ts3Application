@@ -1,29 +1,20 @@
 package serverFunctions;
 
-import java.awt.List;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
-
-import org.json.simple.JSONObject;
-import org.omg.Messaging.SyncScopeHelper;
 
 import com.github.theholywaffle.teamspeak3.TS3Api;
 import com.github.theholywaffle.teamspeak3.api.event.ClientJoinEvent;
 import com.github.theholywaffle.teamspeak3.api.event.ClientLeaveEvent;
 import com.github.theholywaffle.teamspeak3.api.event.TS3EventAdapter;
 import com.github.theholywaffle.teamspeak3.api.wrapper.Client;
-import com.sun.glass.ui.ClipboardAssistance;
-
-import miscellaneous.FileInputOutput;
 
 public class ServerLogger {
 	private static ServerLogger instance = null;
-	private Date date = new Date();
-	private FileInputOutput inOut = new FileInputOutput();
 	private TS3Api api;
+	// api only sends id of leaving persons. Therefore data that should be
+	// logged must be held until leave event is triggered in this list
 	private ArrayList<UserLoggedInEntity> usersLoggedIn = new ArrayList<>();
+	//holding adapters to still have them around should they be removed 
 	private static TS3EventAdapter logOnJoin;
 	private static TS3EventAdapter logOnLeave;
 
@@ -40,14 +31,14 @@ public class ServerLogger {
 		ArrayList<Client> allClientsWhileStartingtoLogg = new ArrayList<Client>();
 		allClientsWhileStartingtoLogg = (ArrayList<Client>) api.getClients();
 
-		for (int i = 0; i < allClientsWhileStartingtoLogg.size(); i++) {		
+		for (int i = 0; i < allClientsWhileStartingtoLogg.size(); i++) {
 			UserLoggedInEntity userAlreadyOnline = new UserLoggedInEntity();
-			
+
 			userAlreadyOnline.setId(allClientsWhileStartingtoLogg.get(i).getId());
 			userAlreadyOnline.setNickname(allClientsWhileStartingtoLogg.get(i).getNickname());
 			userAlreadyOnline.setuId(allClientsWhileStartingtoLogg.get(i).getUniqueIdentifier());
 			userAlreadyOnline.logUser(LoggedServerEvents.STARTED_LOG);
-			
+
 			usersLoggedIn.add(userAlreadyOnline);
 		}
 	}
@@ -71,9 +62,9 @@ public class ServerLogger {
 				newUser.setId(e.getClientId());
 				newUser.setNickname(e.getClientNickname());
 				newUser.setuId(e.getUniqueClientIdentifier());
-				
+
 				newUser.logUser(LoggedServerEvents.JOIN_SERVER);
-				
+
 				usersLoggedIn.add(newUser);
 			}
 		};
@@ -85,7 +76,7 @@ public class ServerLogger {
 			@Override
 			public void onClientLeave(ClientLeaveEvent e) {
 				for (int i = 0; i < usersLoggedIn.size(); i++) {
-					if (usersLoggedIn.get(i).getId() == e.getClientId()) {				
+					if (usersLoggedIn.get(i).getId() == e.getClientId()) {
 						usersLoggedIn.get(i).logUser(LoggedServerEvents.LEFT_SERVER);
 						usersLoggedIn.remove(i);
 						break;

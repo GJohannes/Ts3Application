@@ -1,12 +1,10 @@
 package clientControllers;
 
-import java.awt.Label;
-import java.awt.Window;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
 
 import clientFunctions.LookUserInChannel;
 import clientFunctions.MusicOnMove;
@@ -18,26 +16,19 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
 import com.github.theholywaffle.teamspeak3.TS3Api;
-import com.github.theholywaffle.teamspeak3.TS3Config;
-import com.github.theholywaffle.teamspeak3.TS3Query;
-import com.github.theholywaffle.teamspeak3.api.event.TS3EventAdapter;
 
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.stage.Stage;
-import miscellaneous.*;
-import javafx.scene.Node;
 
+import javafx.fxml.Initializable;
+
+import javafx.scene.control.Button;
+
+
+import javafx.scene.text.Text;
+
+import miscellaneous.*;
 
 
 public class MainWindowController implements Initializable{

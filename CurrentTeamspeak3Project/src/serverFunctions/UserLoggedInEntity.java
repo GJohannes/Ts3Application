@@ -1,8 +1,7 @@
 package serverFunctions;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 
 import org.json.simple.JSONObject;
 
@@ -17,14 +16,14 @@ public class UserLoggedInEntity {
 	
 	
 	public void logUser(LoggedServerEvents event){
-		GregorianCalendar calendar = new GregorianCalendar();
-		Date date = calendar.getTime();
+		LocalDateTime now = LocalDateTime.now();
 		JSONObject json = new JSONObject();
 		
-		json.put("Date", date);
-		json.put("Nickname", this.nickname);
-		json.put("UID", this.uId);
 		json.put("Event", event);
+		json.put("LocalDateTime ", now);
+		json.put("Nickname", this.nickname);
+		json.put("UniqueId", this.uId);
+		
 		
 		FileInputOutput inOut = new FileInputOutput();
 		try {
