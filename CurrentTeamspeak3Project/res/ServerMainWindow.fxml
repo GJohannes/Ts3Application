@@ -7,6 +7,7 @@
 <AnchorPane  prefWidth="500" prefHeight="500" xmlns:fx="http://javafx.com/fxml/1" fx:controller="serverControllers.ServerMainWindowController" fx:id="rootPane">
 	<HBox spacing="10" alignment="CENTER">
 			<Button fx:id="somethingButton" text="Do something Button" prefWidth="200" onAction="#doSomething"></Button>
+			<Button fx:id="printListButton" text="Print list to console" prefWidth="200" onAction="#printList"></Button>
 	</HBox>
 </AnchorPane>
 

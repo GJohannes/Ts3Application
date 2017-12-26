@@ -10,11 +10,12 @@ public class Ts3Client {
 			return;
 		}
 		String filename = "Ts3Starter.bat";
-		//Modify path so that blanks can be read by the system
+		//Modify path so that blanks can be read by the system		
 		String[] parts = ts3Path.split(":");
 		parts[0] = parts[0] +":\""; 
 		parts[1] = parts[1] + "\"";
 		String execString = parts[0] + parts[1];
+		System.out.println(execString);
 		FileInputOutput writer = new FileInputOutput();
 		
 		writer.wirteTs3ClientBatch(execString,filename);
