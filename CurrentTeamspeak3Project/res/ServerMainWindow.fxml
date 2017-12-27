@@ -15,6 +15,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.StackPane?>
+<?import com.sun.javafx.scene.control.skin.IntegerField?>
 
 <AnchorPane prefWidth="500" prefHeight="500"
 	xmlns:fx="http://javafx.com/fxml/1" fx:controller="serverControllers.ServerMainWindowController"
@@ -33,11 +34,10 @@
 				<Text fx:id="serverPort" font="$FONT" />
 			</StackPane>
 		</HBox>
-		<VBox spacing="10" alignment="CENTER">
-			<Button fx:id="serverLogger" onAction="#log" text="Start_Logging"prefWidth="200" />
-		</VBox>
+		<HBox spacing="10" alignment="CENTER">
+			<Button fx:id="serverLogger" onAction="#logging" text="StartLogging" prefWidth="200" ></Button>
+		</HBox>
 	</VBox>
-
 </AnchorPane>
 
 

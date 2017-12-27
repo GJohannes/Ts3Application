@@ -42,8 +42,6 @@ public class AppMain extends Application {
 		launch(args);
 		
 		
-		
-		
 		// Ts3Client test = new Ts3Client();
 		//
 		// test.startTs3Client("C:/Program Files/TeamSpeak 3

@@ -15,15 +15,16 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import customFxmlElements.IpAdressTextField?>
+<?import customFxmlElements.PortTextField?>
 
 
-<AnchorPane prefWidth="500" prefHeight="500" fx:controller="login.LoginController" xmlns:fx="http://javafx.com/fxml" fx:id="rootPane">
+<AnchorPane prefWidth="500" prefHeight="500" fx:controller="login.LoginController" xmlns:fx="http://javafx.com/fxml" fx:id="rootPane" style="-fx-background-color: #6E6E6E;">
 	<fx:define>
 		<Font fx:id="FONT" size="18" />
 	</fx:define>
 	<VBox spacing="10" alignment="CENTER" prefWidth="500" prefHeight="600" >
 		<StackPane alignment="CENTER">
-			<Rectangle fill="TRANSPARENT" stroke="GRAY" width="400"
+			<Rectangle fill="TRANSPARENT" stroke="BLUE" width="400"
 				height="50" />
 			<Text fx:id="infoBox" font="$FONT" />
 		</StackPane>
@@ -57,7 +58,7 @@
 		</HBox>
 		<HBox spacing="10" alignment="CENTER">
 			<Label text="Serverport:" prefWidth="200" font="$FONT" />
-			<TextField fx:id="serverPortTextField" text="couldNotReadValue" prefWidth="200" font="$FONT" />
+			<PortTextField fx:id="serverPortTextField" text="couldNotReadValue" prefWidth="200" font="$FONT" />
 		</HBox>
 		<HBox spacing="10" alignment="CENTER">
 			<Label text="Server Query Name:" prefWidth="200" font="$FONT" />

@@ -1,12 +1,9 @@
 package customFxmlElements;
 
 import javafx.scene.control.TextField;
-import javafx.scene.text.Text;
-
 
 public class IpAdressTextField extends TextField {
 	private boolean isTextFieldInputValid = false;
-	private Text text;
 	
 	public IpAdressTextField() {
 		// do after every key release

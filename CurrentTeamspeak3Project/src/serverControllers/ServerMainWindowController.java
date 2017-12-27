@@ -30,9 +30,13 @@ public class ServerMainWindowController implements Initializable {
 	}
 
 	@FXML
-	public void log(){
+	public void logging(){
 		ServerLogger logger = ServerLogger.getInstance(api);
 		logger.startServerLogging();
+	}
+	
+	public void testThis(){
+		System.out.println("TEst");
 	}
 	
 	@Override
