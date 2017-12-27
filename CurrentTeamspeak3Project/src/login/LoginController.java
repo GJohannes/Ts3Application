@@ -19,7 +19,7 @@ import miscellaneous.FileInputOutput;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
-import customFxmlElements.ipAdressTextField;
+import customFxmlElements.IpAdressTextField;
 
 public class LoginController implements Initializable {
 
@@ -29,12 +29,16 @@ public class LoginController implements Initializable {
 	@FXML private TextField uIdTextField;
 	@FXML private TextField serverQueryNameTextField;
 	@FXML private TextField serverQueryPasswordTextField;
-	@FXML private TextField serverIpAdressTextField;
+	@FXML private IpAdressTextField serverIpAdressTextField;
 	@FXML private TextField serverPortTextField;
 	@FXML private Button serverLoginButton;
 	@FXML private Button clientLoginButton;
 	@FXML private TextField ts3PathTextField;
-	@FXML private ipAdressTextField ipText;
+	
+	
+	@FXML
+	private void ipTextPressed(){
+	}
 	
 	@FXML
 	private void clientLogin(ActionEvent event) throws IOException {
@@ -78,6 +82,7 @@ public class LoginController implements Initializable {
 			serverPortTextField.setText((String) json.get("serverPort"));
 			uIdTextField.setText((String) json.get("uId"));
 			serverIpAdressTextField.setText((String) json.get("tsIpAdress"));
+			serverIpAdressTextField.checkValidity();
 			serverQueryNameTextField.setText((String) json.get("serverQueryName"));
 			serverQueryPasswordTextField.setText((String) json.get("serverQueryPw"));
 			ts3PathTextField.setText((String) json.get("ts3Path"));

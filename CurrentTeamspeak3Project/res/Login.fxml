@@ -14,17 +14,14 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
-<?import customFxmlElements.ipAdressTextField?>
+<?import customFxmlElements.IpAdressTextField?>
+
 
 <AnchorPane prefWidth="500" prefHeight="500" fx:controller="login.LoginController" xmlns:fx="http://javafx.com/fxml" fx:id="rootPane">
 	<fx:define>
 		<Font fx:id="FONT" size="18" />
 	</fx:define>
 	<VBox spacing="10" alignment="CENTER" prefWidth="500" prefHeight="600" >
-	
-		<ipAdressTextField fx:id="ipText"></ipAdressTextField>
-		
-		
 		<StackPane alignment="CENTER">
 			<Rectangle fill="TRANSPARENT" stroke="GRAY" width="400"
 				height="50" />
@@ -56,7 +53,7 @@
 		</HBox>
 		<HBox spacing="10" alignment="CENTER">
 			<Label text="Ts Ip Adresse:" prefWidth="200" font="$FONT" />
-			<TextField fx:id="serverIpAdressTextField" text="couldNotReadValue" prefWidth="200" font="$FONT" />
+			<IpAdressTextField fx:id="serverIpAdressTextField"  text="couldNotReadValue" prefWidth="200" font="$FONT" />
 		</HBox>
 		<HBox spacing="10" alignment="CENTER">
 			<Label text="Serverport:" prefWidth="200" font="$FONT" />
