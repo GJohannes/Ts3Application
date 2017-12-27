@@ -126,21 +126,30 @@ public class ConnectToServer extends Task<TS3Api> {
 		TS3Config config = new TS3Config();
 		TS3Query query = new TS3Query(config);
 		TS3Api api = query.getApi();
-		
+
 		config.setHost(this.ipAdress);
 		config.setDebugLevel(Level.ALL);
 
-		try{
+		try {
 			query.connect();
-		} catch (Exception e){
-			System.out.println(e);
+		} catch (Exception e) {
+			System.out.println(e + "ERROR-ERROR");
 			throw new TimeoutException();
 		}
+
 		api.login(this.serverQueryName, this.serverQueryPassword);
 		api.selectVirtualServerByPort(this.serverPort);
 		api.setNickname(this.serverQueryName);
 		api.registerAllEvents();
 		api.sendServerMessage("QueryTester is now online!");
+
+		try {
+			// exception is thrown if no connectinh could be establised and therefore a nullpointer gets to this information
+			System.out.println(api.getConnectionInfo().getConnectedTime());
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		
 		return api;
 	}
 
