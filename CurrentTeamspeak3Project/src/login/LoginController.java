@@ -9,7 +9,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.application.Platform;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -17,11 +16,10 @@ import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 import miscellaneous.FileInputOutput;
 
-
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
-
+import customFxmlElements.ipAdressTextField;
 
 public class LoginController implements Initializable {
 
@@ -36,19 +34,19 @@ public class LoginController implements Initializable {
 	@FXML private Button serverLoginButton;
 	@FXML private Button clientLoginButton;
 	@FXML private TextField ts3PathTextField;
-
+	@FXML private ipAdressTextField ipText;
+	
 	@FXML
 	private void clientLogin(ActionEvent event) throws IOException {
 		infoBox.setText("Trying to connect to server ....");
 		Image icon = new Image(this.getClass().getResourceAsStream("/waiting.gif"));
 		clientLoginButton.setGraphic(new ImageView(icon));
 		ConnectToServer connect = new ConnectToServer(	serverIpAdressTextField.getText(), 
-													serverQueryNameTextField.getText(),
-													serverQueryPasswordTextField.getText(),
-													Integer.parseInt(serverPortTextField.getText()), 
-													rootPane, 
-													false
-
+														serverQueryNameTextField.getText(),
+														serverQueryPasswordTextField.getText(),
+														Integer.parseInt(serverPortTextField.getText()), 
+														rootPane, 
+														false
 		);
 		connect.setUserName(userNameTextField.getText());
 		connect.setUniqueId(uIdTextField.getText());
@@ -61,12 +59,11 @@ public class LoginController implements Initializable {
 		Image icon = new Image(this.getClass().getResourceAsStream("/waiting.gif"));
 		serverLoginButton.setGraphic(new ImageView(icon));
 		ConnectToServer connect = new ConnectToServer(	serverIpAdressTextField.getText(), 
-													serverQueryNameTextField.getText(),
-													serverQueryPasswordTextField.getText(),
-													Integer.parseInt(serverPortTextField.getText()), 
-													rootPane, 
-													true
-
+														serverQueryNameTextField.getText(),
+														serverQueryPasswordTextField.getText(),
+														Integer.parseInt(serverPortTextField.getText()), 
+														rootPane, 
+														true
 		);
 		new Thread(connect).start();
 	}

@@ -19,7 +19,7 @@
 <AnchorPane prefWidth="500" prefHeight="500"
 	xmlns:fx="http://javafx.com/fxml/1" fx:controller="serverControllers.ServerMainWindowController"
 	fx:id="rootPane">
-	
+
 	<VBox spacing="10" alignment="CENTER" prefWidth="500" prefHeight="100">
 		<HBox alignment="CENTER" spacing="10">
 			<StackPane alignment="CENTER">
@@ -32,11 +32,9 @@
 					height="50" />
 				<Text fx:id="serverPort" font="$FONT" />
 			</StackPane>
-
 		</HBox>
 		<VBox spacing="10" alignment="CENTER">
-			<Button fx:id="serverLogger" text="Start Logging" prefWidth="200"
-				onAction="#log"></Button>
+			<Button fx:id="serverLogger" onAction="#log" text="Start_Logging"prefWidth="200" />
 		</VBox>
 	</VBox>
 
