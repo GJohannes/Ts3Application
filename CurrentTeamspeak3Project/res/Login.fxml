@@ -43,7 +43,6 @@
 			</Button>
 		</HBox>
 		
-		
 		<HBox spacing="10" alignment="CENTER">
 			<Label text="User Name:" prefWidth="200" font="$FONT" />
 			<TextField fx:id="userNameTextField" text="couldNotReadValue" prefWidth="200" font="$FONT" />

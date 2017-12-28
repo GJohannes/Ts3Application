@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;
+import java.util.logging.Logger;
 
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -29,8 +30,9 @@ import clientControllers.MainWindowController;
 import customFxmlElements.IpAdressTextField;
 import customFxmlElements.PortTextField;
 
-public class LoginController implements Initializable {
 
+public class LoginController implements Initializable {
+	
 	@FXML private AnchorPane rootPane;
 	@FXML private Text infoBox;
 	@FXML private TextField userNameTextField;
@@ -43,6 +45,7 @@ public class LoginController implements Initializable {
 	@FXML private Button clientLoginButton;
 	@FXML private TextField ts3PathTextField;
 	
+	
 	@FXML
 	private void clientLogin(ActionEvent event) throws IOException {
 		if(!serverIpAdressTextField.isValid() || !serverPortTextField.isValid()){
@@ -50,14 +53,14 @@ public class LoginController implements Initializable {
 			return;
 		}
 		
-		infoBox.setText("Trying to connect to server ....");
-		Image icon = new Image(this.getClass().getResourceAsStream("/waiting.gif"));
-		clientLoginButton.setGraphic(new ImageView(icon));
-		ConnectToServer connect = new ConnectToServer( 	serverIpAdressTextField.getText(),
-														serverQueryNameTextField.getText(),
-														serverQueryPasswordTextField.getText(),
-														Integer.parseInt(serverPortTextField.getText())
+		ConnectToServer connect = ConnectToServer.getInstance( 	serverIpAdressTextField.getText(),
+																serverQueryNameTextField.getText(),
+																serverQueryPasswordTextField.getText(),
+																Integer.parseInt(serverPortTextField.getText())
 		);
+		if(connect == null){
+			return;
+		}
 		connect.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
 			@Override
 			public void handle(WorkerStateEvent event) {
@@ -95,30 +98,35 @@ public class LoginController implements Initializable {
 		connect.setOnFailed(e -> {	infoBox.setText("Could not connect to Server");
 				 					clientLoginButton.setGraphic(null);
 		});
+
+		infoBox.setText("Trying to connect to server ....");
+		Image icon = new Image(this.getClass().getResourceAsStream("/waiting.gif"));
+		clientLoginButton.setGraphic(new ImageView(icon));
 		new Thread(connect).start();
 	}
 
 	@FXML
 	public void serverLogin(ActionEvent e) {
 		//TODO useful system to enable and disable buttons and textfields
-		serverLoginButton.setDisable(true);
-		clientLoginButton.setDisable(true);
-		serverIpAdressTextField.setDisable(true);
+//		serverLoginButton.setDisable(true);
+//		clientLoginButton.setDisable(true);
+//		serverIpAdressTextField.setDisable(true);
 		
 		if(!serverIpAdressTextField.isValid() || !serverPortTextField.isValid()){
 			infoBox.setText("Not all text fileds are valid");
 			return;
+		} 
+		
+		ConnectToServer connect = ConnectToServer.getInstance(	
+				serverIpAdressTextField.getText(), 
+				serverQueryNameTextField.getText(),
+				serverQueryPasswordTextField.getText(),
+				Integer.parseInt(serverPortTextField.getText())
+				);
+		if(connect == null){
+			return;
 		}
 		
-		infoBox.setText("Trying to connect to server ....");
-		Image icon = new Image(this.getClass().getResourceAsStream("/waiting.gif"));
-		serverLoginButton.setGraphic(new ImageView(icon));
-		ConnectToServer connect = new ConnectToServer(	
-														serverIpAdressTextField.getText(), 
-														serverQueryNameTextField.getText(),
-														serverQueryPasswordTextField.getText(),
-														Integer.parseInt(serverPortTextField.getText())
-		);
 		connect.setOnSucceeded(event -> {
 			FXMLLoader serverLoader = new FXMLLoader();
 			serverLoader.setLocation(getClass().getResource("/ServerMainWindow.fxml"));
@@ -141,6 +149,9 @@ public class LoginController implements Initializable {
 										infoBox.setText("Could not connect to Server");
 		});
 		
+		infoBox.setText("Trying to connect to server ....");
+		Image icon = new Image(this.getClass().getResourceAsStream("/waiting.gif"));
+		serverLoginButton.setGraphic(new ImageView(icon));
 		new Thread(connect).start();
 	}
 

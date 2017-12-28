@@ -10,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoUnit;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.github.theholywaffle.teamspeak3.TS3Api;
 import com.github.theholywaffle.teamspeak3.TS3Config;
@@ -21,6 +22,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import login.LoginController;
 import login.Ts3Client;
 
 public class AppMain extends Application {
@@ -46,7 +48,6 @@ public class AppMain extends Application {
 
 	public static void main(String[] args) {
 		launch(args);
-		
 		
 //		 Ts3Client test = new Ts3Client();
 //		
