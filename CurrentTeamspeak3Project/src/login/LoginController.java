@@ -106,12 +106,7 @@ public class LoginController implements Initializable {
 	}
 
 	@FXML
-	public void serverLogin(ActionEvent e) {
-		//TODO useful system to enable and disable buttons and textfields
-//		serverLoginButton.setDisable(true);
-//		clientLoginButton.setDisable(true);
-//		serverIpAdressTextField.setDisable(true);
-		
+	public void serverLogin(ActionEvent e) {	
 		if(!serverIpAdressTextField.isValid() || !serverPortTextField.isValid()){
 			infoBox.setText("Not all text fileds are valid");
 			return;

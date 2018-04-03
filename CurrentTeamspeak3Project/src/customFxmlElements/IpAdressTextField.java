@@ -53,7 +53,7 @@ public class IpAdressTextField extends TextField {
 				} catch (Exception e) {
 					return false;
 				}
-			}
+			} 
 			// nothing killed it therefore it mus be a valid ip adress
 			return true;
 		}

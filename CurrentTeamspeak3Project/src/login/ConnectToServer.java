@@ -2,6 +2,7 @@ package login;
 
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.github.theholywaffle.teamspeak3.TS3Api;
 import com.github.theholywaffle.teamspeak3.TS3Config;
@@ -15,13 +16,18 @@ public class ConnectToServer extends Task<TS3Api> {
 	private String serverQueryName;
 	private String serverQueryPassword;
 	private int serverPort;
+	private Logger logger = Logger.getLogger("connectToServerLogger");
+	
 	
 	private static ConnectToServer instance = null;
 	
+	/*
+	 * returns a serverConectionClass if none already exists
+	 * can start a new thread that connects to teamspeakServer
+	 */
 	public static ConnectToServer getInstance(String ipAdress, String serverQueryName, String serverQueryPassword, int serverPort) {
 		if (instance == null) {
 			instance = new ConnectToServer(ipAdress , serverQueryName , serverQueryPassword , serverPort);
-			System.out.println("Started to connect to server");
 		}
 		else {
 			return null;
@@ -43,7 +49,7 @@ public class ConnectToServer extends Task<TS3Api> {
 
 	@Override
 	public TS3Api call() throws Exception {
-		System.out.println("LOG: call started");
+		logger.log(Level.INFO, "Started building connection to server");
 		TS3Config config = new TS3Config();
 		TS3Query query = new TS3Query(config);
 		TS3Api api = query.getApi();
@@ -51,30 +57,22 @@ public class ConnectToServer extends Task<TS3Api> {
 		config.setHost(this.ipAdress);
 		config.setDebugLevel(Level.ALL);
 		try{
-			try {
-				query.connect();
-			} catch (Exception e) {
-				throw new TimeoutException();
-			}
-			
-			//if true connect was successful
+			// throws exception if no connection could be established 
+			query.connect();
+			//is true if connect was successful 
 			if(api.login(this.serverQueryName, this.serverQueryPassword)){
 				api.selectVirtualServerByPort(this.serverPort);
 				api.setNickname(this.serverQueryName);
 				api.registerAllEvents();
 				api.sendServerMessage("QueryTester is now online!");
+				// exception is thrown if no connection could be established and
+				//therefore a null pointer gets to this information
+				api.getConnectionInfo();
 				
-				try {
-					// exception is thrown if no connection could be established and therefore a nullpointer gets to this information
-					api.getConnectionInfo();
-				} catch (Exception e) {
-					System.out.println(e);
-					throw new TimeoutException();
-				}
 				return api;
-			//connect was not sucesfull
+			//connect was not successful
 			} else {
-				throw new TimeoutException();
+				throw new Exception();
 			}
 		} catch (Exception e){
 			throw new Exception();

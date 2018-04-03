@@ -1,6 +1,8 @@
 package clientFunctions;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.awt.AWTException;
 import java.awt.Robot;
 import java.awt.event.KeyEvent;
@@ -24,6 +26,7 @@ public class MusicOnMove {
 //	
 	private static TS3EventAdapter thisEventAdapter = new TS3EventAdapter() {};
 	private static boolean soundPlaying = false;
+	private Logger logger = Logger.getLogger("musicOnMoveLogger");
 	
 	public TS3Api activateMusikOnMove(TS3Api api, String userName, int audioLenght, boolean activate){
 		if(activate){
@@ -41,12 +44,11 @@ public class MusicOnMove {
 		TS3EventAdapter listenToMusikOnMove = new TS3EventAdapter() {
 			@Override
 			public void onClientMoved(ClientMovedEvent e) {
-				System.out.println("MusikOnMove is alive");
+				logger.log(Level.INFO, "MusikOnMove is alive");
 				if ((e.getClientId() == api.getClientsByName(userName).get(0).getId()) && !soundPlaying) {
-					System.out.println(e.toString());
 					soundPlaying = true;
 					try {
-						System.out.println("TS input: VLC");
+						logger.log(Level.INFO,"TS input: VLC");
 						
 						Robot robot = new Robot();
 						robot.keyPress(KeyEvent.VK_F3);
@@ -59,15 +61,14 @@ public class MusicOnMove {
 						robot.keyPress(KeyEvent.VK_F4);
 						Thread.sleep(50);
 						robot.keyRelease(KeyEvent.VK_F4);
-						System.out.println("TS input : Normal");
+						logger.log(Level.INFO,"TS input : Normal");
 
 					} catch (InterruptedException | AWTException | IOException e2) {
-						System.out.println("Internal Java Error");
 						e2.printStackTrace();
 					}
 					soundPlaying = false;
 				} else {
-					System.out.println("No Switch of Target Person someone else moved");
+					logger.log(Level.INFO,"No Switch of Target Person someone else moved");
 				}
 			}
 		};
