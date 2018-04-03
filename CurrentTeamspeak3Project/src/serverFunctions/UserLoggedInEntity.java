@@ -14,6 +14,17 @@ public class UserLoggedInEntity {
 	private int id;
 	private String uId;
 	private String nickname;
+	private LocalDateTime timeUserJoinedTheServer;
+	
+	
+	
+	public LocalDateTime getTimeUserJoinedTheServer() {
+		return timeUserJoinedTheServer;
+	}
+
+	public void setTimeUserJoinedTheServer(LocalDateTime timeUserJoinedTheServer) {
+		this.timeUserJoinedTheServer = timeUserJoinedTheServer;
+	}
 
 	public void logUser(LoggedServerEvents event) {
 		LocalDateTime now = LocalDateTime.now();
