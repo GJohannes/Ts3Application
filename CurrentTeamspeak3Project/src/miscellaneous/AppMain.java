@@ -17,6 +17,9 @@ import java.util.logging.SimpleFormatter;
 import com.github.theholywaffle.teamspeak3.TS3Api;
 import com.github.theholywaffle.teamspeak3.TS3Config;
 import com.github.theholywaffle.teamspeak3.TS3Query;
+import com.github.theholywaffle.teamspeak3.api.event.ClientJoinEvent;
+import com.github.theholywaffle.teamspeak3.api.event.TS3EventAdapter;
+
 import java.util.logging.Level;
 
 import javafx.application.Application;
@@ -50,34 +53,53 @@ public class AppMain extends Application {
 	}
 
 	public static void main(String[] args) {
-		launch(args);
-		
+		// launch(args);
 
-//		 Ts3Client test = new Ts3Client();
-//		
-//		// test.startTs3Client("C:/Program Files/TeamSpeak 3Client/ts3client_win64.exe");
+//		ExtendedTS3EventAdapter extendedTS3EventAdapter = new ExtendedTS3EventAdapter(
+//				AllExistingEventAdapter.GREETING_MESSAGE) {
+//			@Override
+//			public void onClientJoin(ClientJoinEvent e) {
+//				System.out.println("ClientJoined");
+//				System.out.println(e.getInvokerId());
+//			}
+//		};
 //
-//		 String uId = "giwLzOcXMB1fi+DVtV6uSDzCqGo=";
-//		 TS3Config config = new TS3Config();
-//		 TS3Query query = new TS3Query(config);
-//		 TS3Api api = query.getApi();
-//		 // TsConection Settings
-//		 config.setHost("127.0.0.1");
-//		 config.setDebugLevel(Level.ALL);
+//		TS3EventAdapter tester = new TS3EventAdapter() {
+//		};
 //		
-//		 query.connect();
+//		Ts3Client test = new Ts3Client();
+//
+//		// test.startTs3Client("C:/Program Files/TeamSpeak
+//		// 3Client/ts3client_win64.exe");
+//
+//		String uId = "giwLzOcXMB1fi+DVtV6uSDzCqGo=";
+//		TS3Config config = new TS3Config();
+//		TS3Query query = new TS3Query(config);
+//
+//		ExtendedTS3Api api = new ExtendedTS3Api(query);
+//
+//		// TS3Api api = new TS3Api(query);
+//		// TS3Api api = query.getApi();
+//		// TsConection Settings
+//		config.setHost("127.0.0.1");
+//		config.setDebugLevel(Level.ALL);
+//
+//		query.connect();
+//
+//		api.login("QueryTester", "IRvo65OQ");
+//		api.selectVirtualServerByPort(Integer.valueOf(9987));
+//		api.setNickname("QueryTester");
+//		api.registerAllEvents();
+//		api.sendServerMessage("QueryTester is now online!");
+//		// api.add(tester);
+//		// api.addTS3Listeners(tester);
+//		api.addTS3Listeners(extendedTS3EventAdapter);
+//		System.out.println(api.getAllTS3Listeners().get(0).getName());
 //		
-//		 api.login("QueryTester", "cdgT5HY9");
-//		 api.selectVirtualServerByPort(Integer.valueOf(9987));
-//		 api.setNickname("QueryTester");
-//		 api.registerAllEvents();
-//		 api.sendServerMessage("QueryTester is now online!");
-//		
-//		 System.out.println(api.getClientsByName("Zephira").get(0).getChannelId());
-//		
-//		
-//		 System.out.println(api.getClientByUId(uId));
-		
-		
+//		//System.out.println(api.getClientsByName("Zephira").get(0).getChannelId());
+//		//api.removeTS3Listeners(AllExistingEventAdapter.GREETING_MESSAGE);
+//
+//		System.out.println(api.getClientByUId(uId));
+
 	}
 }
