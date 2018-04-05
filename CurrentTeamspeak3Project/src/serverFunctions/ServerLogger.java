@@ -34,6 +34,9 @@ public class ServerLogger {
 
 	public void stopServerLogging() {
 		api.removeTS3Listeners(logOnJoin,logOnLeave,greetingMessage);
+		greetingMessage = null;
+		logOnJoin = null; 
+		logOnLeave = null;
 		this.instance = null;
 	}
 	
@@ -49,11 +52,14 @@ public class ServerLogger {
 			userAlreadyOnline.setNickname(allClientsWhileStartingtoLogg.get(i).getNickname());
 			userAlreadyOnline.setuId(allClientsWhileStartingtoLogg.get(i).getUniqueIdentifier());
 			userAlreadyOnline.logUser(LoggedServerEvents.STARTED_LOG);
+			userAlreadyOnline.setTimeUserJoinedTheServer(LocalDateTime.now());
 
 			usersLoggedIn.add(userAlreadyOnline);
 		}
 	}
 
+	
+	// null check is there to prevent duplicates 
 	public void startServerLogging() {
 		if (logOnJoin == null) {
 			logOnJoin = logOnClientJoinedServer();
@@ -62,8 +68,9 @@ public class ServerLogger {
 		if (logOnLeave == null) {
 			logOnLeave = logOnClientLeaveServer();
 			api.addTS3Listeners(logOnLeave);
+			
 		}
-		if(greetingMessage() == null) {
+		if(greetingMessage == null) {
 			this.greetingMessage = greetingMessage();
 			api.addTS3Listeners(greetingMessage);
 		}

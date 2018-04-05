@@ -40,7 +40,6 @@ public class ServerMainWindowController implements Initializable {
 			// get the instance and set it to null
 			this.logger = ServerLogger.getInstance(api);
 			this.logger.startServerLogging();
-			System.out.println(logger);
 		} else {
 			// if logging was previously deactive it is hereby activated
 			logger.stopServerLogging();
@@ -54,19 +53,12 @@ public class ServerMainWindowController implements Initializable {
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		System.out.println("hello world init");
 		serverLoggerButton.setActiveText("Currently Active -- Stop Logging");
 		serverLoggerButton.setDeActiveText("Deactive -- Start Logging");
 	}
 
 	public void setApi(TS3Api ts3Api) {
 		this.api = ts3Api;
-	}
-	
-	public ServerMainWindowController() {
-//		System.out.println("hello world");
-//		serverLoggerButton.setActiveText("Start Logging");
-//		serverLoggerButton.setDeActiveText("Stop Logging");
 	}
 	
 }
