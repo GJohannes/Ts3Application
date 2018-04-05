@@ -17,7 +17,6 @@ public class BooleanButton extends Button{
 			@Override
 			public void handle(MouseEvent event) {
 				if(event.getButton() == MouseButton.PRIMARY) {
-					System.out.println("now toggling");
 					toggle();
 				}
 			}

@@ -44,9 +44,7 @@ public class ServerMainWindowController implements Initializable {
 		} else {
 			// if logging was previously deactive it is hereby activated
 			logger.stopServerLogging();
-			System.out.println(logger);
 		}
-		System.out.println(serverLoggerButton.isNowActive() + " is the state after click");
 	}
 	
 	@FXML
