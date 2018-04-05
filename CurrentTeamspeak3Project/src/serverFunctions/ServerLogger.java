@@ -16,38 +16,17 @@ import miscellaneous.ExtendedTS3EventAdapter;
 import miscellaneous.FileInputOutput;
 
 public class ServerLogger {
-	private static ServerLogger instance = null;
+
 	private ExtendedTS3Api api;
 	// api only sends id of leaving persons. Therefore data that should be
 	// logged must be held until leave event is triggered in this list
 	private ArrayList<UserLoggedInEntity> usersLoggedIn = new ArrayList<>();
-	// holding adapters to still have them around should they be removed
-	private static ExtendedTS3EventAdapter logOnJoin;
-	private static ExtendedTS3EventAdapter logOnLeave;
-	private static ExtendedTS3EventAdapter greetingMessage;
-
-	public static ServerLogger getInstance(ExtendedTS3Api api) {
-		if (instance == null) {
-			instance = new ServerLogger(api);
-			instance.api = api;
-			System.out.println("Now logging Join/Leav on server");
-		}
-		return instance;
-	}
-
-	public void stopServerLogging() {
-		System.out.println("stop was trigered");
-		api.removeTS3Listeners(AllExistingEventAdapter.LOG_ON_JOIN);
-		api.removeTS3Listeners(AllExistingEventAdapter.LOG_ON_LEAVE);
-		api.removeTS3Listeners(AllExistingEventAdapter.GREETING_MESSAGE);
-		greetingMessage = null;
-		logOnJoin = null; 
-		logOnLeave = null;
-		this.instance = null;
-	}
 	
+
 	// initialize so that all currently logged in people start to be logged
-	private ServerLogger(TS3Api api) {
+	public ServerLogger(ExtendedTS3Api api) {
+		System.out.println("Did an initialize");
+		this.api = api;
 		ArrayList<Client> allClientsWhileStartingtoLogg = new ArrayList<Client>();
 		allClientsWhileStartingtoLogg = (ArrayList<Client>) api.getClients();
 
@@ -64,22 +43,16 @@ public class ServerLogger {
 		}
 	}
 
-	
-	// null check is there to prevent duplicates 
 	public void startServerLogging() {
-		if (logOnJoin == null) {
-			logOnJoin = logOnClientJoinedServer();
-			api.addTS3Listeners(logOnJoin);
-		}
-		if (logOnLeave == null) {
-			logOnLeave = logOnClientLeaveServer();
-			api.addTS3Listeners(logOnLeave);
-			
-		}
-		if(greetingMessage == null) {
-			this.greetingMessage = greetingMessage();
-			api.addTS3Listeners(greetingMessage);
-		}
+		api.addTS3Listeners(logOnClientJoinedServer());
+		api.addTS3Listeners(logOnClientLeaveServer());
+		api.addTS3Listeners(greetingMessage());
+	}
+	
+	public void stopServerLogging() {
+		api.removeTS3Listeners(AllExistingEventAdapter.LOG_ON_JOIN);
+		api.removeTS3Listeners(AllExistingEventAdapter.LOG_ON_LEAVE);
+		api.removeTS3Listeners(AllExistingEventAdapter.GREETING_MESSAGE);
 	}
 
 	private ExtendedTS3EventAdapter greetingMessage() {
@@ -87,13 +60,13 @@ public class ServerLogger {
 			@Override
 			public void onClientJoin(ClientJoinEvent e) {
 				api.sendPrivateMessage(e.getClientId(), getWelcomeMessage(e));
-				api.sendPrivateMessage(e.getClientId(), "... also Fuck off");
+				//api.sendPrivateMessage(e.getClientId(), "... also Fuck off");
 			}
 		};
 		return greetinMessageEvent;
 	}
 
-	private ExtendedTS3EventAdapter logOnClientJoinedServer() {
+	private ExtendedTS3EventAdapter logOnClientJoinedServer() {		
 		ExtendedTS3EventAdapter logOnClientJoinedAdapter = new ExtendedTS3EventAdapter(AllExistingEventAdapter.LOG_ON_JOIN) {
 			@Override
 			public void onClientJoin(ClientJoinEvent e) {

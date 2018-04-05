@@ -24,7 +24,7 @@ public class ServerMainWindowController implements Initializable {
 	@FXML private BooleanButton testButton;
 	
 	private ExtendedTS3Api api;
-	ServerLogger logger;
+	private ServerLogger logger;
 	
 	public void setIpAdress(String ipAdress) {
 		this.ipAdress.setText(ipAdress);
@@ -39,7 +39,9 @@ public class ServerMainWindowController implements Initializable {
 		// if already active the stop logging by setting the log instance to null
 		if(serverLoggerButton.isNowActive()) {
 			// get the instance and set it to null
-			this.logger = ServerLogger.getInstance(api);
+			
+			this.logger = new ServerLogger(api);
+			//this.logger = ServerLogger.getInstance(api);
 			this.logger.startServerLogging();
 		} else {
 			// if logging was previously deactive it is hereby activated
