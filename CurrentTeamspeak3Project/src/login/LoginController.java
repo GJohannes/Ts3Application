@@ -58,40 +58,14 @@ public class LoginController implements Initializable {
 																serverQueryPasswordTextField.getText(),
 																Integer.parseInt(serverPortTextField.getText())
 		);
+		// only one instance of connect is possible
 		if(connect == null){
 			return;
 		}
 		connect.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
 			@Override
 			public void handle(WorkerStateEvent event) {
-				FXMLLoader clientLoader = new FXMLLoader();
-				clientLoader.setLocation(getClass().getResource("/MainWindow.fxml"));
-				try {
-					clientLoader.load();
-					MainWindowController mainWindowController = clientLoader.getController();
-					// Pass Data to new Controller
-					mainWindowController.setIpAdress(serverIpAdressTextField.getText());
-					mainWindowController.setServerPort((serverPortTextField.getText()));
-					mainWindowController.setServerQueryName(serverQueryNameTextField.getText());
-					mainWindowController.setServerQueryPassword(serverQueryPasswordTextField.getText());
-					mainWindowController.setInfoBoxText("Succesfully connected to server: " + serverIpAdressTextField.getText() + ":" + serverPortTextField.getText());
-					mainWindowController.setUserName(userNameTextField.getText());
-					mainWindowController.setUId(uIdTextField.getText());
-					mainWindowController.setApi(connect.get());
-				} catch (IOException | InterruptedException | ExecutionException e) {
-					e.printStackTrace();
-				}
-				
-				// Load the next FXML File in the same Window
-				Parent p = clientLoader.getRoot();
-				rootPane.getChildren().setAll(p);
-				rootPane.getScene().getWindow().sizeToScene();
-
-				// New Window
-				// Parent p = Loader.getRoot();
-				// Stage stage = new Stage();
-				// stage.setScene(new Scene(p));
-				// stage.show();
+				clientLoginFunctionality(connect);
 			}
 		});
 		
@@ -99,6 +73,7 @@ public class LoginController implements Initializable {
 				 					clientLoginButton.setGraphic(null);
 		});
 
+		
 		infoBox.setText("Trying to connect to server ....");
 		Image icon = new Image(this.getClass().getResourceAsStream("/waiting.gif"));
 		clientLoginButton.setGraphic(new ImageView(icon));
@@ -118,26 +93,13 @@ public class LoginController implements Initializable {
 				serverQueryPasswordTextField.getText(),
 				Integer.parseInt(serverPortTextField.getText())
 				);
+		
 		if(connect == null){
 			return;
 		}
 		
 		connect.setOnSucceeded(event -> {
-			FXMLLoader serverLoader = new FXMLLoader();
-			serverLoader.setLocation(getClass().getResource("/ServerMainWindow.fxml"));
-			try {
-				serverLoader.load();
-				ServerMainWindowController serverMainWindowController = serverLoader.getController();
-				serverMainWindowController.setApi(connect.get());
-				serverMainWindowController.setIpAdress(serverIpAdressTextField.getText());
-				serverMainWindowController.setServerPort(Integer.parseInt(serverPortTextField.getText()));
-			} catch (IOException | InterruptedException | ExecutionException expection) {
-				expection.printStackTrace();
-			}
-			
-			Parent p = serverLoader.getRoot();
-			rootPane.getChildren().setAll(p);
-			rootPane.getScene().getWindow().sizeToScene();
+			serverLoginFunctionality(connect);
 		});
 		
 		connect.setOnFailed(event -> { 	serverLoginButton.setGraphic(null);
@@ -197,6 +159,55 @@ public class LoginController implements Initializable {
 		}
 	}
 
+	private void serverLoginFunctionality(ConnectToServer connect) {
+		FXMLLoader serverLoader = new FXMLLoader();
+		serverLoader.setLocation(getClass().getResource("/ServerMainWindow.fxml"));
+		try {
+			serverLoader.load();
+			ServerMainWindowController serverMainWindowController = serverLoader.getController();
+			serverMainWindowController.setApi(connect.get());
+			serverMainWindowController.setIpAdress(serverIpAdressTextField.getText());
+			serverMainWindowController.setServerPort(Integer.parseInt(serverPortTextField.getText()));
+		} catch (IOException | InterruptedException | ExecutionException expection) {
+			expection.printStackTrace();
+		}
+		
+		Parent p = serverLoader.getRoot();
+		rootPane.getChildren().setAll(p);
+		rootPane.getScene().getWindow().sizeToScene();
+	}
+	
+	private void clientLoginFunctionality(ConnectToServer connect) {
+		FXMLLoader clientLoader = new FXMLLoader();
+		clientLoader.setLocation(getClass().getResource("/MainWindow.fxml"));
+		try {
+			clientLoader.load();
+			MainWindowController mainWindowController = clientLoader.getController();
+			// Pass Data to new Controller
+			mainWindowController.setIpAdress(serverIpAdressTextField.getText());
+			mainWindowController.setServerPort((serverPortTextField.getText()));
+			mainWindowController.setServerQueryName(serverQueryNameTextField.getText());
+			mainWindowController.setServerQueryPassword(serverQueryPasswordTextField.getText());
+			mainWindowController.setInfoBoxText("Succesfully connected to server: " + serverIpAdressTextField.getText() + ":" + serverPortTextField.getText());
+			mainWindowController.setUserName(userNameTextField.getText());
+			mainWindowController.setUId(uIdTextField.getText());
+			mainWindowController.setApi(connect.get());
+		} catch (IOException | InterruptedException | ExecutionException e) {
+			e.printStackTrace();
+		}
+		
+		// Load the next FXML File in the same Window
+		Parent p = clientLoader.getRoot();
+		rootPane.getChildren().setAll(p);
+		rootPane.getScene().getWindow().sizeToScene();
+
+		// New Window
+		// Parent p = Loader.getRoot();
+		// Stage stage = new Stage();
+		// stage.setScene(new Scene(p));
+		// stage.show();
+	}
+	
 	public void exit() {
 		Platform.exit();
 		System.exit(0);
