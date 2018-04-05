@@ -17,14 +17,11 @@ import serverFunctions.UserLoggedInEntity;
 
 public class ExtendedTS3Api extends TS3Api{
 	private static List<ExtendedTS3EventAdapter> allCurrentActiveEventAdapters = new ArrayList<>();
-	private static TS3EventAdapter test1;
-	private static ExtendedTS3EventAdapter test2;
 	
 	public ExtendedTS3Api(TS3Query query) {
 		super(query);
 	}
  
-  	
 	@Deprecated
 	public void addTS3Listeners(TS3EventAdapter adapter) throws Exception {
 		System.out.println("DO NOT USE THIS METHOD");
@@ -51,19 +48,14 @@ public class ExtendedTS3Api extends TS3Api{
 	
 	public void removeTS3Listeners(Enum<AllExistingEventAdapter> name) {
 		for(int i = 0; i < allCurrentActiveEventAdapters.size(); i++) {
-			System.out.println(allCurrentActiveEventAdapters.get(i).getName() + " -- " + name);
-			System.out.println(allCurrentActiveEventAdapters.get(i).getName().equals(name));
 			if(allCurrentActiveEventAdapters.get(i).getName().equals(name)){
 				super.removeTS3Listeners(allCurrentActiveEventAdapters.get(i));
 				allCurrentActiveEventAdapters.remove(i);
 			}
-			System.out.println(allCurrentActiveEventAdapters.size());
 		}
 	}
 	
 	public List<ExtendedTS3EventAdapter> getAllTS3Listeners() {
 		return allCurrentActiveEventAdapters;
 	}
-	
-
 }
