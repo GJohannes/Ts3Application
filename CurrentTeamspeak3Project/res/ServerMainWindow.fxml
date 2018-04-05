@@ -16,6 +16,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import com.sun.javafx.scene.control.skin.IntegerField?>
+<?import javafx.scene.control.Button?>
+<?import customFxmlElements.BooleanButton?>
 
 <AnchorPane prefWidth="500" prefHeight="500"
 	xmlns:fx="http://javafx.com/fxml/1" fx:controller="serverControllers.ServerMainWindowController"
@@ -35,7 +37,10 @@
 			</StackPane>
 		</HBox>
 		<HBox spacing="10" alignment="CENTER">
-			<Button fx:id="serverLogger" onAction="#logging" text="StartLogging" prefWidth="200" ></Button>
+			<BooleanButton prefWidth="200" fx:id="serverLoggerButton" onAction="#logging" ></BooleanButton>
+		</HBox>
+		<HBox>
+			<BooleanButton prefWidth="200" fx:id="testButton" onAction="#test"></BooleanButton>
 		</HBox>
 	</VBox>
 </AnchorPane>

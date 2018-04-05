@@ -5,21 +5,25 @@ import java.util.ResourceBundle;
 
 import com.github.theholywaffle.teamspeak3.TS3Api;
 
+import customFxmlElements.BooleanButton;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
+import miscellaneous.TestClass;
 import serverFunctions.ServerLogger;
 
 public class ServerMainWindowController implements Initializable {
 	
 	@FXML private AnchorPane rootPane;
-	@FXML private Button serverLogger;
+	@FXML private BooleanButton serverLoggerButton;
 	@FXML private Text ipAdress;	
 	@FXML private Text serverPort;
+	@FXML private BooleanButton testButton;
 	
 	private TS3Api api;
+	ServerLogger logger;
 	
 	public void setIpAdress(String ipAdress) {
 		this.ipAdress.setText(ipAdress);
@@ -31,21 +35,40 @@ public class ServerMainWindowController implements Initializable {
 
 	@FXML
 	public void logging(){
-		ServerLogger logger = ServerLogger.getInstance(api);
-		logger.startServerLogging();
+		// if already active the stop logging by setting the log instance to null
+		if(serverLoggerButton.isNowActive()) {
+			// get the instance and set it to null
+			this.logger = ServerLogger.getInstance(api);
+			this.logger.startServerLogging();
+			System.out.println(logger);
+		} else {
+			// if logging was previously deactive it is hereby activated
+			logger.stopServerLogging();
+			System.out.println(logger);
+		}
+		System.out.println(serverLoggerButton.isNowActive() + " is the state after click");
 	}
 	
-	public void testThis(){
-		System.out.println("TEst");
+	@FXML
+	public void test(){
+		System.out.println(Math.random());
 	}
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		// TODO Auto-generated method stub
-		
+		System.out.println("hello world init");
+		serverLoggerButton.setActiveText("Currently Active -- Stop Logging");
+		serverLoggerButton.setDeActiveText("Deactive -- Start Logging");
 	}
 
 	public void setApi(TS3Api ts3Api) {
 		this.api = ts3Api;
 	}
+	
+	public ServerMainWindowController() {
+//		System.out.println("hello world");
+//		serverLoggerButton.setActiveText("Start Logging");
+//		serverLoggerButton.setDeActiveText("Stop Logging");
+	}
+	
 }

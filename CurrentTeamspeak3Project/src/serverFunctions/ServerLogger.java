@@ -21,6 +21,7 @@ public class ServerLogger {
 	// holding adapters to still have them around should they be removed
 	private static TS3EventAdapter logOnJoin;
 	private static TS3EventAdapter logOnLeave;
+	private static TS3EventAdapter greetingMessage;
 
 	public static ServerLogger getInstance(TS3Api api) {
 		if (instance == null) {
@@ -31,6 +32,11 @@ public class ServerLogger {
 		return instance;
 	}
 
+	public void stopServerLogging() {
+		api.removeTS3Listeners(logOnJoin,logOnLeave,greetingMessage);
+		this.instance = null;
+	}
+	
 	// initialize so that all currently logged in people start to be logged
 	private ServerLogger(TS3Api api) {
 		ArrayList<Client> allClientsWhileStartingtoLogg = new ArrayList<Client>();
@@ -57,7 +63,10 @@ public class ServerLogger {
 			logOnLeave = logOnClientLeaveServer();
 			api.addTS3Listeners(logOnLeave);
 		}
-		api.addTS3Listeners(greetingMessage());
+		if(greetingMessage() == null) {
+			this.greetingMessage = greetingMessage();
+			api.addTS3Listeners(greetingMessage);
+		}
 	}
 
 	private TS3EventAdapter greetingMessage() {
