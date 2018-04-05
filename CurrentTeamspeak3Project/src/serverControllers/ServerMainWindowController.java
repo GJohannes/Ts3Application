@@ -11,6 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
+import miscellaneous.ExtendedTS3Api;
 import miscellaneous.TestClass;
 import serverFunctions.ServerLogger;
 
@@ -22,7 +23,7 @@ public class ServerMainWindowController implements Initializable {
 	@FXML private Text serverPort;
 	@FXML private BooleanButton testButton;
 	
-	private TS3Api api;
+	private ExtendedTS3Api api;
 	ServerLogger logger;
 	
 	public void setIpAdress(String ipAdress) {
@@ -57,7 +58,7 @@ public class ServerMainWindowController implements Initializable {
 		serverLoggerButton.setDeActiveText("Deactive -- Start Logging");
 	}
 
-	public void setApi(TS3Api ts3Api) {
+	public void setApi(ExtendedTS3Api ts3Api) {
 		this.api = ts3Api;
 	}
 	

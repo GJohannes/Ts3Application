@@ -4,14 +4,14 @@ import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.github.theholywaffle.teamspeak3.TS3Api;
 import com.github.theholywaffle.teamspeak3.TS3Config;
 import com.github.theholywaffle.teamspeak3.TS3Query;
 
 import javafx.concurrent.Task;
+import miscellaneous.ExtendedTS3Api;
 
 
-public class ConnectToServer extends Task<TS3Api> {
+public class ConnectToServer extends Task<ExtendedTS3Api> {
 	private String ipAdress;
 	private String serverQueryName;
 	private String serverQueryPassword;
@@ -48,11 +48,13 @@ public class ConnectToServer extends Task<TS3Api> {
 	}
 
 	@Override
-	public TS3Api call() throws Exception {
+	public ExtendedTS3Api call() throws Exception {
 		logger.log(Level.INFO, "Started building connection to server");
 		TS3Config config = new TS3Config();
 		TS3Query query = new TS3Query(config);
-		TS3Api api = query.getApi();
+		
+		ExtendedTS3Api api = new ExtendedTS3Api(query);
+		//OLD TS3Api api = query.getApi();
 
 		config.setHost(this.ipAdress);
 		config.setDebugLevel(Level.ALL);

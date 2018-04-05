@@ -33,7 +33,7 @@ import miscellaneous.*;
 
 public class MainWindowController implements Initializable{
 
-	private static TS3Api api;
+	private static ExtendedTS3Api api;
 	
     @FXML
     private Text infoBox;
@@ -64,8 +64,8 @@ public class MainWindowController implements Initializable{
     	infoBox.setText(s);
     }
     
-    public void setApi(TS3Api connectedApi){
-    	api = connectedApi;
+    public void setApi(ExtendedTS3Api ts3Api){
+    	api = ts3Api;
     }
 	
     public void setUserName(String s){

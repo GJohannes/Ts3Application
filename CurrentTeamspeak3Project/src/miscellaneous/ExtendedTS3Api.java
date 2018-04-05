@@ -16,7 +16,9 @@ import serverFunctions.UserLoggedInEntity;
 
 
 public class ExtendedTS3Api extends TS3Api{
-	private List<ExtendedTS3EventAdapter> all = new ArrayList<>();
+	private static List<ExtendedTS3EventAdapter> allCurrentActiveEventAdapters = new ArrayList<>();
+	private static TS3EventAdapter test1;
+	private static ExtendedTS3EventAdapter test2;
 	
 	public ExtendedTS3Api(TS3Query query) {
 		super(query);
@@ -36,27 +38,31 @@ public class ExtendedTS3Api extends TS3Api{
 	}
 	
 	public void addTS3Listeners(ExtendedTS3EventAdapter adapter) {
-		for(int i = 0; i < all.size(); i++) {
-			if(all.get(i).getName().equals(adapter.getName())) {
+		for(int i = 0; i < allCurrentActiveEventAdapters.size(); i++) {
+			if(allCurrentActiveEventAdapters.get(i).getName().equals(adapter.getName())) {
 				System.out.println("Could not add adapter since duplicates are not allowed");
 				return;
 			}
 		}
 		// loop did not return therefore possible to add since it is not a duplicate
-		all.add(adapter);
+		allCurrentActiveEventAdapters.add(adapter);
 		super.addTS3Listeners(adapter);
 	}	
 	
 	public void removeTS3Listeners(Enum<AllExistingEventAdapter> name) {
-		for(int i = 0; i < all.size(); i++) {
-			if(all.get(i).getName().equals(name)){
-				super.removeTS3Listeners(all.get(i));
+		for(int i = 0; i < allCurrentActiveEventAdapters.size(); i++) {
+			System.out.println(allCurrentActiveEventAdapters.get(i).getName() + " -- " + name);
+			System.out.println(allCurrentActiveEventAdapters.get(i).getName().equals(name));
+			if(allCurrentActiveEventAdapters.get(i).getName().equals(name)){
+				super.removeTS3Listeners(allCurrentActiveEventAdapters.get(i));
+				allCurrentActiveEventAdapters.remove(i);
 			}
+			System.out.println(allCurrentActiveEventAdapters.size());
 		}
 	}
 	
 	public List<ExtendedTS3EventAdapter> getAllTS3Listeners() {
-		return all;
+		return allCurrentActiveEventAdapters;
 	}
 	
 

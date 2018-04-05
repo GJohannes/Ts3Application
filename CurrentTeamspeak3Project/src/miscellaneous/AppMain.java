@@ -53,7 +53,7 @@ public class AppMain extends Application {
 	}
 
 	public static void main(String[] args) {
-		// launch(args);
+		launch(args);
 
 //		ExtendedTS3EventAdapter extendedTS3EventAdapter = new ExtendedTS3EventAdapter(
 //				AllExistingEventAdapter.GREETING_MESSAGE) {
@@ -95,6 +95,9 @@ public class AppMain extends Application {
 //		// api.addTS3Listeners(tester);
 //		api.addTS3Listeners(extendedTS3EventAdapter);
 //		System.out.println(api.getAllTS3Listeners().get(0).getName());
+//		
+//		api.removeTS3Listeners(AllExistingEventAdapter.GREETING_MESSAGE);
+//		System.out.println(api.getAllTS3Listeners().size() + " current size");
 //		
 //		//System.out.println(api.getClientsByName("Zephira").get(0).getChannelId());
 //		//api.removeTS3Listeners(AllExistingEventAdapter.GREETING_MESSAGE);

@@ -9,6 +9,11 @@ import java.awt.event.KeyEvent;
 
 import com.github.theholywaffle.teamspeak3.*;
 import com.github.theholywaffle.teamspeak3.api.event.TS3EventAdapter;
+
+import miscellaneous.AllExistingEventAdapter;
+import miscellaneous.ExtendedTS3Api;
+import miscellaneous.ExtendedTS3EventAdapter;
+
 import com.github.theholywaffle.teamspeak3.api.event.ClientMovedEvent;
 
 public class MusicOnMove {
@@ -24,24 +29,24 @@ public class MusicOnMove {
 //		return instance;
 //	}
 //	
-	private static TS3EventAdapter thisEventAdapter = new TS3EventAdapter() {};
+	private static ExtendedTS3EventAdapter thisEventAdapter = new ExtendedTS3EventAdapter(AllExistingEventAdapter.MUSIC_ON_MOVE) {};
 	private static boolean soundPlaying = false;
 	private Logger logger = Logger.getLogger("musicOnMoveLogger");
 	
-	public TS3Api activateMusikOnMove(TS3Api api, String userName, int audioLenght, boolean activate){
+	public ExtendedTS3Api activateMusikOnMove(ExtendedTS3Api api, String userName, int audioLenght, boolean activate){
 		if(activate){
-			api.removeTS3Listeners(thisEventAdapter);
+			api.removeTS3Listeners(AllExistingEventAdapter.MUSIC_ON_MOVE);
 			thisEventAdapter = playMusicOnClientMove(api, userName, audioLenght);
 			api.addTS3Listeners(thisEventAdapter);
 		} else {
-			api.removeTS3Listeners(thisEventAdapter);
+			api.removeTS3Listeners(AllExistingEventAdapter.MUSIC_ON_MOVE);
 		}
 		return api;
 	}
 
 	
-	private TS3EventAdapter playMusicOnClientMove(TS3Api api, String userName, int audioLenght) {
-		TS3EventAdapter listenToMusikOnMove = new TS3EventAdapter() {
+	private ExtendedTS3EventAdapter playMusicOnClientMove(ExtendedTS3Api api, String userName, int audioLenght) {
+		ExtendedTS3EventAdapter listenToMusikOnMove = new ExtendedTS3EventAdapter(AllExistingEventAdapter.MUSIC_ON_MOVE) {
 			@Override
 			public void onClientMoved(ClientMovedEvent e) {
 				logger.log(Level.INFO, "MusikOnMove is alive");
@@ -105,4 +110,40 @@ public class MusicOnMove {
 	// e.getMessage();
 	// }
 
+//	@Override
+//	public void onTextMessage(TextMessageEvent e) {}
+//
+//	@Override
+//	public void onClientJoin(ClientJoinEvent e) {}
+//
+//	@Override
+//	public void onClientLeave(ClientLeaveEvent e) {}
+//
+//	@Override
+//	public void onServerEdit(ServerEditedEvent e) {}
+//
+//	@Override
+//	public void onChannelEdit(ChannelEditedEvent e) {}
+//
+//	@Override
+//	public void onChannelDescriptionChanged(ChannelDescriptionEditedEvent e) {}
+//
+//	@Override
+//	public void onClientMoved(ClientMovedEvent e) {}
+//
+//	@Override
+//	public void onChannelCreate(ChannelCreateEvent e) {}
+//
+//	@Override
+//	public void onChannelDeleted(ChannelDeletedEvent e) {}
+//
+//	@Override
+//	public void onChannelMoved(ChannelMovedEvent e) {}
+//
+//	@Override
+//	public void onChannelPasswordChanged(ChannelPasswordChangedEvent e) {}
+//
+//	@Override
+//	public void onPrivilegeKeyUsed(PrivilegeKeyUsedEvent e) {}
+	
 }

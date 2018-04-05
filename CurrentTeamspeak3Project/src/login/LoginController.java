@@ -192,6 +192,7 @@ public class LoginController implements Initializable {
 			mainWindowController.setUserName(userNameTextField.getText());
 			mainWindowController.setUId(uIdTextField.getText());
 			mainWindowController.setApi(connect.get());
+			mainWindowController.setApi(connect.get());
 		} catch (IOException | InterruptedException | ExecutionException e) {
 			e.printStackTrace();
 		}

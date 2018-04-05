@@ -10,20 +10,23 @@ import com.github.theholywaffle.teamspeak3.api.event.ClientLeaveEvent;
 import com.github.theholywaffle.teamspeak3.api.event.TS3EventAdapter;
 import com.github.theholywaffle.teamspeak3.api.wrapper.Client;
 
+import miscellaneous.AllExistingEventAdapter;
+import miscellaneous.ExtendedTS3Api;
+import miscellaneous.ExtendedTS3EventAdapter;
 import miscellaneous.FileInputOutput;
 
 public class ServerLogger {
 	private static ServerLogger instance = null;
-	private TS3Api api;
+	private ExtendedTS3Api api;
 	// api only sends id of leaving persons. Therefore data that should be
 	// logged must be held until leave event is triggered in this list
 	private ArrayList<UserLoggedInEntity> usersLoggedIn = new ArrayList<>();
 	// holding adapters to still have them around should they be removed
-	private static TS3EventAdapter logOnJoin;
-	private static TS3EventAdapter logOnLeave;
-	private static TS3EventAdapter greetingMessage;
+	private static ExtendedTS3EventAdapter logOnJoin;
+	private static ExtendedTS3EventAdapter logOnLeave;
+	private static ExtendedTS3EventAdapter greetingMessage;
 
-	public static ServerLogger getInstance(TS3Api api) {
+	public static ServerLogger getInstance(ExtendedTS3Api api) {
 		if (instance == null) {
 			instance = new ServerLogger(api);
 			instance.api = api;
@@ -33,7 +36,10 @@ public class ServerLogger {
 	}
 
 	public void stopServerLogging() {
-		api.removeTS3Listeners(logOnJoin,logOnLeave,greetingMessage);
+		System.out.println("stop was trigered");
+		api.removeTS3Listeners(AllExistingEventAdapter.LOG_ON_JOIN);
+		api.removeTS3Listeners(AllExistingEventAdapter.LOG_ON_LEAVE);
+		api.removeTS3Listeners(AllExistingEventAdapter.GREETING_MESSAGE);
 		greetingMessage = null;
 		logOnJoin = null; 
 		logOnLeave = null;
@@ -76,8 +82,8 @@ public class ServerLogger {
 		}
 	}
 
-	private TS3EventAdapter greetingMessage() {
-		TS3EventAdapter greetinMessageEvent = new TS3EventAdapter() {
+	private ExtendedTS3EventAdapter greetingMessage() {
+		ExtendedTS3EventAdapter greetinMessageEvent = new ExtendedTS3EventAdapter(AllExistingEventAdapter.GREETING_MESSAGE) {
 			@Override
 			public void onClientJoin(ClientJoinEvent e) {
 				api.sendPrivateMessage(e.getClientId(), getWelcomeMessage(e));
@@ -87,8 +93,8 @@ public class ServerLogger {
 		return greetinMessageEvent;
 	}
 
-	private TS3EventAdapter logOnClientJoinedServer() {
-		TS3EventAdapter logOnClientJoinedAdapter = new TS3EventAdapter() {
+	private ExtendedTS3EventAdapter logOnClientJoinedServer() {
+		ExtendedTS3EventAdapter logOnClientJoinedAdapter = new ExtendedTS3EventAdapter(AllExistingEventAdapter.LOG_ON_JOIN) {
 			@Override
 			public void onClientJoin(ClientJoinEvent e) {
 				UserLoggedInEntity newUser = new UserLoggedInEntity();
@@ -105,8 +111,8 @@ public class ServerLogger {
 		return logOnClientJoinedAdapter;
 	}
 
-	private TS3EventAdapter logOnClientLeaveServer() {
-		TS3EventAdapter logOnClientLeaveAdapter = new TS3EventAdapter() {
+	private ExtendedTS3EventAdapter logOnClientLeaveServer() {
+		ExtendedTS3EventAdapter logOnClientLeaveAdapter = new ExtendedTS3EventAdapter(AllExistingEventAdapter.LOG_ON_LEAVE) {
 			@Override
 			public void onClientLeave(ClientLeaveEvent e) {
 				for (int i = 0; i < usersLoggedIn.size(); i++) {
