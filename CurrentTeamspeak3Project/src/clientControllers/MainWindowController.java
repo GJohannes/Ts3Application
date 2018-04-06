@@ -6,16 +6,15 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import clientFunctions.LookUserInChannel;
+import clientFunctions.LockUserInChannel;
 import clientFunctions.MusicOnMove;
+import customFxmlElements.BooleanButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.AnchorPane;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
-
-import com.github.theholywaffle.teamspeak3.TS3Api;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -53,6 +52,10 @@ public class MainWindowController implements Initializable{
     private TextField audioFileNameTextField;
     @FXML
     private TextField audioFileLenghtTextField;
+    @FXML
+    private BooleanButton musicOnMoveButton;
+    @FXML
+    private BooleanButton lockUserButton;
     
     @FXML
     private Tooltip test;
@@ -94,32 +97,35 @@ public class MainWindowController implements Initializable{
     
     @FXML
     private void startStopMusikOnMove(ActionEvent event)  {
-    	//playMusikOnMove test = playMusikOnMove.getInstance();
     	FileInputOutput writerReaderObject = new FileInputOutput();
     	MusicOnMove musikMove = new MusicOnMove();
     	
-    	try {
-
-    		File audioFile = new File(audioFileNameTextField.getText());
-			writerReaderObject.writeAudioBatch(audioFile.getAbsolutePath(), "StartAudio.bat");
-			String startStopText = ((Button)event.getSource()).getText();
-	    	if(startStopText.equals("Start MusikOnMove")){ 
-	    		api = musikMove.activateMusikOnMove(api, userName.getText().toString(), Integer.valueOf(audioFileLenghtTextField.getText().toString()), true);
-	    		((Button)event.getSource()).setText("Stop MusikOnMove");
-	    	} else {
-	    		api = musikMove.activateMusikOnMove(api, userName.getText().toString(), Integer.valueOf(audioFileLenghtTextField.getText().toString()), false);
-	    		((Button)event.getSource()).setText("Start MusikOnMove");
-	    	}
-		} catch (IOException e) {
-			infoBox.setText("Could not write audiofile batch");
-			e.printStackTrace();
-		}
+    	if(musicOnMoveButton.isNowActive()) {
+    		try {
+    			audioFileNameTextField.setDisable(true);
+    			audioFileLenghtTextField.setDisable(true);
+    	    	File audioFile = new File(audioFileNameTextField.getText());
+    			writerReaderObject.writeAudioBatch(audioFile.getAbsolutePath(), "StartAudio.bat");
+    			musikMove.startMusicOnMove(api, userName.getText(), Integer.valueOf(audioFileLenghtTextField.getText().toString()));
+    		} catch (IOException e) {
+    			e.printStackTrace();
+    		}
+    	} else {
+    		System.out.println("deactivated");
+    		audioFileNameTextField.setDisable(false);
+			audioFileLenghtTextField.setDisable(false);
+    		musikMove.stopMusicOnMove(api);
+    	}
     }
 
 	@FXML
-    private void empty(ActionEvent event){
-		LookUserInChannel look = new LookUserInChannel();
-		api = look.activateCatchMeIfYouCan(api, userName.getText().toString(), true);
+    private void lockUserInCurrentChannel(ActionEvent event){
+		LockUserInChannel lock = new LockUserInChannel();
+		if(lockUserButton.isNowActive()) {
+			lock.activateCatchMeIfYouCan(api, userName.getText().toString());			
+		} else {
+			lock.deactivateCatchMeIfYouCan(api);
+		}
     }
     
     @FXML
@@ -146,7 +152,12 @@ public class MainWindowController implements Initializable{
 	public void initialize(URL location, ResourceBundle resources) {
 		FileInputOutput inOut = new FileInputOutput();
 		JSONObject json = new JSONObject();
-	
+		musicOnMoveButton.setActiveText("Active -- Click to Deactivate");
+		musicOnMoveButton.setDeActiveText("Currently Deactive -- Click To Activate");
+		
+		lockUserButton.setActiveText("Currently Locking a User");
+		lockUserButton.setDeActiveText("Not currently locking a user");
+		
 		try {
 		json = inOut.readFile("MainData");
 		audioFileNameTextField.setText((String)json.get("audioFileName"));

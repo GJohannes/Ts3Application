@@ -17,39 +17,24 @@ import miscellaneous.ExtendedTS3EventAdapter;
 import com.github.theholywaffle.teamspeak3.api.event.ClientMovedEvent;
 
 public class MusicOnMove {
-	
-//	private static playMusikOnMove instance = null;
-//	
-//	private playMusikOnMove(){}
-//	
-//	public static playMusikOnMove getInstance(){
-//		if(instance == null){
-//			instance = new playMusikOnMove();
-//		}
-//		return instance;
-//	}
-//	
-	private static ExtendedTS3EventAdapter thisEventAdapter = new ExtendedTS3EventAdapter(AllExistingEventAdapter.MUSIC_ON_MOVE) {};
-	private static boolean soundPlaying = false;
-	private Logger logger = Logger.getLogger("musicOnMoveLogger");
-	
-	public ExtendedTS3Api activateMusikOnMove(ExtendedTS3Api api, String userName, int audioLenght, boolean activate){
-		if(activate){
-			api.removeTS3Listeners(AllExistingEventAdapter.MUSIC_ON_MOVE);
-			thisEventAdapter = playMusicOnClientMove(api, userName, audioLenght);
-			api.addTS3Listeners(thisEventAdapter);
-		} else {
-			api.removeTS3Listeners(AllExistingEventAdapter.MUSIC_ON_MOVE);
-		}
-		return api;
-	}
 
+	public void startMusicOnMove(ExtendedTS3Api api, String userName, int audioLenght) {
+		api.addTS3Listeners(this.playMusicOnClientMove(api, userName, audioLenght));
+	}
+	
+	public void stopMusicOnMove(ExtendedTS3Api api) {
+		api.removeTS3Listeners(AllExistingEventAdapter.MUSIC_ON_MOVE);
+	}
 	
 	private ExtendedTS3EventAdapter playMusicOnClientMove(ExtendedTS3Api api, String userName, int audioLenght) {
 		ExtendedTS3EventAdapter listenToMusikOnMove = new ExtendedTS3EventAdapter(AllExistingEventAdapter.MUSIC_ON_MOVE) {
+			private boolean soundPlaying = false;
+			private Logger logger = Logger.getLogger("musicOnMoveLogger");
+			
 			@Override
 			public void onClientMoved(ClientMovedEvent e) {
 				logger.log(Level.INFO, "MusikOnMove is alive");
+				
 				if ((e.getClientId() == api.getClientsByName(userName).get(0).getId()) && !soundPlaying) {
 					soundPlaying = true;
 					try {
@@ -73,13 +58,13 @@ public class MusicOnMove {
 					}
 					soundPlaying = false;
 				} else {
-					logger.log(Level.INFO,"No Switch of Target Person someone else moved");
+					logger.log(Level.INFO,"No Switch of Target Person someone else moved OR sound is already playing");
 				}
 			}
 		};
-
 		return listenToMusikOnMove;
 	}
+	
 	// @Override
 	// public void onClientJoin(ClientJoinEvent e) {
 	// System.out.println("ClientJoined");

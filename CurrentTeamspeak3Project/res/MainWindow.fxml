@@ -14,6 +14,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import customFxmlElements.BooleanButton?>
 
 <AnchorPane prefWidth="1350" prefHeight="700"
 	fx:controller="clientControllers.MainWindowController" xmlns:fx="http://javafx.com/fxml">
@@ -86,14 +87,14 @@
 			<HBox spacing="10" alignment="TOP_LEFT">
 				<StackPane alignment="TOP_LEFT"/>
 				<Label text="" prefWidth="200" font="$FONT" />
-				<Button text="Start MusikOnMove" prefWidth="200" font="$FONT"
+				<BooleanButton fx:id="musicOnMoveButton" text="Start MusikOnMove" prefWidth="200" font="$FONT"
 					onAction="#startStopMusikOnMove" />
-				<Button text="Placeholder" prefWidth="200" font="$FONT"
-					onAction="#empty">
+				<BooleanButton fx:id="lockUserButton" prefWidth="200" font="$FONT"
+					onAction="#lockUserInCurrentChannel">
 					<tooltip>
 						<Tooltip text="This button does nothing yet" />
 					</tooltip>
-				</Button>
+				</BooleanButton>
 			</HBox>
 			<HBox spacing="10" alignment="TOP_LEFT">
 				<StackPane alignment="TOP_LEFT" />
