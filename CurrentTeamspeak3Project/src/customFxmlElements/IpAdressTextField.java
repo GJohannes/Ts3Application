@@ -1,17 +1,26 @@
 package customFxmlElements;
 
+import javax.swing.plaf.basic.BasicSplitPaneUI.KeyboardEndHandler;
+
+import javafx.event.EventHandler;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 
 public class IpAdressTextField extends TextField {
 	private boolean isTextFieldInputValid = false;
 	
 	public IpAdressTextField() {
-		// do after every key release
-		this.setOnKeyReleased(event -> {
-			this.checkValidity();
-		});
+		EventHandler<KeyEvent> handle = new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent event) {
+					checkValidity();
+			}
+		};
+		this.addEventHandler(KeyEvent.KEY_RELEASED, handle);
 	}
-	
+		
 	//should be done after setText but no possibiliy found yet
 	public void checkValidity(){
 		if(this.isValidIpAdress(this.getText())){
