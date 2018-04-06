@@ -1,15 +1,22 @@
 package customFxmlElements;
 
+import javafx.event.EventHandler;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 
 public class PortTextField extends TextField {
 private boolean isTextFieldInputValid = false;
 	
 	public PortTextField() {
 		// do after every key release
-		this.setOnKeyReleased(event -> {
-			this.checkValidity();
-		});	
+		EventHandler<KeyEvent> handle = new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent event) {
+					checkValidity();
+			}
+		};
+		this.addEventHandler(KeyEvent.KEY_RELEASED, handle);
+		
 	}
 	
 	//should be done after setText but no possibiliy found yet
