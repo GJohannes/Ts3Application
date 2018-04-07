@@ -111,7 +111,6 @@ public class MainWindowController implements Initializable{
     			e.printStackTrace();
     		}
     	} else {
-    		System.out.println("deactivated");
     		audioFileNameTextField.setDisable(false);
 			audioFileLenghtTextField.setDisable(false);
     		musikMove.stopMusicOnMove(api);

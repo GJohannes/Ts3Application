@@ -3,16 +3,14 @@ package serverControllers;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import com.github.theholywaffle.teamspeak3.TS3Api;
+
 
 import customFxmlElements.BooleanButton;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import miscellaneous.ExtendedTS3Api;
-import miscellaneous.TestClass;
 import serverFunctions.ServerLogger;
 
 public class ServerMainWindowController implements Initializable {

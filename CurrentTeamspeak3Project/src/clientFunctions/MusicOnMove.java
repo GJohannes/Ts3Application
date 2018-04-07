@@ -7,9 +7,6 @@ import java.awt.AWTException;
 import java.awt.Robot;
 import java.awt.event.KeyEvent;
 
-import com.github.theholywaffle.teamspeak3.*;
-import com.github.theholywaffle.teamspeak3.api.event.TS3EventAdapter;
-
 import miscellaneous.AllExistingEventAdapter;
 import miscellaneous.ExtendedTS3Api;
 import miscellaneous.ExtendedTS3EventAdapter;

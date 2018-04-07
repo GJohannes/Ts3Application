@@ -2,7 +2,6 @@ package customFxmlElements;
 
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
-import javafx.scene.input.InputEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.MouseButton;
 

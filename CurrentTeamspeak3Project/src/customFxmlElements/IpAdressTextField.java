@@ -1,12 +1,8 @@
 package customFxmlElements;
 
-import javax.swing.plaf.basic.BasicSplitPaneUI.KeyboardEndHandler;
-
 import javafx.event.EventHandler;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 
 public class IpAdressTextField extends TextField {
 	private boolean isTextFieldInputValid = false;
