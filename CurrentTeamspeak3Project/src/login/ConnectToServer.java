@@ -46,7 +46,7 @@ public class ConnectToServer extends Task<ExtendedTS3Api> {
 	@Override
 	public ExtendedTS3Api call() throws Exception {
 		logger.log(Level.INFO, "Started building connection to server");
-		ExtendedTS3Config config = new ExtendedTS3Config();
+		ExtendedTS3Config config = new ExtendedTS3Config(this.ipAdress);
 		ExtendedTS3Query query = new ExtendedTS3Query(config);
 		ExtendedTS3Api api = new ExtendedTS3Api(query);
 		

@@ -142,10 +142,17 @@ public class MainWindowController implements Initializable{
     }
     
     @FXML
+    private void showConnectionInfo(ActionEvent event) {
+    	ApiConnectionStatusWindow connectionWindow = new ApiConnectionStatusWindow();
+    	connectionWindow.showWindow(api);
+    }
+    
+    @FXML
     private void exitSystem(ActionEvent event){
     	Platform.exit();
     	System.exit(0);
     }
+    
     
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
