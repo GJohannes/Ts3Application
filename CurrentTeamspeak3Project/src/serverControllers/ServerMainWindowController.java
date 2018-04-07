@@ -54,7 +54,6 @@ public class ServerMainWindowController implements Initializable {
 	@FXML
 	public void toggleMusikBot(ActionEvent e) {
 		MusikBot bot = new MusikBot();
-		System.out.println("button clicked");
 		bot.startMusikBot(api, "TODO_InsertVLCPath");
 	}
 	

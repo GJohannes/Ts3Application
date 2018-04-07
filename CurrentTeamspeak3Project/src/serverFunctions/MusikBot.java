@@ -62,7 +62,6 @@ public class MusikBot {
 				process.destroy();
 			}
 
-			System.out.println("process  NOT alive");
 			process = new ProcessBuilder(vlcPathInternal, messageWithoutPrefix).start();
 
 		} catch (IOException e1) {

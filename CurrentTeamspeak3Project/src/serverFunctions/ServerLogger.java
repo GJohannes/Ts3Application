@@ -23,7 +23,6 @@ public class ServerLogger {
 
 	// initialize so that all currently logged in people start to be logged
 	public ServerLogger(ExtendedTS3Api api) {
-		System.out.println("Did an initialize");
 		this.api = api;
 		ArrayList<Client> allClientsWhileStartingtoLogg = new ArrayList<Client>();
 		allClientsWhileStartingtoLogg = (ArrayList<Client>) api.getClients();
