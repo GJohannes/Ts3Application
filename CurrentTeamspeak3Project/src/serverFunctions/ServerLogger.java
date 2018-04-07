@@ -120,7 +120,7 @@ public class ServerLogger {
 				hours = (totalSecs / 3600) % 24;
 				minutes = (totalSecs % 3600) / 60;
 				seconds = totalSecs % 60;
-				return  "Welcome " +  e.getClientNickname() + " you already spent \n "+ days + "-Days " + hours + "-Hours " + minutes + "-Minutes and " + seconds + "-Seconds \n of your lifetime on this Server. SAD!";
+				return  " \n Welcome " +  e.getClientNickname() + " you already spent \n "+ days + "-Days " + hours + "-Hours " + minutes + "-Minutes and " + seconds + "-Seconds \n of your lifetime on this Server. SAD!";
 			}
 		} catch (IOException e1) {
 			e1.printStackTrace();

@@ -42,6 +42,9 @@
 		<HBox>
 			<BooleanButton prefWidth="200" fx:id="testButton" onAction="#test"></BooleanButton>
 		</HBox>
+		<HBox>
+			<Button text="Start Musik Bot" prefWidth="200" onAction="#toggleMusikBot" />
+		</HBox>
 	</VBox>
 </AnchorPane>
 

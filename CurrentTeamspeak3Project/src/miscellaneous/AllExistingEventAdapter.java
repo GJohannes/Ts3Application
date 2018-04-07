@@ -6,4 +6,5 @@ public enum AllExistingEventAdapter {
 		LOG_ON_LEAVE,
 		GREETING_MESSAGE,
 		CATCH_ME_IF_YOU_CAN,
+		MUSIK_BOT,
 }

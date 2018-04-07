@@ -15,6 +15,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import customFxmlElements.BooleanButton?>
+<?import javafx.scene.control.Button?>
 
 <AnchorPane prefWidth="1350" prefHeight="700"
 	fx:controller="clientControllers.MainWindowController" xmlns:fx="http://javafx.com/fxml">
@@ -114,6 +115,8 @@
 					onAction="#exitSystem" />
 				<Button text="Save Current Values" prefWidth="200" font="$FONT"
 					onAction="#saveData" />
+				<Button text="Show Connection Info" prefWidth="200" font="$FONT" 
+					onAction="#showConnectionInfo" />
 			</HBox>
 		</VBox>
 	</VBox>

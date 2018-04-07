@@ -6,11 +6,14 @@ import java.util.ResourceBundle;
 
 
 import customFxmlElements.BooleanButton;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import miscellaneous.ExtendedTS3Api;
+import serverFunctions.MusikBot;
 import serverFunctions.ServerLogger;
 
 public class ServerMainWindowController implements Initializable {
@@ -20,6 +23,7 @@ public class ServerMainWindowController implements Initializable {
 	@FXML private Text ipAdress;	
 	@FXML private Text serverPort;
 	@FXML private BooleanButton testButton;
+	@FXML private Button musikBotButton;
 	
 	private ExtendedTS3Api api;
 	private ServerLogger logger;
@@ -45,6 +49,13 @@ public class ServerMainWindowController implements Initializable {
 			// if logging was previously deactive it is hereby activated
 			logger.stopServerLogging();
 		}
+	}
+	
+	@FXML
+	public void toggleMusikBot(ActionEvent e) {
+		MusikBot bot = new MusikBot();
+		System.out.println("button clicked");
+		bot.startMusikBot(api, "TODO_InsertVLCPath");
 	}
 	
 	@FXML
