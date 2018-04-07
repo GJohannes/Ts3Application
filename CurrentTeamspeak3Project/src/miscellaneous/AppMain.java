@@ -59,7 +59,14 @@ public class AppMain extends Application {
 
 	public static void main(String[] args) {
 		launch(args);
-
+		
+//		try {
+//			Process process = new ProcessBuilder("C:\\Program Files\\VideoLAN\\VLC\\vlc.exe","https://www.youtube.com/watch?v=zWmx56kvLUA").start();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		
 //		ExtendedTS3EventAdapter extendedTS3EventAdapter = new ExtendedTS3EventAdapter(
 //				AllExistingEventAdapter.GREETING_MESSAGE) {
 //			@Override
@@ -89,6 +96,8 @@ public class AppMain extends Application {
 //		config.setHost("127.0.0.1");
 //		config.setDebugLevel(Level.ALL);
 //
+//		
+//		
 //		query.connect();
 //
 //		api.login("QueryTester", "IRvo65OQ");
