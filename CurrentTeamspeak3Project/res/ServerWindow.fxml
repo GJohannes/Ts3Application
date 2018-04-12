@@ -3,6 +3,7 @@
 <?import java.net.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
+<?import javafx.scene.control.Button?>
 <?import javafx.beans.property.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.shape.*?>
@@ -11,18 +12,18 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.paint.Color?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.StackPane?>
-<?import com.sun.javafx.scene.control.skin.IntegerField?>
-<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import customFxmlElements.IpAdressTextField?>
+<?import customFxmlElements.PortTextField?>
 <?import customFxmlElements.BooleanButton?>
+<?import javafx.scene.layout.VBox?>
+
 
 <AnchorPane prefWidth="500" prefHeight="500"
-	xmlns:fx="http://javafx.com/fxml/1" fx:controller="serverControllers.ServerMainWindowController"
+	xmlns:fx="http://javafx.com/fxml/1" fx:controller="serverControllers.ServerWindowController"
 	fx:id="rootPane">
-
 	<VBox spacing="10" alignment="CENTER" prefWidth="500" prefHeight="100">
 		<HBox alignment="CENTER" spacing="10">
 			<StackPane alignment="CENTER">
@@ -43,9 +44,7 @@
 			<BooleanButton prefWidth="200" fx:id="testButton" onAction="#test"></BooleanButton>
 		</HBox>
 		<HBox>
-			<Button text="Start Musik Bot" prefWidth="200" onAction="#toggleMusikBot" />
+			<BooleanButton text="Start Musik Bot" prefWidth="200" onAction="#toggleMusikBot" > </BooleanButton>
 		</HBox>
 	</VBox>
 </AnchorPane>
-
-

@@ -20,7 +20,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 import miscellaneous.FileInputOutput;
-import serverControllers.ServerMainWindowController;
+import serverControllers.ServerWindowController;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
@@ -160,20 +160,34 @@ public class LoginController implements Initializable {
 
 	private void serverLoginFunctionality(ConnectToServer connect) {
 		FXMLLoader serverLoader = new FXMLLoader();
-		serverLoader.setLocation(getClass().getResource("/ServerMainWindow.fxml"));
+		serverLoader.setLocation(getClass().getResource("/ServerWindow.fxml"));
 		try {
+			System.out.println(this.rootPane);
+			for(int i = 0; i < rootPane.getChildren().size(); i++) {
+				System.out.println(rootPane.getChildren().get(i).getId());
+			}
 			serverLoader.load();
-			ServerMainWindowController serverMainWindowController = serverLoader.getController();
+			System.out.println(1);
+			ServerWindowController serverMainWindowController = serverLoader.getController();
+			System.out.println(2);
 			serverMainWindowController.setApi(connect.get());
-			serverMainWindowController.setIpAdress(serverIpAdressTextField.getText());
-			serverMainWindowController.setServerPort(Integer.parseInt(serverPortTextField.getText()));
+			System.out.println(3);
+			//serverMainWindowController.setIpAdress(serverIpAdressTextField.getText());
+			//serverMainWindowController.setServerPort(Integer.parseInt(serverPortTextField.getText()));
 		} catch (IOException | InterruptedException | ExecutionException expection) {
+			System.out.println(" -- exception thrown --");
+			System.out.println(rootPane);
+			System.out.println(this.rootPane);
+			for(int i = 0; i < rootPane.getChildren().size(); i++) {
+				System.out.println(rootPane.getChildren().get(i).getId());
+			}
 			expection.printStackTrace();
 		}
-		
+		System.out.println(4);
 		Parent p = serverLoader.getRoot();
 		rootPane.getChildren().setAll(p);
 		rootPane.getScene().getWindow().sizeToScene();
+		System.out.println(5);
 	}
 	
 	private void clientLoginFunctionality(ConnectToServer connect) {

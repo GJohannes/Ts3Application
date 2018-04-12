@@ -16,14 +16,14 @@ import miscellaneous.ExtendedTS3Api;
 import serverFunctions.MusikBot;
 import serverFunctions.ServerLogger;
 
-public class ServerMainWindowController implements Initializable {
+public class ServerWindowController implements Initializable {
 	
 	@FXML private AnchorPane rootPane;
 	@FXML private BooleanButton serverLoggerButton;
 	@FXML private Text ipAdress;	
 	@FXML private Text serverPort;
 	@FXML private BooleanButton testButton;
-	@FXML private Button musikBotButton;
+	@FXML private BooleanButton musikBotButton;
 	
 	private ExtendedTS3Api api;
 	private ServerLogger logger;
@@ -52,7 +52,7 @@ public class ServerMainWindowController implements Initializable {
 	}
 	
 	@FXML
-	public void toggleMusikBot(ActionEvent e) {
+	public void toggleMusikBot() {
 		MusikBot bot = new MusikBot();
 		bot.startMusikBot(api, "TODO_InsertVLCPath");
 	}

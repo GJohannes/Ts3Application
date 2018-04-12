@@ -34,6 +34,8 @@ public class MainWindowController implements Initializable{
 
 	private static ExtendedTS3Api api;
 	
+	@FXML
+	private AnchorPane rootPane; 
     @FXML
     private Text infoBox;
     @FXML
@@ -57,10 +59,9 @@ public class MainWindowController implements Initializable{
     @FXML
     private BooleanButton lockUserButton;
     
+    
     @FXML
     private Tooltip test;
-    @FXML
-    private AnchorPane rootPane;
     
     
     public void setInfoBoxText(String s){

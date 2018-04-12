@@ -16,6 +16,8 @@
 <?import javafx.scene.control.TextField?>
 <?import customFxmlElements.IpAdressTextField?>
 <?import customFxmlElements.PortTextField?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.VBox?>
 
 
 <AnchorPane prefWidth="500" prefHeight="500" fx:controller="login.LoginController" xmlns:fx="http://javafx.com/fxml" fx:id="rootPane" style="-fx-background-color: #6E6E6E;">
