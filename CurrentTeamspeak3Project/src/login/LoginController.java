@@ -172,8 +172,8 @@ public class LoginController implements Initializable {
 			System.out.println(2);
 			serverMainWindowController.setApi(connect.get());
 			System.out.println(3);
-			//serverMainWindowController.setIpAdress(serverIpAdressTextField.getText());
-			//serverMainWindowController.setServerPort(Integer.parseInt(serverPortTextField.getText()));
+			serverMainWindowController.setIpAdress(serverIpAdressTextField.getText());
+			serverMainWindowController.setServerPort(Integer.parseInt(serverPortTextField.getText()));
 		} catch (IOException | InterruptedException | ExecutionException expection) {
 			System.out.println(" -- exception thrown --");
 			System.out.println(rootPane);
