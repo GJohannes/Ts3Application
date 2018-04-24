@@ -37,6 +37,7 @@ public class MusikBot {
 			@Override
 			public void onTextMessage(TextMessageEvent e) {
 				if (e.getMessage().startsWith("!")) {
+					//get message without "!"
 					String messageWithoutPrefix = e.getMessage().substring(1);
 					if (messageWithoutPrefix.equals("commands") || messageWithoutPrefix.equals("help")) {
 						api.sendPrivateMessage(e.getInvokerId(), " \n !commands \n !\"insert youtube link here\" \n !DasDing \n !killMusic");
@@ -48,6 +49,7 @@ public class MusikBot {
 					} else if(messageWithoutPrefix.equals("killMusic")){
 						if(process != null && process.isAlive()) {
 							process.destroy();
+							// SET PALYING FALSE HERE
 						}
 					} else {
 						api.sendServerMessage("Command could not be interpreted - Syntaxerror");
@@ -56,15 +58,25 @@ public class MusikBot {
 			}
 
 	private void playAudioLink(String messageWithoutPrefix) {
+		//set playing TRUE HERE
 		try {
+			
 			// if a previous file is playing then
 			if (process != null && process.isAlive()) {
 				process.destroy();
+				System.out.println("Destroyed old Process");
 			}
-
+			
+			System.out.println("now playing");
+			
 			process = new ProcessBuilder(vlcPathInternal, messageWithoutPrefix).start();
-
-		} catch (IOException e1) {
+			
+			
+			
+			System.out.println("process created");
+			System.out.println("process:" + process);
+			
+		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
