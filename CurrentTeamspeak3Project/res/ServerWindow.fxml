@@ -19,32 +19,45 @@
 <?import customFxmlElements.PortTextField?>
 <?import customFxmlElements.BooleanButton?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.StackPane?>
 
 
 <AnchorPane prefWidth="500" prefHeight="500"
-	xmlns:fx="http://javafx.com/fxml/1" fx:controller="serverControllers.ServerWindowController"
+	xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="serverControllers.ServerWindowController"
 	fx:id="rootPane">
-	<VBox spacing="10" alignment="CENTER" prefWidth="500" prefHeight="100">
-		<HBox alignment="CENTER" spacing="10">
-			<StackPane alignment="CENTER">
-				<Rectangle fill="TRANSPARENT" stroke="GRAY" width="200"
-					height="50" />
-				<Text fx:id="ipAdress" font="$FONT" />
-			</StackPane>
-			<StackPane alignment="CENTER">
-				<Rectangle fill="TRANSPARENT" stroke="GRAY" width="200"
-					height="50" />
-				<Text fx:id="serverPort" font="$FONT" />
-			</StackPane>
-		</HBox>
-		<HBox spacing="10" alignment="CENTER">
-			<BooleanButton prefWidth="200" fx:id="serverLoggerButton" onAction="#logging" ></BooleanButton>
-		</HBox>
-		<HBox>
-			<BooleanButton prefWidth="200" fx:id="testButton" onAction="#test"></BooleanButton>
-		</HBox>
-		<HBox>
-			<BooleanButton text="Start Musik Bot" prefWidth="200" onAction="#toggleMusikBot" > </BooleanButton>
-		</HBox>
-	</VBox>
+	<StackPane alignment="TOP_LEFT">
+		<VBox spacing="10" alignment="CENTER" prefWidth="500"
+			prefHeight="100">
+			<StackPane alignment="TOP_LEFT" />
+			<HBox alignment="CENTER" spacing="10">
+				<StackPane alignment="CENTER">
+					<Rectangle fill="TRANSPARENT" stroke="GRAY" width="200"
+						height="50" />
+					<Text fx:id="ipAdress" font="$FONT" />
+				</StackPane>
+				<StackPane alignment="CENTER">
+					<Rectangle fill="TRANSPARENT" stroke="GRAY" width="200"
+						height="50" />
+					<Text fx:id="serverPort" font="$FONT" />
+				</StackPane>
+			</HBox>
+			<HBox spacing="10" alignment="CENTER">
+				<StackPane alignment="TOP_LEFT" />
+				<BooleanButton prefWidth="200"
+					fx:id="serverLoggerButton" onAction="#logging"></BooleanButton>
+			</HBox>
+			<HBox>
+				<StackPane alignment="TOP_LEFT" />
+				<BooleanButton prefWidth="200" fx:id="testButton"
+					onAction="#test"></BooleanButton>
+			</HBox>
+			<HBox>
+				<StackPane alignment="TOP_LEFT" />
+				<BooleanButton fx:id="musikBotButton" prefWidth="200"
+					onAction="#toggleMusikBot">
+				</BooleanButton>
+			</HBox>
+		</VBox>
+	</StackPane>
 </AnchorPane>

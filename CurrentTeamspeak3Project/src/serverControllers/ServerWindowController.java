@@ -27,6 +27,7 @@ public class ServerWindowController implements Initializable {
 	
 	private ExtendedTS3Api api;
 	private ServerLogger logger;
+	private MusikBot musicBot;
 	
 	public void setIpAdress(String ipAdress) {
 		this.ipAdress.setText(ipAdress);
@@ -53,8 +54,15 @@ public class ServerWindowController implements Initializable {
 	
 	@FXML
 	public void toggleMusikBot() {
-		MusikBot bot = new MusikBot();
-		bot.startMusikBot(api, "TODO_InsertVLCPath");
+		if(musikBotButton.isNowActive()) {
+			musicBot = new MusikBot();
+			musicBot.startMusikBot(api, "TODO_InsertVLCPath");
+		} else {
+			musicBot.stopMusicBot(api);
+		}
+		
+		
+		
 	}
 	
 	@FXML
@@ -66,6 +74,8 @@ public class ServerWindowController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		serverLoggerButton.setActiveText("Currently Active -- Stop Logging");
 		serverLoggerButton.setDeActiveText("Deactive -- Start Logging");
+		musikBotButton.setActiveText("Currently Active");
+		musikBotButton.setDeActiveText("Music Bot is Deactive");;
 	}
 
 	public void setApi(ExtendedTS3Api ts3Api) {
