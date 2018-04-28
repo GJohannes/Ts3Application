@@ -8,13 +8,26 @@ public class ConnectedConfigValues {
 	private int serverPort;
 	private String usedNickName;
 	
-	public ConnectedConfigValues(String serverIpAdress, String serverQueryName, String serverQueryPassword, int serverPort){
+	private String uniqueClientID;
+	private String clientName;
+	
+	public ConnectedConfigValues(String serverIpAdress, String serverQueryName, String serverQueryPassword, int serverPort, String uniqueID, String clientName){
 		this.serverIpAdress = serverIpAdress;
 		this.serverQueryName = serverQueryName;
 		this.serverQueryPassword = serverQueryPassword;
 		this.serverPort = serverPort;
+		this.uniqueClientID = uniqueID;
+		this.clientName = clientName;
 	}
 
+	public String getclientName() {
+		return this.clientName;
+	}
+	
+	public String getUniqueClientID() {
+		return this.uniqueClientID;
+	}
+	
 	public String getUsedNickName() {
 		return usedNickName;
 	}

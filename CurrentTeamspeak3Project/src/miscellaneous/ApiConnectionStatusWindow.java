@@ -1,5 +1,6 @@
 package miscellaneous;
 
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
@@ -17,6 +18,7 @@ public class ApiConnectionStatusWindow {
 		Label serverPortLabel = new Label(Integer.toString(api.getConnectedConfigValues().getServerPort()));
 		VBox box = new VBox();
 		box.setSpacing(20);
+		box.setAlignment(Pos.CENTER);
 		box.getChildren().add(ipAdressLabel);
 		box.getChildren().add(serverQueryNameLabel);
 		box.getChildren().add(serverQueryPasswordLabel);

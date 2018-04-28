@@ -12,6 +12,8 @@ public class ConnectToServer extends Task<ExtendedTS3Api> {
 	private String ipAdress;
 	private String serverQueryName;
 	private String serverQueryPassword;
+	private String clientName;
+	private String clientUniqueID;
 	private int serverPort;
 	private Logger logger = Logger.getLogger("connectToServerLogger");
 
@@ -22,21 +24,23 @@ public class ConnectToServer extends Task<ExtendedTS3Api> {
 	 * that connects to teamspeakServer
 	 */
 	public static ConnectToServer getInstance(String ipAdress, String serverQueryName, String serverQueryPassword,
-			int serverPort) {
+			int serverPort, String clinetName, String clientUniqueID) {
 		if (instance == null) {
-			instance = new ConnectToServer(ipAdress, serverQueryName, serverQueryPassword, serverPort);
+			instance = new ConnectToServer(ipAdress, serverQueryName, serverQueryPassword, serverPort, clinetName, clientUniqueID);
 		} else {
 			return null;
 		}
 		return instance;
 	}
 
-	private ConnectToServer(String ipAdress, String serverQueryName, String serverQueryPassword, int serverPort) {
+	private ConnectToServer(String ipAdress, String serverQueryName, String serverQueryPassword, int serverPort, String clientName, String clientUniqueID) {
 		this.ipAdress = ipAdress;
 		this.serverQueryName = serverQueryName;
 		this.serverQueryPassword = serverQueryPassword;
 		this.serverPort = serverPort;
-
+		this.clientName = clientName;
+		this.clientUniqueID = clientUniqueID;
+		
 		// // moved to controller instead
 		// this.setOnFailed(e -> {
 		// System.out.println("failed");
@@ -57,7 +61,7 @@ public class ConnectToServer extends Task<ExtendedTS3Api> {
 			query.connect();
 			api.login(this.serverQueryName, this.serverQueryPassword);
 			// is true if connect was successful
-			if (api.login(this.serverQueryName, this.serverQueryPassword)) {
+			if (api.login(this.serverQueryName, this.serverQueryPassword, this.clientName, this.clientUniqueID)) {
 				if (api.selectVirtualServerByPort(this.serverPort)) {
 					api.setNickname(this.serverQueryName);
 					api.registerAllEvents();

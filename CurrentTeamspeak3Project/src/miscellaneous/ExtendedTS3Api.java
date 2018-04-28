@@ -18,8 +18,7 @@ public class ExtendedTS3Api extends TS3Api{
 	
 	public ExtendedTS3Api(ExtendedTS3Query query) {
 		super(query);
-		this.connectedConfigValues = new ConnectedConfigValues(query.getHostIpAdress(), "NotInizialized", "NotInizialized", -1);
-		
+		this.connectedConfigValues = new ConnectedConfigValues(query.getHostIpAdress(), "NotInizialized", "NotInizialized", -1, "NotInizialized", "NotInizialized");
 	}
  
 	@Deprecated
@@ -73,10 +72,11 @@ public class ExtendedTS3Api extends TS3Api{
 	 * (non-Javadoc)
 	 * @see com.github.theholywaffle.teamspeak3.TS3Api#selectVirtualServerByPort(int)
 	 */
+	@Override
 	public boolean selectVirtualServerByPort(int port) { 
 		if(super.selectVirtualServerByPort(port)) {
 			ConnectedConfigValues newConnectedConfigValues = new ConnectedConfigValues(this.connectedConfigValues.getServerIpAdress(), 
-					this.connectedConfigValues.getServerQueryName(), this.connectedConfigValues.getServerQueryPassword(), port);
+					this.connectedConfigValues.getServerQueryName(), this.connectedConfigValues.getServerQueryPassword(), port, this.getConnectedConfigValues().getclientName() , this.connectedConfigValues.getUniqueClientID());
 			this.connectedConfigValues = newConnectedConfigValues;
 			return true;
 		} else {
@@ -97,10 +97,10 @@ public class ExtendedTS3Api extends TS3Api{
 	 * (non-Javadoc)
 	 * @see com.github.theholywaffle.teamspeak3.TS3Api#login(java.lang.String, java.lang.String)
 	 */
-	public boolean login(String serverQueryName, String serverQueryPassword) {
+	public boolean login(String serverQueryName, String serverQueryPassword, String clientName, String clientUniqueID) {
 		if(super.login(serverQueryName, serverQueryPassword)) {
 			ConnectedConfigValues newConnectedConfigValues = new ConnectedConfigValues(this.connectedConfigValues.getServerIpAdress(), 
-					serverQueryName, serverQueryPassword, -1);
+					serverQueryName, serverQueryPassword, -1, clientName, clientUniqueID);
 			this.connectedConfigValues = newConnectedConfigValues;
 			return true;
 		} else {

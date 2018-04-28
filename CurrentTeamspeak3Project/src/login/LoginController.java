@@ -55,7 +55,9 @@ public class LoginController implements Initializable {
 		ConnectToServer connect = ConnectToServer.getInstance( 	serverIpAdressTextField.getText(),
 																serverQueryNameTextField.getText(),
 																serverQueryPasswordTextField.getText(),
-																Integer.parseInt(serverPortTextField.getText())
+																Integer.parseInt(serverPortTextField.getText()),
+																userNameTextField.getText(),
+																uIdTextField.getText()
 		);
 		// only one instance of connect is possible
 		if(connect == null){
@@ -90,7 +92,9 @@ public class LoginController implements Initializable {
 				serverIpAdressTextField.getText(), 
 				serverQueryNameTextField.getText(),
 				serverQueryPasswordTextField.getText(),
-				Integer.parseInt(serverPortTextField.getText())
+				Integer.parseInt(serverPortTextField.getText()),
+				userNameTextField.getText(),
+				uIdTextField.getText()
 				);
 		
 		if(connect == null){
@@ -162,16 +166,9 @@ public class LoginController implements Initializable {
 		FXMLLoader serverLoader = new FXMLLoader();
 		serverLoader.setLocation(getClass().getResource("/ServerWindow.fxml"));
 		try {
-			System.out.println(this.rootPane);
-			for(int i = 0; i < rootPane.getChildren().size(); i++) {
-				System.out.println(rootPane.getChildren().get(i).getId());
-			}
 			serverLoader.load();
-			System.out.println(1);
 			ServerWindowController serverMainWindowController = serverLoader.getController();
-			System.out.println(2);
 			serverMainWindowController.setApi(connect.get());
-			System.out.println(3);
 			serverMainWindowController.setIpAdress(serverIpAdressTextField.getText());
 			serverMainWindowController.setServerPort(Integer.parseInt(serverPortTextField.getText()));
 		} catch (IOException | InterruptedException | ExecutionException expection) {
@@ -183,11 +180,9 @@ public class LoginController implements Initializable {
 			}
 			expection.printStackTrace();
 		}
-		System.out.println(4);
 		Parent p = serverLoader.getRoot();
 		rootPane.getChildren().setAll(p);
 		rootPane.getScene().getWindow().sizeToScene();
-		System.out.println(5);
 	}
 	
 	private void clientLoginFunctionality(ConnectToServer connect) {
