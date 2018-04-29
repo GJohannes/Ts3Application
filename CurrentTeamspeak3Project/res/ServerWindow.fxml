@@ -43,20 +43,15 @@
 				</StackPane>
 			</HBox>
 			<HBox spacing="10" alignment="CENTER">
-				<StackPane alignment="TOP_LEFT" />
-				<BooleanButton prefWidth="200"
-					fx:id="serverLoggerButton" onAction="#logging"></BooleanButton>
+				<BooleanButton prefWidth="200" fx:id="serverLoggerButton" onAction="#logging" />
 			</HBox>
 			<HBox>
-				<StackPane alignment="TOP_LEFT" />
-				<BooleanButton prefWidth="200" fx:id="testButton"
-					onAction="#test"></BooleanButton>
+				<BooleanButton prefWidth="200" fx:id="testButton" />
 			</HBox>
 			<HBox>
-				<StackPane alignment="TOP_LEFT" />
-				<BooleanButton fx:id="musikBotButton" prefWidth="200"
-					onAction="#toggleMusikBot">
-				</BooleanButton>
+				<BooleanButton fx:id="musikBotButton" prefWidth="200" onAction="#toggleMusikBot" />
+				<TextField fx:id="vlcPathTextField"  prefWidth="200" />
+				<Button text="choose vlc location" fx:id="vlcPathFileChooser" prefWidth="200" onAction="#chooseVlcPathLocation" />
 			</HBox>
 		</VBox>
 	</StackPane>

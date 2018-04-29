@@ -73,7 +73,12 @@
 			<Label text="Teamspeak 3 Path" prefWidth="410" font="$FONT" alignment="CENTER" />
 		</HBox>
 		<HBox spacing="10" alignment="CENTER">
-			<TextField fx:id="ts3PathTextField" text="Insert a Path to Ts3.exe to enable its autostart" prefWidth="410" font="$FONT" />
+			<TextField fx:id="ts3PathTextField" text="Insert a Path to Ts3.exe to enable its autostart" prefWidth="350" font="$FONT" />
+			<Button fx:id="ts3PathFileChooser" onAction="#choseTs3Path" text="..." prefWidth="50" font="$FONT" >
+			<tooltip>
+					<Tooltip text="Select Path" />
+			</tooltip>
+			</Button>
 		</HBox>
 		<HBox spacing="10" alignment="CENTER">
 			<Button text="Exit Program" prefWidth="200" font="$FONT" onAction="#exit"></Button>

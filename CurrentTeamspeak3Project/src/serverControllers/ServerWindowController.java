@@ -1,5 +1,6 @@
 package serverControllers;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -10,8 +11,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import miscellaneous.ExtendedTS3Api;
 import serverFunctions.MusikBot;
 import serverFunctions.ServerLogger;
@@ -24,6 +28,8 @@ public class ServerWindowController implements Initializable {
 	@FXML private Text serverPort;
 	@FXML private BooleanButton testButton;
 	@FXML private BooleanButton musikBotButton;
+	@FXML private Button vlcPathFileChooser;
+	@FXML private TextField vlcPathTextField;
 	
 	private ExtendedTS3Api api;
 	private ServerLogger logger;
@@ -56,7 +62,7 @@ public class ServerWindowController implements Initializable {
 	public void toggleMusikBot() {
 		if(musikBotButton.isNowActive()) {
 			musicBot = new MusikBot();
-			musicBot.startMusikBot(api, "TODO_InsertVLCPath");
+			musicBot.startMusikBot(api, this.vlcPathTextField.getText());
 		} else {
 			musicBot.stopMusicBot(api);
 		}
@@ -66,16 +72,23 @@ public class ServerWindowController implements Initializable {
 	}
 	
 	@FXML
-	public void test(){
-		System.out.println(Math.random());
+	public void chooseVlcPathLocation() {
+		FileChooser chooser = new FileChooser();
+		File file = chooser.showOpenDialog(new Stage());
+		if(file != null) {
+			this.vlcPathTextField.setText(file.getAbsolutePath());			
+		}
 	}
+	
+	
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		serverLoggerButton.setActiveText("Currently Active -- Stop Logging");
 		serverLoggerButton.setDeActiveText("Deactive -- Start Logging");
 		musikBotButton.setActiveText("Currently Active");
-		musikBotButton.setDeActiveText("Music Bot is Deactive");;
+		musikBotButton.setDeActiveText("Music Bot is Deactive");
+		this.vlcPathTextField.setText("C:\\Program Files\\VideoLAN\\VLC\\vlc.exe");
 	}
 
 	public void setApi(ExtendedTS3Api ts3Api) {
