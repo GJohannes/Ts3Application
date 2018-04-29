@@ -59,7 +59,7 @@ public class ConnectToServer extends Task<ExtendedTS3Api> {
 		try {
 			// throws exception if no connection could be established
 			query.connect();
-			api.login(this.serverQueryName, this.serverQueryPassword);
+			//api.login(this.serverQueryName, this.serverQueryPassword);
 			// is true if connect was successful
 			if (api.login(this.serverQueryName, this.serverQueryPassword, this.clientName, this.clientUniqueID)) {
 				if (api.selectVirtualServerByPort(this.serverPort)) {

@@ -1,9 +1,12 @@
 package login;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;
+
+import javax.swing.JFileChooser;
 
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -19,6 +22,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import miscellaneous.FileInputOutput;
 import serverControllers.ServerWindowController;
 
@@ -43,7 +48,7 @@ public class LoginController implements Initializable {
 	@FXML private Button serverLoginButton;
 	@FXML private Button clientLoginButton;
 	@FXML private TextField ts3PathTextField;
-	
+	@FXML private Button ts3PathFileChooser;
 	
 	@FXML
 	private void clientLogin(ActionEvent event) throws IOException {
@@ -139,8 +144,7 @@ public class LoginController implements Initializable {
 		try {
 			client.startTs3Client(ts3PathTextField.getText().toString());
 		} catch (Exception e) {
-			infoBox.setText("Teamspeak3Client path wrong");
-			e.printStackTrace();
+			infoBox.setText("Teamspeak3Client path could not be interpreted");
 		}
 	}
 
@@ -215,6 +219,15 @@ public class LoginController implements Initializable {
 		// Stage stage = new Stage();
 		// stage.setScene(new Scene(p));
 		// stage.show();
+	}
+	
+	@FXML
+	public void choseTs3Path() {
+		FileChooser chooser = new FileChooser();
+		File file = chooser.showOpenDialog(new Stage());
+		if(file != null) {
+			this.ts3PathTextField.setText(file.getAbsolutePath());			
+		}
 	}
 	
 	public void exit() {
