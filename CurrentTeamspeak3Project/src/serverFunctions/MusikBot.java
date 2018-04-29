@@ -28,6 +28,7 @@ public class MusikBot {
 			// private String vlcPathInternal = "C:\\Program Files\\VideoLAN\\VLC\\vlc.exe";
 			// // vlcPath;
 			private double soundHighValue = 1.00;
+			private ArrayList<String> allComands = new ArrayList<>();
 
 			@Override
 			public void onClientJoin(ClientJoinEvent e) {
@@ -66,11 +67,16 @@ public class MusikBot {
 				// only accept message that has been send from a client, otherwise SERVER
 				// messages would also be interpreted
 				if (messageToBotEvent.getTargetMode().equals(TextMessageTargetMode.CLIENT)) {
+					
 					// only if message was directed as a command
 					if (messageToBotEvent.getMessage().startsWith("!")) {
-
+						
 						// get message without "!"
 						String messageWithoutPrefix = messageToBotEvent.getMessage().substring(1);
+						
+						//list for command history
+						allComands.add(messageWithoutPrefix + " -- " + messageToBotEvent.getInvokerName() + " -- " + "Client Command Nr: " + allComands.size());
+						
 						System.out.println(messageWithoutPrefix);
 						if (messageWithoutPrefix.equals("commands") || messageWithoutPrefix.equals("help")) {
 							this.sendCommandsToClient(messageToBotEvent);
@@ -92,6 +98,8 @@ public class MusikBot {
 							this.pullAllClinetsIntoInvokerChannel(messageToBotEvent);
 						} else if (messageWithoutPrefix.equals("version")) {
 							// this.sendAsciArt(messageToBotEvent);
+						} else if (messageWithoutPrefix.equals("history")) {
+							this.showHistory(messageToBotEvent);
 						} else {
 							this.sendSyntaxErrorMessage(messageToBotEvent);
 						}
@@ -102,7 +110,6 @@ public class MusikBot {
 			private void pullAllClinetsIntoInvokerChannel(TextMessageEvent messageToBotEvent) {
 				List<Client> allClientsOnServer = api.getClients();
 				int targetChannelId = 1;
-				System.out.println("|//|a");
 				ArrayList<Client> temp = new ArrayList<Client>();
 				// get the target channel from all Clinets on Server
 				for (int i = 0; i < allClientsOnServer.size(); i++) {
@@ -130,6 +137,22 @@ public class MusikBot {
 
 			}
 
+			private void showHistory(TextMessageEvent messageToBotEvent) {
+				StringBuilder stringBuilder = new StringBuilder();
+				stringBuilder.append("\n");
+				// if it should ever be parameterized so that any number of last commands can be read --> this integer
+				int numberOfLastCommendsShown = 10;
+				// i >= 0 secures that there are only positions accessed that are existing inside the list
+				for(int i = allComands.size()-1; (i > allComands.size()-1 - numberOfLastCommendsShown) && (i >= 0); i--) {
+					System.out.println(i + " i size");
+					stringBuilder.append(allComands.get(i));
+					stringBuilder.append("\n");
+					//api.sendPrivateMessage(messageToBotEvent.getInvokerId(),  allComands.get(i));
+				}
+				System.out.println(stringBuilder.toString());
+				api.sendPrivateMessage(messageToBotEvent.getInvokerId(), stringBuilder.toString());
+			}
+			
 			private void sendSyntaxErrorMessage(TextMessageEvent messageToBotEvent) {
 				api.sendPrivateMessage(messageToBotEvent.getInvokerId(),
 						"Command could not be interpreted - Syntaxerror");
@@ -137,7 +160,7 @@ public class MusikBot {
 
 			private void sendCommandsToClient(TextMessageEvent e) {
 				api.sendPrivateMessage(e.getInvokerId(),
-						" \n !commands \n !\"insert youtube link here\" \n !DasDing \n !1077 \n !Antenne1 \n !killMusic \n !Volume XXX (Number between 0 and 200))");
+						" \n !commands \n !\"insert youtube link here\" \n !DasDing \n !1077 \n !Antenne1 \n !killMusic \n !Volume XXX (Number between 50 and 150)");
 			}
 
 			private void playYoutubeLink(String youtubeLocation, TextMessageEvent messageToBotEvent) {
