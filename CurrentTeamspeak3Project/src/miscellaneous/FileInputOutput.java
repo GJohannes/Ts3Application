@@ -50,6 +50,7 @@ public class FileInputOutput {
 		writer.close();
 	}
 
+	
 	// uId of user who left + the time on the server in seconds
 	public void updateStayedOnServer(String uID, long additionalStayedOnServerTime) throws IOException {
 		List<String> allLines;
