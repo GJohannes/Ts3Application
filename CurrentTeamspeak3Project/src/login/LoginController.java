@@ -128,18 +128,18 @@ public class LoginController implements Initializable {
 			json = inOut.readFile("LoginData");
 			userNameTextField.setText((String) json.get("userName"));
 			serverPortTextField.setText((String) json.get("serverPort"));
-			serverPortTextField.checkValidity();
 			uIdTextField.setText((String) json.get("uId"));
 			serverIpAdressTextField.setText((String) json.get("tsIpAdress"));
-			serverIpAdressTextField.checkValidity();
 			serverQueryNameTextField.setText((String) json.get("serverQueryName"));
 			serverQueryPasswordTextField.setText((String) json.get("serverQueryPw"));
 			ts3PathTextField.setText((String) json.get("ts3Path"));
 		} catch (IOException | ParseException | NullPointerException e) {
 			infoBox.setText("Could not read file: LoginData");
-			e.printStackTrace();
 		}
 
+		serverPortTextField.checkValidity();
+		serverIpAdressTextField.checkValidity();
+		
 		Ts3Client client = new Ts3Client();
 		try {
 			client.startTs3Client(ts3PathTextField.getText().toString());
