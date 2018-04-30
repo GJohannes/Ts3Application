@@ -15,7 +15,6 @@ public class ConnectToServer extends Task<ExtendedTS3Api> {
 	private String clientName;
 	private String clientUniqueID;
 	private int serverPort;
-	private Logger logger = Logger.getLogger("connectToServerLogger");
 
 	private static ConnectToServer instance = null;
 
@@ -49,7 +48,6 @@ public class ConnectToServer extends Task<ExtendedTS3Api> {
 
 	@Override
 	public ExtendedTS3Api call() throws Exception {
-		logger.log(Level.INFO, "Started building connection to server");
 		ExtendedTS3Config config = new ExtendedTS3Config(this.ipAdress);
 		ExtendedTS3Query query = new ExtendedTS3Query(config);
 		ExtendedTS3Api api = new ExtendedTS3Api(query);
@@ -59,13 +57,15 @@ public class ConnectToServer extends Task<ExtendedTS3Api> {
 		try {
 			// throws exception if no connection could be established
 			query.connect();
+			api.logToCommandline("Connected to Server");
 			//api.login(this.serverQueryName, this.serverQueryPassword);
 			// is true if connect was successful
 			if (api.login(this.serverQueryName, this.serverQueryPassword, this.clientName, this.clientUniqueID)) {
 				if (api.selectVirtualServerByPort(this.serverPort)) {
 					api.setNickname(this.serverQueryName);
 					api.registerAllEvents();
-					api.sendServerMessage("QueryTester is now online!");
+					api.sendServerMessage(api.getConnectedConfigValues().getclientName() + "is now online!");
+					api.logToCommandline("Logged in to Server Instance");
 					// exception is thrown if no connection could be established and
 					// therefore a null pointer gets to this information
 				} else {
@@ -73,11 +73,13 @@ public class ConnectToServer extends Task<ExtendedTS3Api> {
 				}
 				
 				return api;
-				// connect was not successful
+			// connect was not successful
 			} else {
+				api.logToCommandline("Could not login to Server -- Serverquery name or password have to be wrong");
 				throw new Exception();
 			}
 		} catch (Exception e) {
+			api.logToCommandline("Could not connect to server -- Ip adress or port have to be wrong");
 			throw new Exception();
 		} finally {
 			this.instance = null;

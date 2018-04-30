@@ -73,11 +73,12 @@ public class MusikBot {
 						
 						// get message without "!"
 						String messageWithoutPrefix = messageToBotEvent.getMessage().substring(1);
+						api.logToCommandline("Command -- " + messageWithoutPrefix);
 						
 						//list for command history
 						allComands.add(messageWithoutPrefix + " -- " + messageToBotEvent.getInvokerName() + " -- " + "Client Command Nr: " + allComands.size());
+					
 						
-						System.out.println(messageWithoutPrefix);
 						if (messageWithoutPrefix.equals("commands") || messageWithoutPrefix.equals("help")) {
 							this.sendCommandsToClient(messageToBotEvent);
 						} else if (messageWithoutPrefix.contains("www.youtube.com")) {
@@ -92,7 +93,7 @@ public class MusikBot {
 								|| messageWithoutPrefix.toLowerCase().equals("killMusik")
 								|| messageWithoutPrefix.toLowerCase().equals("kill")) {
 							this.stopMusic();
-						} else if (messageWithoutPrefix.startsWith("Volume")) {
+						} else if (messageWithoutPrefix.toLowerCase().startsWith("volume")) {
 							this.adjustVolume(messageWithoutPrefix, messageToBotEvent);
 						} else if (messageWithoutPrefix.equals("pull")) {
 							this.pullAllClinetsIntoInvokerChannel(messageToBotEvent);
@@ -144,12 +145,10 @@ public class MusikBot {
 				int numberOfLastCommendsShown = 10;
 				// i >= 0 secures that there are only positions accessed that are existing inside the list
 				for(int i = allComands.size()-1; (i > allComands.size()-1 - numberOfLastCommendsShown) && (i >= 0); i--) {
-					System.out.println(i + " i size");
 					stringBuilder.append(allComands.get(i));
 					stringBuilder.append("\n");
 					//api.sendPrivateMessage(messageToBotEvent.getInvokerId(),  allComands.get(i));
 				}
-				System.out.println(stringBuilder.toString());
 				api.sendPrivateMessage(messageToBotEvent.getInvokerId(), stringBuilder.toString());
 			}
 			
@@ -186,7 +185,7 @@ public class MusikBot {
 			private void stopMusic() {
 				if (process != null && process.isAlive()) {
 					process.destroy();
-					System.out.println("Destroyed old Process");
+					api.logToCommandline("Destroyed old Process");
 				}
 				process = null;
 			}
@@ -194,7 +193,6 @@ public class MusikBot {
 			private void adjustVolume(String messageWithoutPrefix, TextMessageEvent messageToBotEvent) {
 				try {
 					String argumentAfterVolumeCommand = messageWithoutPrefix.split(" ")[1];
-					System.out.println(argumentAfterVolumeCommand + "arg after coluimehn commands");
 					double doubleValueOfArgument = Double.parseDouble(argumentAfterVolumeCommand);
 
 					if (doubleValueOfArgument <= 150 && doubleValueOfArgument >= 50) {
@@ -262,18 +260,15 @@ public class MusikBot {
 				this.moveBotToMusicRequestingUser(messageToBotEvent);
 				// set playing TRUE HERE
 				try {
-					// if a previous file is playing then
-
 					process = new ProcessBuilder(vlcPath, audioLocation, soundHighCommand,
 							Double.toString(soundHighValue), prefferedResolutionCommand, prefferedResolutionValue,
 							endAgrumentAfterPlay).start();
+					api.logToCommandline("Started playing music");
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
 			}
-
 		};
 		return musikBot;
-
 	}
 }
