@@ -2,6 +2,7 @@ package serverFunctions;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
 
 import com.github.theholywaffle.teamspeak3.api.TextMessageTargetMode;
 import com.github.theholywaffle.teamspeak3.api.event.ClientJoinEvent;
@@ -24,17 +25,17 @@ public class MusikBot {
 
 	private ExtendedTS3EventAdapter getMusikBot(ExtendedTS3Api api, String vlcPath) {
 		ExtendedTS3EventAdapter musikBot = new ExtendedTS3EventAdapter(AllExistingEventAdapter.MUSIK_BOT) {
-			private Process process;
+			private Process musicProcess;
 			// private String vlcPathInternal = "C:\\Program Files\\VideoLAN\\VLC\\vlc.exe";
 			// // vlcPath;
 			private double soundHighValue = 1.00;
 			private ArrayList<String> allComands = new ArrayList<>();
+			private ProcessDestoryer processDestoryer = new ProcessDestoryer();
 
 			@Override
 			public void onClientJoin(ClientJoinEvent e) {
-				api.sendPrivateMessage(e.getClientId(),
-						">>>><<<<----Music Bot Lilith---->>>><<<< \r\n" + 
-						"                                                                  type !help or !commands for further information");
+				api.sendPrivateMessage(e.getClientId(), ">>>><<<<----Music Bot Lilith---->>>><<<< \r\n"
+						+ "                                                                  type !help or !commands for further information");
 				// if (process == null) {
 				// ClientInfo botInfo =
 				// api.getClientByUId(api.getConnectedConfigValues().getUniqueClientID());
@@ -67,18 +68,18 @@ public class MusikBot {
 				// only accept message that has been send from a client, otherwise SERVER
 				// messages would also be interpreted
 				if (messageToBotEvent.getTargetMode().equals(TextMessageTargetMode.CLIENT)) {
-					
+
 					// only if message was directed as a command
 					if (messageToBotEvent.getMessage().startsWith("!")) {
-						
+
 						// get message without "!"
 						String messageWithoutPrefix = messageToBotEvent.getMessage().substring(1);
 						api.logToCommandline("Command -- " + messageWithoutPrefix);
-						
-						//list for command history
-						allComands.add(messageWithoutPrefix + " -- " + messageToBotEvent.getInvokerName() + " -- " + "Client Command Nr: " + allComands.size());
-					
-						
+
+						// list for command history
+						allComands.add(messageWithoutPrefix + " -- " + messageToBotEvent.getInvokerName() + " -- "
+								+ "Client Command Nr: " + allComands.size());
+
 						if (messageWithoutPrefix.equals("commands") || messageWithoutPrefix.equals("help")) {
 							this.sendCommandsToClient(messageToBotEvent);
 						} else if (messageWithoutPrefix.contains("www.youtube.com")) {
@@ -92,7 +93,7 @@ public class MusikBot {
 						} else if (messageWithoutPrefix.toLowerCase().equals("killmusic")
 								|| messageWithoutPrefix.toLowerCase().equals("killMusik")
 								|| messageWithoutPrefix.toLowerCase().equals("kill")) {
-							this.stopMusic();
+							this.stopMusicInSeconds(0);
 						} else if (messageWithoutPrefix.toLowerCase().startsWith("volume")) {
 							this.adjustVolume(messageWithoutPrefix, messageToBotEvent);
 						} else if (messageWithoutPrefix.equals("pull")) {
@@ -141,17 +142,20 @@ public class MusikBot {
 			private void showHistory(TextMessageEvent messageToBotEvent) {
 				StringBuilder stringBuilder = new StringBuilder();
 				stringBuilder.append("\n");
-				// if it should ever be parameterized so that any number of last commands can be read --> this integer
+				// if it should ever be parameterized so that any number of last commands can be
+				// read --> this integer
 				int numberOfLastCommendsShown = 10;
-				// i >= 0 secures that there are only positions accessed that are existing inside the list
-				for(int i = allComands.size()-1; (i > allComands.size()-1 - numberOfLastCommendsShown) && (i >= 0); i--) {
+				// i >= 0 secures that there are only positions accessed that are existing
+				// inside the list
+				for (int i = allComands.size() - 1; (i > allComands.size() - 1 - numberOfLastCommendsShown)
+						&& (i >= 0); i--) {
 					stringBuilder.append(allComands.get(i));
 					stringBuilder.append("\n");
-					//api.sendPrivateMessage(messageToBotEvent.getInvokerId(),  allComands.get(i));
+					// api.sendPrivateMessage(messageToBotEvent.getInvokerId(), allComands.get(i));
 				}
 				api.sendPrivateMessage(messageToBotEvent.getInvokerId(), stringBuilder.toString());
 			}
-			
+
 			private void sendSyntaxErrorMessage(TextMessageEvent messageToBotEvent) {
 				api.sendPrivateMessage(messageToBotEvent.getInvokerId(),
 						"Command could not be interpreted - Syntaxerror");
@@ -182,13 +186,7 @@ public class MusikBot {
 				this.playAudioLink("https://stream.antenne1.de/a1stg/livestream2.mp3", messageToBotEvent);
 			}
 
-			private void stopMusic() {
-				if (process != null && process.isAlive()) {
-					process.destroy();
-					api.logToCommandline("Destroyed old Process");
-				}
-				process = null;
-			}
+			
 
 			private void adjustVolume(String messageWithoutPrefix, TextMessageEvent messageToBotEvent) {
 				try {
@@ -197,7 +195,7 @@ public class MusikBot {
 
 					if (doubleValueOfArgument <= 150 && doubleValueOfArgument >= 50) {
 						this.soundHighValue = doubleValueOfArgument / 100;
-						System.out.println(soundHighValue + " new voulme high");
+						api.logToCommandline("New volume high : " + soundHighValue);
 						api.sendPrivateMessage(messageToBotEvent.getInvokerId(),
 								"Volume for future music is now: " + doubleValueOfArgument);
 					} else {
@@ -215,23 +213,26 @@ public class MusikBot {
 			}
 
 			/*
-			 * get all clinets and search those to reduce amohunts of times connection to server has to be build to get a 
+			 * get all clinets and search those to reduce amohunts of times connection to
+			 * server has to be build to get a
 			 */
 			private void moveBotToMusicRequestingUser(TextMessageEvent messageToBotEvent) {
 				List<Client> allClients = api.getClients();
 				int botClientId = 0;
 				int targetChannelId = 0;
-				
+
 				for (int i = 0; i < allClients.size(); i++) {
-					
-					// if unique id and name match the ones that where stored inside api (in login screen) then get his id to get current bot id
+
+					// if unique id and name match the ones that where stored inside api (in login
+					// screen) then get his id to get current bot id
 					if (allClients.get(i).getUniqueIdentifier()
 							.equals(api.getConnectedConfigValues().getUniqueClientID())
 							&& allClients.get(i).getNickname().equals(api.getConnectedConfigValues().getclientName())) {
 						botClientId = allClients.get(i).getId();
 					}
 
-					//if client matches name and Uid to invoker then get his channel to move bot there
+					// if client matches name and Uid to invoker then get his channel to move bot
+					// there
 					if (allClients.get(i).getUniqueIdentifier().equals(messageToBotEvent.getInvokerUniqueId())
 							&& allClients.get(i).getNickname().equals(messageToBotEvent.getInvokerName())) {
 						{
@@ -242,12 +243,12 @@ public class MusikBot {
 				}
 
 				api.moveClient(botClientId, targetChannelId);
-				
-				//to many api requests that slowed the interpretation of the command
+
+				// to many api requests that slowed the interpretation of the command
 				// ClientInfo botInfo =
 				// api.getClientByUId(api.getConnectedConfigValues().getUniqueClientID());
-				//api.moveClient(api.getClientsByName("Zephira").get(0).getId(),
-				//		api.getClientByUId(messageToBotEvent.getInvokerUniqueId()).getChannelId());
+				// api.moveClient(api.getClientsByName("Zephira").get(0).getId(),
+				// api.getClientByUId(messageToBotEvent.getInvokerUniqueId()).getChannelId());
 
 			}
 
@@ -256,17 +257,26 @@ public class MusikBot {
 				String endAgrumentAfterPlay = "vlc://quit";
 				String prefferedResolutionCommand = "--preferred-resolution";
 				String prefferedResolutionValue = "144";
-				this.stopMusic();
+				this.stopMusicInSeconds(0);
 				this.moveBotToMusicRequestingUser(messageToBotEvent);
 				// set playing TRUE HERE
 				try {
-					process = new ProcessBuilder(vlcPath, audioLocation, soundHighCommand,
+					musicProcess = new ProcessBuilder(vlcPath, audioLocation, soundHighCommand,
 							Double.toString(soundHighValue), prefferedResolutionCommand, prefferedResolutionValue,
 							endAgrumentAfterPlay).start();
 					api.logToCommandline("Started playing music");
+
+				//14400 secconds are 4 hours. After 4 hours audio is stopped to ensure performance on server
+				this.stopMusicInSeconds(14400);
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
+			}
+
+			private void stopMusicInSeconds(int seconds) {
+				Timer timer = new Timer();
+				BotTimeout timeout = new BotTimeout(timer, musicProcess);
+				timer.schedule(timeout, seconds * 1000);
 			}
 		};
 		return musikBot;
