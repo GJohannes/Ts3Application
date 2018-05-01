@@ -47,6 +47,7 @@ public class AppMain extends Application {
 		Pane root = (Pane) FXMLLoader.load(getClass().getResource("/Login.fxml"));
 
 		primaryStage.setScene(new Scene(root));
+		primaryStage.setTitle("Ts3 Application");
 		primaryStage.show();
 
 		// Terminate Program on Close Window
