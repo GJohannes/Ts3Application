@@ -1,9 +1,7 @@
 # Ts3Application
-# Ts3Application
 
----Versions---
-2.0 Lilith <<--- 1.0 Rudolf
----Versions---
+---MusicBot--- 1.0 Rudolf --->> 2.0 Lilith
+
 1. Lilith:
     1. bot now follows
     1. volume implementation
