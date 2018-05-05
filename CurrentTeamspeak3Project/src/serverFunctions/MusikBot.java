@@ -172,7 +172,8 @@ public class MusikBot {
 						+ " \n !Antenne1"
 						+ " \n !killMusic or killMusik or kill"
 						+ " \n !Volume XXX (Number between 50 and 150)"
-						+ " \n !history to get the last 10 commands");
+						+ " \n !history to get the last 10 commands"
+						+ " \n !changelog displays features of versions");
 			}
 			
 			private void sendChangeLog(TextMessageEvent e) {
