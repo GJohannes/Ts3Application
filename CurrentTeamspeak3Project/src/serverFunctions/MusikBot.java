@@ -100,8 +100,10 @@ public class MusikBot {
 							this.pullAllClinetsIntoInvokerChannel(messageToBotEvent);
 						} else if (messageWithoutPrefix.equals("version")) {
 							// this.sendAsciArt(messageToBotEvent);
-						} else if (messageWithoutPrefix.equals("history")) {
+						} else if (messageWithoutPrefix.toLowerCase().equals("history")) {
 							this.showHistory(messageToBotEvent);
+						} else if (messageWithoutPrefix.toLowerCase().equals("changelog")) {
+							this.sendChangeLog(messageToBotEvent);
 						} else {
 							this.sendSyntaxErrorMessage(messageToBotEvent);
 						}
@@ -163,7 +165,31 @@ public class MusikBot {
 
 			private void sendCommandsToClient(TextMessageEvent e) {
 				api.sendPrivateMessage(e.getInvokerId(),
-						" \n !commands \n !\"insert youtube link here\" \n !DasDing \n !1077 \n !Antenne1 \n !killMusic \n !Volume XXX (Number between 50 and 150)");
+						" \n !commands"
+						+ " \n !\"insert youtube link here\""
+						+ " \n !DasDing"
+						+ " \n !1077"
+						+ " \n !Antenne1"
+						+ " \n !killMusic or killMusik or kill"
+						+ " \n !Volume XXX (Number between 50 and 150)"
+						+ " \n !history to get the last 10 commands");
+			}
+			
+			private void sendChangeLog(TextMessageEvent e) {
+				api.sendPrivateMessage(e.getInvokerId(), 
+						"  \n -->>Lilith<<-- Features:"
+						+ "\n -Additional webradio streams"
+						+ "\n -Volume implementation (!Volume XXX)"
+						+ "\n -Server side performance increases (autostop after 4h and reduced network load)"
+						+ "\n -Bot switches to person who requested music"
+						+ "\n -ignor of case sensitivity for commands"
+						+ "\n -added history of commands (!history)"
+						+ "\n -added changelog command (!changelog)"
+						+ "\n -->>Rudolf<<-- Features:"
+						+ "\n -Youtube Links playable"
+						+ "\n -webradio DasDing"
+						+ "\n -stop playing music (!killMusic) command"
+						+ "\n -Repository: https://github.com/GJohannes/Ts3Application/");
 			}
 
 			private void playYoutubeLink(String youtubeLocation, TextMessageEvent messageToBotEvent) {

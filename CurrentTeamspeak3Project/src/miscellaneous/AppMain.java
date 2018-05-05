@@ -55,7 +55,6 @@ public class AppMain extends Application {
 			System.exit(0);
 			Platform.exit();
 		});
-
 	}
 
 	public static void main(String[] args) {
