@@ -14,6 +14,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
+import org.json.simple.parser.ParseException;
+
 import com.github.theholywaffle.teamspeak3.TS3Api;
 import com.github.theholywaffle.teamspeak3.TS3Config;
 import com.github.theholywaffle.teamspeak3.TS3Query;
@@ -36,6 +38,7 @@ import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
 import login.LoginController;
 import login.Ts3Client;
+import serverFunctions.riotApi.riotApiData;
 
 public class AppMain extends Application {
 
@@ -57,8 +60,12 @@ public class AppMain extends Application {
 		});
 	}
 
-	public static void main(String[] args) {
-		launch(args);
+	public static void main(String[] args) throws IOException, ParseException {
+		//launch(args);
+		
+		
+		riotApiData riotApi = new riotApiData();
+		riotApi.getIdByNickName("","");
 		
 //		try {
 //			Process process = new ProcessBuilder("C:\\Program Files\\VideoLAN\\VLC\\vlc.exe","https://www.youtube.com/watch?v=zWmx56kvLUA").start();
