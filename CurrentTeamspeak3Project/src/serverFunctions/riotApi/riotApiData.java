@@ -14,7 +14,7 @@ import org.json.simple.parser.ParseException;
 import netscape.javascript.JSObject;
 
 public class riotApiData {
-	public void getIdByNickName(String nickName, String ApiKey) throws IOException, ParseException {
+	public long getIdByNickName(String nickName, String ApiKey) throws IOException, ParseException {
 		ApiKey = "RGAPI-4c46e0b2-8cce-4a8c-821d-fe4c9abc41cd";
 		nickName = "XZephiraX";
 		
@@ -28,9 +28,14 @@ public class riotApiData {
 		InputStreamReader in = new InputStreamReader(conn.getInputStream());
 
 		JSONParser parser = new JSONParser();
-		JSONObject o = (JSONObject) parser.parse(in);
+		JSONObject summenorData = (JSONObject) parser.parse(in);
+		
+		System.out.println(summenorData.get("accountId").getClass());
 		
 		
+		long accountId =  (long) summenorData.get("accountId");
+		System.out.println(accountId);
+	    return accountId;
 		//JSONObject summonerByNameData = (JSONObject) parser.parse(line);
 	//	System.out.println(summonerByNameData.toJSONString() + " adfshjdf");
 		
