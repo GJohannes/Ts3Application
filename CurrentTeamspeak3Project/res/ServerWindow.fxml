@@ -53,6 +53,10 @@
 				<TextField fx:id="vlcPathTextField"  prefWidth="200" />
 				<Button text="choose vlc location" fx:id="vlcPathFileChooser" prefWidth="200" onAction="#chooseVlcPathLocation" />
 			</HBox>
+			<HBox >
+				<BooleanButton fx:id="riotApiButton" prefWidth="200" onAction="#toggleRiotApi">
+				</BooleanButton>
+			</HBox>
 		</VBox>
 	</StackPane>
 </AnchorPane>

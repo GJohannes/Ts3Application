@@ -61,12 +61,12 @@ public class AppMain extends Application {
 	}
 
 	public static void main(String[] args) throws IOException, ParseException {
-		//launch(args);
+		launch(args);
 		
 		
-		riotApiData riotApi = new riotApiData();
-		riotApi.getWinFromGameId(3730321220L, "", "");
-		
+//		riotApiData riotApi = new riotApiData();
+//		riotApi.getWinFromGameId(3730321220L, "", "");
+	
 //		try {
 //			Process process = new ProcessBuilder("C:\\Program Files\\VideoLAN\\VLC\\vlc.exe","https://www.youtube.com/watch?v=zWmx56kvLUA").start();
 //		} catch (IOException e) {

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 
+import org.json.simple.JSONObject;
+
 import com.github.theholywaffle.teamspeak3.api.TextMessageTargetMode;
 import com.github.theholywaffle.teamspeak3.api.event.ClientJoinEvent;
 import com.github.theholywaffle.teamspeak3.api.event.TextMessageEvent;
@@ -64,7 +66,10 @@ public class MusikBot {
 
 			@Override
 			public void onTextMessage(TextMessageEvent messageToBotEvent) {
-
+				System.out.println(api.getClientByUId("giwLzOcXMB1fi+DVtV6uSDzCqGo=").getDescription());
+				
+				
+				
 				// only accept message that has been send from a client, otherwise SERVER
 				// messages would also be interpreted
 				if (messageToBotEvent.getTargetMode().equals(TextMessageTargetMode.CLIENT)) {
@@ -138,7 +143,7 @@ public class MusikBot {
 				}
 
 				api.moveClients(clientIds, targetChannelId);
-
+			
 			}
 
 			private void showHistory(TextMessageEvent messageToBotEvent) {

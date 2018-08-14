@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 import miscellaneous.ExtendedTS3Api;
 import serverFunctions.MusikBot;
 import serverFunctions.ServerLogger;
+import serverFunctions.riotApi.RiotApiNotification;
 
 public class ServerWindowController implements Initializable {
 	
@@ -28,12 +29,17 @@ public class ServerWindowController implements Initializable {
 	@FXML private Text serverPort;
 	@FXML private BooleanButton testButton;
 	@FXML private BooleanButton musikBotButton;
+	@FXML private BooleanButton riotApiButton;
 	@FXML private Button vlcPathFileChooser;
 	@FXML private TextField vlcPathTextField;
 	
 	private ExtendedTS3Api api;
 	private ServerLogger logger;
 	private MusikBot musicBot;
+	
+	//private RiotApiNotification apiThread;
+	RiotApiNotification apiThread;
+	Thread thread;
 	
 	public void setIpAdress(String ipAdress) {
 		this.ipAdress.setText(ipAdress);
@@ -81,6 +87,17 @@ public class ServerWindowController implements Initializable {
 	}
 	
 	
+	@FXML
+	public void toggleRiotApi() {
+		if(riotApiButton.isNowActive()) {
+			this.apiThread = new RiotApiNotification(api);
+			thread = new Thread(apiThread);
+			thread.start();
+		} else {
+			apiThread.exit();
+		}
+ 
+	}
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -88,6 +105,8 @@ public class ServerWindowController implements Initializable {
 		serverLoggerButton.setDeActiveText("Deactive -- Start Logging");
 		musikBotButton.setActiveText("Currently Active");
 		musikBotButton.setDeActiveText("Music Bot is Deactive");
+		riotApiButton.setActiveText("Api check online");
+		riotApiButton.setDeActiveText("Api check offline");
 		this.vlcPathTextField.setText("C:\\Program Files\\VideoLAN\\VLC\\vlc.exe");
 	}
 
