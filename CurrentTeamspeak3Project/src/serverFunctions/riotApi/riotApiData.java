@@ -31,6 +31,7 @@ public class riotApiData {
 		JSONObject o = (JSONObject) parser.parse(in);
 		
 		
+		
 		//JSONObject summonerByNameData = (JSONObject) parser.parse(line);
 	//	System.out.println(summonerByNameData.toJSONString() + " adfshjdf");
 		
