@@ -65,7 +65,7 @@ public class AppMain extends Application {
 		
 		
 		riotApiData riotApi = new riotApiData();
-		riotApi.getLastGameIdByAccId(21918507, "");
+		riotApi.getWinFromGameId(3730321220L, "", "");
 		
 //		try {
 //			Process process = new ProcessBuilder("C:\\Program Files\\VideoLAN\\VLC\\vlc.exe","https://www.youtube.com/watch?v=zWmx56kvLUA").start();

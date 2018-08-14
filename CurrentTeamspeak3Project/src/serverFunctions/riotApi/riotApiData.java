@@ -19,47 +19,78 @@ public class riotApiData {
 	public long getIdByNickName(String nickName, String ApiKey) throws IOException, ParseException {
 		ApiKey = "RGAPI-4c46e0b2-8cce-4a8c-821d-fe4c9abc41cd";
 		nickName = "XZephiraX";
-		
-		String urlString =  "https://euw1.api.riotgames.com/lol/summoner/v3/summoners/by-name/";
-		
+	
 		URL url = new URL("https://euw1.api.riotgames.com/lol/summoner/v3/summoners/by-name/" + nickName + "?api_key=" + ApiKey);
-		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-		conn.setRequestMethod("GET");
-
-		// Input-Stream from HTTP-Request
-		InputStreamReader in = new InputStreamReader(conn.getInputStream());
-
-		JSONParser parser = new JSONParser();
-		JSONObject summenorData = (JSONObject) parser.parse(in);
-						
+		JSONObject summenorData  = getJSONFromUrl(url);		
 		long accountId =  (long) summenorData.get("accountId");
-		
-	    return accountId;
-		//JSONObject summonerByNameData = (JSONObject) parser.parse(line);
-	//	System.out.println(summonerByNameData.toJSONString() + " adfshjdf");
-			
+
+	    return accountId;		
 	}
 	
 	public long getLastGameIdByAccId(long accId,String ApiKey) throws IOException, ParseException {
 		ApiKey = "RGAPI-4c46e0b2-8cce-4a8c-821d-fe4c9abc41cd";
 		
-		
-		String urlString =  "https://euw1.api.riotgames.com/lol/match/v3/matchlists/by-account/";
-		
-		URL url = new URL(urlString + accId + "?api_key=" + ApiKey);
-		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-		conn.setRequestMethod("GET");
-
-		// Input-Stream from HTTP-Request
-		InputStreamReader in = new InputStreamReader(conn.getInputStream());
-
-		JSONParser parser = new JSONParser();
-		JSONObject matchData = (JSONObject) parser.parse(in);
-			System.out.println(matchData.get("matches").getClass());			
+		URL url = new URL("https://euw1.api.riotgames.com/lol/match/v3/matchlists/by-account/" + accId + "?api_key=" + ApiKey);
+		JSONObject matchData = getJSONFromUrl(url);
 		JSONArray matchlist =   (JSONArray) matchData.get("matches");
-		System.out.println(matchlist);
+		
 		return (long) ((JSONObject) matchlist.get(0)).get("gameId");
-	    //return accountId;
 	}
 	
+	/*
+	 * returns true if last game was won; returns false if last game was lost
+	 */
+	public boolean getWinFromGameId(long gameId, String ApiKey, String nickName) throws IOException, ParseException {
+		ApiKey = "RGAPI-4c46e0b2-8cce-4a8c-821d-fe4c9abc41cd";
+		nickName = "XZephiraX";
+
+		
+		URL url = new URL("https://euw1.api.riotgames.com/lol/match/v3/matches/" + gameId + "?api_key=" + ApiKey);
+		JSONObject match = getJSONFromUrl(url);
+		System.out.println(match);
+		//System.out.println(match.get("participantIdentities").getClass()); 
+		JSONArray participantIdentities = (JSONArray) match.get("participantIdentities");
+		long participantId = -1;
+		
+		
+		//get each player that participated in the game until match is found for given nickname
+		for(int i = 0; i < participantIdentities.size(); i++) {
+			JSONObject player = (JSONObject)((JSONObject)participantIdentities.get(i)).get("player");
+			
+			if(player.get("summonerName").equals(nickName)) {
+				System.out.println(((JSONObject)participantIdentities.get(i)).get("participantId"));
+				participantId = (long) ((JSONObject)participantIdentities.get(i)).get("participantId");
+			}
+		}
+		
+		
+		if(participantId == -1) {
+			//defensive programmed should bever be executed
+			return false;
+		}
+		
+		JSONArray participants = (JSONArray) match.get("participants");
+		
+		for(int i = 0; i < participants.size(); i++) {
+			JSONObject oneParticipant = (JSONObject) participants.get(i);
+			
+			if(((long)(oneParticipant.get("participantId"))) == participantId){
+				return (boolean) ((JSONObject)oneParticipant.get("stats")).get("win");
+
+			}
+		}
+		return false;
+	}
+	
+	public JSONObject getJSONFromUrl(URL url) throws IOException, ParseException {
+		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+		conn.setRequestMethod("GET");
+		
+		// Input-Stream from HTTP-Request
+		InputStreamReader in = new InputStreamReader(conn.getInputStream());
+		
+		JSONParser parser = new JSONParser();
+		JSONObject resultingJSON = (JSONObject) parser.parse(in);
+		return resultingJSON;
+	}
 }
