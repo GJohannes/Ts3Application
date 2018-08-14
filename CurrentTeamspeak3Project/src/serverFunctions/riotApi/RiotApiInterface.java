@@ -17,9 +17,6 @@ import netscape.javascript.JSObject;
 public class RiotApiInterface {
 	
 	public long getIdByNickName(String nickName, String ApiKey) throws IOException, ParseException {
-//		ApiKey = "RGAPI-4c46e0b2-8cce-4a8c-821d-fe4c9abc41cd";
-//		nickName = "XsfdZephiraX";
-	
 		URL url = new URL("https://euw1.api.riotgames.com/lol/summoner/v3/summoners/by-name/" + nickName + "?api_key=" + ApiKey);
 		JSONObject summenorData  = getJSONFromUrl(url);		
 		long accountId =  (long) summenorData.get("accountId");
@@ -28,8 +25,6 @@ public class RiotApiInterface {
 	}
 	
 	public long getLastGameIdByAccId(long accId,String ApiKey) throws IOException, ParseException {
-		ApiKey = "RGAPI-4c46e0b2-8cce-4a8c-821d-fe4c9abc41cd";
-		
 		URL url = new URL("https://euw1.api.riotgames.com/lol/match/v3/matchlists/by-account/" + accId + "?api_key=" + ApiKey);
 		JSONObject matchData = getJSONFromUrl(url);
 		JSONArray matchlist =   (JSONArray) matchData.get("matches");
@@ -40,15 +35,9 @@ public class RiotApiInterface {
 	/*
 	 * returns true if last game was won; returns false if last game was lost
 	 */
-	public boolean getWinFromGameId(long gameId, String ApiKey, String nickName) throws IOException, ParseException {
-		ApiKey = "RGAPI-4c46e0b2-8cce-4a8c-821d-fe4c9abc41cd";
-		nickName = "XZephiraX";
-
-		
+	public boolean getWinFromGameId(long gameId, String ApiKey, String nickName) throws IOException, ParseException {		
 		URL url = new URL("https://euw1.api.riotgames.com/lol/match/v3/matches/" + gameId + "?api_key=" + ApiKey);
-		JSONObject match = getJSONFromUrl(url);
-		System.out.println(match);
-		//System.out.println(match.get("participantIdentities").getClass()); 
+		JSONObject match = getJSONFromUrl(url); 
 		JSONArray participantIdentities = (JSONArray) match.get("participantIdentities");
 		long participantId = -1;
 		
@@ -56,9 +45,7 @@ public class RiotApiInterface {
 		//get each player that participated in the game until match is found for given nickname
 		for(int i = 0; i < participantIdentities.size(); i++) {
 			JSONObject player = (JSONObject)((JSONObject)participantIdentities.get(i)).get("player");
-			
 			if(player.get("summonerName").equals(nickName)) {
-				System.out.println(((JSONObject)participantIdentities.get(i)).get("participantId"));
 				participantId = (long) ((JSONObject)participantIdentities.get(i)).get("participantId");
 			}
 		}

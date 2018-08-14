@@ -62,7 +62,7 @@ public class AppMain extends Application {
 	}
 
 	public static void main(String[] args) throws IOException, ParseException {
-		//launch(args);
+		launch(args);
 		
 		
 //		RiotApiInterface riotApi = new RiotApiInterface();
