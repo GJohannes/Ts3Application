@@ -38,7 +38,8 @@ import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
 import login.LoginController;
 import login.Ts3Client;
-import serverFunctions.riotApi.riotApiData;
+import serverFunctions.riotApi.RiotApiInterface;
+import serverFunctions.riotApi.RiotApiNotification;
 
 public class AppMain extends Application {
 
@@ -61,12 +62,14 @@ public class AppMain extends Application {
 	}
 
 	public static void main(String[] args) throws IOException, ParseException {
-		launch(args);
+		//launch(args);
 		
 		
-//		riotApiData riotApi = new riotApiData();
-//		riotApi.getWinFromGameId(3730321220L, "", "");
-	
+//		RiotApiInterface riotApi = new RiotApiInterface();
+//		RiotApiNotification riotN =new RiotApiNotification(null);
+//		riotN.addUser("Lymoon");
+//		System.out.println("done"+riotN.addUser("Lymoon"));
+		//riotApi.getIdByNickName("", "");	
 //		try {
 //			Process process = new ProcessBuilder("C:\\Program Files\\VideoLAN\\VLC\\vlc.exe","https://www.youtube.com/watch?v=zWmx56kvLUA").start();
 //		} catch (IOException e) {

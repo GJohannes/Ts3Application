@@ -14,11 +14,11 @@ import org.json.simple.parser.ParseException;
 
 import netscape.javascript.JSObject;
 
-public class riotApiData {
+public class RiotApiInterface {
 	
 	public long getIdByNickName(String nickName, String ApiKey) throws IOException, ParseException {
-		ApiKey = "RGAPI-4c46e0b2-8cce-4a8c-821d-fe4c9abc41cd";
-		nickName = "XZephiraX";
+//		ApiKey = "RGAPI-4c46e0b2-8cce-4a8c-821d-fe4c9abc41cd";
+//		nickName = "XsfdZephiraX";
 	
 		URL url = new URL("https://euw1.api.riotgames.com/lol/summoner/v3/summoners/by-name/" + nickName + "?api_key=" + ApiKey);
 		JSONObject summenorData  = getJSONFromUrl(url);		
