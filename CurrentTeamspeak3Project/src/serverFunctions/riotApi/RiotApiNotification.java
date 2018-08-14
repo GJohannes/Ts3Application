@@ -150,9 +150,9 @@ public class RiotApiNotification implements Runnable {
 								user.getAccountName());
 
 						if (win) {
-							api.sendServerMessage(user.getAccountName() + " won his last game");
+							api.sendServerMessage(user.getAccountName() + " just won a game");
 						} else {
-							api.sendServerMessage(user.getAccountName() + " lost his last game");
+							api.sendServerMessage(user.getAccountName() + " just lost a game. What a looser");
 						}
 					}
 					Thread.sleep(1000);
