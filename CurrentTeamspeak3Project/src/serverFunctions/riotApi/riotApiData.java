@@ -7,6 +7,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -39,8 +40,26 @@ public class riotApiData {
 			
 	}
 	
-	public void getLastGameId() {
+	public long getLastGameIdByAccId(long accId,String ApiKey) throws IOException, ParseException {
+		ApiKey = "RGAPI-4c46e0b2-8cce-4a8c-821d-fe4c9abc41cd";
 		
+		
+		String urlString =  "https://euw1.api.riotgames.com/lol/match/v3/matchlists/by-account/";
+		
+		URL url = new URL(urlString + accId + "?api_key=" + ApiKey);
+		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+		conn.setRequestMethod("GET");
+
+		// Input-Stream from HTTP-Request
+		InputStreamReader in = new InputStreamReader(conn.getInputStream());
+
+		JSONParser parser = new JSONParser();
+		JSONObject matchData = (JSONObject) parser.parse(in);
+			System.out.println(matchData.get("matches").getClass());			
+		JSONArray matchlist =   (JSONArray) matchData.get("matches");
+		System.out.println(matchlist);
+		return (long) ((JSONObject) matchlist.get(0)).get("gameId");
+	    //return accountId;
 	}
 	
 }
