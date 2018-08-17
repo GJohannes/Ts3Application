@@ -43,7 +43,7 @@ public class IpAdressTextField extends TextField {
 		return this.isTextFieldInputValid;
 	}
 	
-	private boolean isValidIpAdress(String input){
+	private boolean isValidIpAdress(String input){		
 		String[] array = input.split("\\.");
 		if (array.length != 4) {
 			return false;
@@ -63,5 +63,11 @@ public class IpAdressTextField extends TextField {
 			// nothing killed it therefore it mus be a valid ip adress
 			return true;
 		}
+		
+//		// Code alternative as Regex
+//		String ipAdressToValidate = "253.199.01.21";
+//		System.out.println(Pattern.matches(
+//				"((25[0-5]|2[0-4][0-9]|[0-1]?[0-9]?[0-9])\\.){3}(25[0-5]|2[0-4][0-9]|[0-1]?[0-9]?[0-9])",
+//				ipAdressToValidate));
 	}
 }
