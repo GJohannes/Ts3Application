@@ -1,6 +1,7 @@
 # Ts3Application
 
----MusicBot--- 1.0 Rudolf --->> 2.0 Lilith
+## MusicBot
+1.0 Rudolf --->> 2.0 Lilith
 
 1. Lilith:
     1. bot now follows
@@ -16,3 +17,7 @@
    1. ability to play DasDing webradio 
    1. ability to show commands. 
    1. ability to stop current musik playing
+
+## Riot Api
+Register a Summoner to check every 60 seconds if he won/lost a game. If so it will post the result as a Server message.
+?help to get the commands
