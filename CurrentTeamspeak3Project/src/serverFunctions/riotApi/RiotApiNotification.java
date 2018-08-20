@@ -130,9 +130,20 @@ public class RiotApiNotification implements Runnable {
 					} else if (message.toLowerCase().startsWith("help")) {
 						showHelp(api, messageToBotEvent);
 					} else if (message.toLowerCase().startsWith("key")) {
+						//if only key then check validity
+						if(message.equalsIgnoreCase("key")) {
+							try {
+								riotInterface.getIdByNickName("XZephiraX", apiKey);
+								api.sendPrivateMessage(messageToBotEvent.getInvokerId(), "Key is still valid");
+							} catch (IOException | ParseException e) {
+								api.sendPrivateMessage(messageToBotEvent.getInvokerId(), "Invalid Key - Please Update to proceed");
+							}							
+						//else update the key
+						} else {							
 						splittStringAndUpdateKey(message);
 						api.sendPrivateMessage(messageToBotEvent.getInvokerId(),
 								"Successful updated Key");
+						}
 					} else {
 						api.sendPrivateMessage(messageToBotEvent.getInvokerId(),"Syntaxerror - could not read command");
 					}
