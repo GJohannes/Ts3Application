@@ -37,7 +37,7 @@ public class RiotApiNotification implements Runnable {
 	private boolean splittStringAndRemoveNickName(String message) {
 		String nickName = message.split(" ",2)[1];
 		for (int i = 0; i < userList.size(); i++) {
-			if (userList.get(i).getNickName().toLowerCase().equals(nickName.toLowerCase())) {
+			if (userList.get(i).getNickName().equalsIgnoreCase(nickName)) {
 				userList.remove(i);
 				return true;
 			}
@@ -58,7 +58,7 @@ public class RiotApiNotification implements Runnable {
 			allUsers = "No users currently added";
 		}
 		for (int i = 0; i < userList.size(); i++) {
-			allUsers = allUsers + userList.get(i).getNickName() + " ;";
+			allUsers = allUsers + userList.get(i).getNickName() + " -- ";
 		}
 		api.sendPrivateMessage(e.getInvokerId(), allUsers);
 	}
