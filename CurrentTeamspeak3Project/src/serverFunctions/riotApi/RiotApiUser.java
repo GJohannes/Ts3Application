@@ -27,8 +27,4 @@ public class RiotApiUser {
 	public long getAccountId() {
 		return accountId;
 	}
-
-	public void setDEBUGLastGame() {
-		this.lastGameId = 22;
-	}
 }
