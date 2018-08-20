@@ -16,9 +16,9 @@ import miscellaneous.ExtendedTS3EventAdapter;
 public class RiotApiNotification implements Runnable {
 	private ExtendedTS3Api api;
 	private boolean threadRunningFlag = true;
-	ArrayList<RiotApiUser> userList = new ArrayList<>();
-	RiotApiInterface riotInterface = new RiotApiInterface();
-	String apiKey = "RGAPI-4c46e0b2-8cce-4a8c-821d-fe4c9abc41cd";
+	private volatile ArrayList<RiotApiUser> userList = new ArrayList<>();
+	private RiotApiInterface riotInterface = new RiotApiInterface();
+	private String apiKey = "RGAPI-554413a9-1aa9-4364-a50c-e094271a2c78";
 
 	public RiotApiNotification(ExtendedTS3Api api) {
 		this.api = api;
@@ -30,12 +30,13 @@ public class RiotApiNotification implements Runnable {
 
 	// should get message of add and nickname to add
 	private void splittStringAndAddUser(String message) throws IOException, ParseException {
-		String nickName = message.split(" ")[1];
+		String nickName = message.split(" ",2)[1];
+		System.out.println(nickName);
 		this.addUser(nickName);
 	}
 
 	private boolean splittStringAndRemoveNickName(String message) {
-		String nickName = message.split(" ")[1];
+		String nickName = message.split(" ",2)[1];
 		for (int i = 0; i < userList.size(); i++) {
 			if (userList.get(i).getAccountName().toLowerCase().equals(nickName.toLowerCase())) {
 				userList.remove(i);
@@ -115,6 +116,8 @@ public class RiotApiNotification implements Runnable {
 						splittStringAndUpdateKey(message);
 						api.sendPrivateMessage(messageToBotEvent.getInvokerId(),
 								"Successful updated Key");
+					} else {
+						api.sendPrivateMessage(messageToBotEvent.getInvokerId(),"Syntaxerror - could not read command");
 					}
 				}
 			}
@@ -141,7 +144,11 @@ public class RiotApiNotification implements Runnable {
 
 	private void activeLogic() {
 		while (threadRunningFlag) {
-			for (RiotApiUser user : userList) {
+			//resolve bug with local list. if remove during checkup is done the list is to small for the iterator 
+			ArrayList<RiotApiUser> localUsers = new ArrayList<>();
+			localUsers.addAll(userList);
+			
+			for (RiotApiUser user : localUsers) {
 				try {
 					long newGameId = riotInterface.getLastGameIdByAccId(user.getAccountId(), apiKey);
 					if (newGameId != user.getLastGameId()) {
@@ -162,8 +169,6 @@ public class RiotApiNotification implements Runnable {
 
 			}
 			api.logToCommandline("Thread for Riot api is still running");
-
-			System.out.println(userList.size());
 
 			try {
 				Thread.sleep(60000 - userList.size() * 1000);

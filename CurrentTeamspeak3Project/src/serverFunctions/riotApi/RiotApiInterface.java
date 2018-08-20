@@ -1,22 +1,24 @@
 package serverFunctions.riotApi;
 
-import java.io.BufferedReader;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import netscape.javascript.JSObject;
-
 public class RiotApiInterface {
 	
 	public long getIdByNickName(String nickName, String ApiKey) throws IOException, ParseException {
+		//URL can not contain spaces which are possible in nicknames
+		if(nickName.contains(" ")) {
+			nickName = nickName.replace(" ", "%20");
+		}
 		URL url = new URL("https://euw1.api.riotgames.com/lol/summoner/v3/summoners/by-name/" + nickName + "?api_key=" + ApiKey);
 		JSONObject summenorData  = getJSONFromUrl(url);		
 		long accountId =  (long) summenorData.get("accountId");
@@ -70,7 +72,7 @@ public class RiotApiInterface {
 	}
 	
 	public JSONObject getJSONFromUrl(URL url) throws IOException, ParseException {
-		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+		HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
 		conn.setRequestMethod("GET");
 		
 		// Input-Stream from HTTP-Request
