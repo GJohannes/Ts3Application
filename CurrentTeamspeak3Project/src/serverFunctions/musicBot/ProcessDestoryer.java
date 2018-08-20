@@ -1,4 +1,4 @@
-package serverFunctions;
+package serverFunctions.musicBot;
 
 public class ProcessDestoryer {
 	public void destroy(Process process) {

@@ -1,4 +1,4 @@
-package serverFunctions;
+package serverFunctions.musicBot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,10 +66,7 @@ public class MusikBot {
 
 			@Override
 			public void onTextMessage(TextMessageEvent messageToBotEvent) {
-				System.out.println(api.getClientByUId("giwLzOcXMB1fi+DVtV6uSDzCqGo=").getDescription());
-				
-				
-				
+
 				// only accept message that has been send from a client, otherwise SERVER
 				// messages would also be interpreted
 				if (messageToBotEvent.getTargetMode().equals(TextMessageTargetMode.CLIENT)) {

@@ -1,4 +1,4 @@
-package serverFunctions;
+package serverFunctions.loggerForServer;
 
 public enum LoggedServerEvents {
 	JOIN_SERVER,

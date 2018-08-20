@@ -1,4 +1,4 @@
-package serverFunctions;
+package serverFunctions.loggerForServer;
 
 import java.io.IOException;
 import java.nio.file.Files;

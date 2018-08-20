@@ -1,4 +1,4 @@
-package serverFunctions;
+package serverFunctions.musicBot;
 
 import java.util.Timer;
 import java.util.TimerTask;
