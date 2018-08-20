@@ -20,7 +20,7 @@ public class RiotApiUser {
 		return lastGameId;
 	}
 
-	public String getAccountName() {
+	public String getNickName() {
 		return nickName;
 	}
 

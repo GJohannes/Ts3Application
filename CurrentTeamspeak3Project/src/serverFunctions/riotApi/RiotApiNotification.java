@@ -29,16 +29,15 @@ public class RiotApiNotification implements Runnable {
 	}
 
 	// should get message of add and nickname to add
-	private void splittStringAndAddUser(String message) throws IOException, ParseException {
+	private boolean splittStringAndAddUser(String message) throws IOException, ParseException {
 		String nickName = message.split(" ",2)[1];
-		System.out.println(nickName);
-		this.addUser(nickName);
+		return this.addUser(nickName);
 	}
 
 	private boolean splittStringAndRemoveNickName(String message) {
 		String nickName = message.split(" ",2)[1];
 		for (int i = 0; i < userList.size(); i++) {
-			if (userList.get(i).getAccountName().toLowerCase().equals(nickName.toLowerCase())) {
+			if (userList.get(i).getNickName().toLowerCase().equals(nickName.toLowerCase())) {
 				userList.remove(i);
 				return true;
 			}
@@ -59,7 +58,7 @@ public class RiotApiNotification implements Runnable {
 			allUsers = "No users currently added";
 		}
 		for (int i = 0; i < userList.size(); i++) {
-			allUsers = allUsers + userList.get(i).getAccountName() + " ;";
+			allUsers = allUsers + userList.get(i).getNickName() + " ;";
 		}
 		api.sendPrivateMessage(e.getInvokerId(), allUsers);
 	}
@@ -72,11 +71,26 @@ public class RiotApiNotification implements Runnable {
 				+ "\n ?show");
 	}
 
-	private void addUser(String nickName) throws IOException, ParseException {
+	/**
+	 * 
+	 * 
+	 * @param nickName
+	 * @return true if was added; false if user nickname was already in the list
+	 * @throws IOException
+	 * @throws ParseException
+	 */
+	
+	private boolean addUser(String nickName) throws IOException, ParseException {
+		for(int i = 0; i < userList.size(); i++) {
+			if(userList.get(i).getNickName().equalsIgnoreCase(nickName)) {
+				return false;
+			}
+		}
 		long accountId = riotInterface.getIdByNickName(nickName, apiKey);
 		long lastGameId = riotInterface.getLastGameIdByAccId(accountId, apiKey);
 		RiotApiUser newUser = new RiotApiUser(accountId, nickName, lastGameId);
 		userList.add(newUser);
+		return true;
 	}
 
 	private ExtendedTS3EventAdapter getRiotApi(ExtendedTS3Api api) {
@@ -89,8 +103,11 @@ public class RiotApiNotification implements Runnable {
 					message = message.substring(1);
 					if (message.toLowerCase().startsWith("add")) {
 						try {
-							splittStringAndAddUser(message);
-							api.sendPrivateMessage(messageToBotEvent.getInvokerId(), "Successfully added");
+							if(splittStringAndAddUser(message)) {
+								api.sendPrivateMessage(messageToBotEvent.getInvokerId(), "Successfully added");								
+							} else {
+								api.sendPrivateMessage(messageToBotEvent.getInvokerId(), "User already registered. Duplicates not allowed");
+							}
 						} catch (FileNotFoundException w) {
 							api.sendPrivateMessage(messageToBotEvent.getInvokerId(),
 									"Could not find User, check spelling");
@@ -154,12 +171,12 @@ public class RiotApiNotification implements Runnable {
 					if (newGameId != user.getLastGameId()) {
 						user.setLastGameId(newGameId);
 						boolean win = riotInterface.getWinFromGameId(user.getLastGameId(), apiKey,
-								user.getAccountName());
+								user.getNickName());
 
 						if (win) {
-							api.sendServerMessage(user.getAccountName() + " just won a game");
+							api.sendServerMessage(user.getNickName() + " just won a game");
 						} else {
-							api.sendServerMessage(user.getAccountName() + " just lost a game. What a looser");
+							api.sendServerMessage(user.getNickName() + " just lost a game. What a looser");
 						}
 					}
 					Thread.sleep(1000);
