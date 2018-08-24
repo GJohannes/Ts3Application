@@ -3,6 +3,7 @@ package serverFunctions.riotApi;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.json.simple.parser.ParseException;
 
@@ -16,7 +17,8 @@ import miscellaneous.ExtendedTS3EventAdapter;
 public class RiotApiNotification implements Runnable {
 	private ExtendedTS3Api api;
 	private boolean threadRunningFlag = true;
-	private volatile ArrayList<RiotApiUser> userList = new ArrayList<>();
+	private CopyOnWriteArrayList<RiotApiUser> userList = new CopyOnWriteArrayList<RiotApiUser>();
+	//private volatile ArrayList<RiotApiUser> userList = new ArrayList<>();
 	private RiotApiInterface riotInterface = new RiotApiInterface();
 	private String apiKey = "RGAPI-554413a9-1aa9-4364-a50c-e094271a2c78";
 
@@ -172,11 +174,7 @@ public class RiotApiNotification implements Runnable {
 
 	private void activeLogic() {
 		while (threadRunningFlag) {
-			//resolve bug with local list. if remove during checkup is done the list is to small for the iterator 
-			ArrayList<RiotApiUser> localUsers = new ArrayList<>();
-			localUsers.addAll(userList);
-			
-			for (RiotApiUser user : localUsers) {
+			for (RiotApiUser user : userList) {
 				try {
 					long newGameId = riotInterface.getLastGameIdByAccId(user.getAccountId(), apiKey);
 					if (newGameId != user.getLastGameId()) {
