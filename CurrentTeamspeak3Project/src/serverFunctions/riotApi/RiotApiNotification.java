@@ -17,10 +17,10 @@ import miscellaneous.ExtendedTS3EventAdapter;
 public class RiotApiNotification implements Runnable {
 	private ExtendedTS3Api api;
 	private boolean threadRunningFlag = true;
+	//thread save list in case that add/remove is done while the lookup thread is using the list to to api requests
 	private CopyOnWriteArrayList<RiotApiUser> userList = new CopyOnWriteArrayList<RiotApiUser>();
-	//private volatile ArrayList<RiotApiUser> userList = new ArrayList<>();
 	private RiotApiInterface riotInterface = new RiotApiInterface();
-	private String apiKey = "RGAPI-554413a9-1aa9-4364-a50c-e094271a2c78";
+	private String apiKey = "";
 
 	public RiotApiNotification(ExtendedTS3Api api) {
 		this.api = api;
@@ -197,7 +197,8 @@ public class RiotApiNotification implements Runnable {
 			api.logToCommandline("Thread for Riot api is still running");
 
 			try {
-				Thread.sleep(60000 - userList.size() * 1000);
+				// check all 60 sec - sleep time - approximated time for all server query requests
+				Thread.sleep(60000 - (userList.size() * 1000)- (250 * userList.size()));
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
