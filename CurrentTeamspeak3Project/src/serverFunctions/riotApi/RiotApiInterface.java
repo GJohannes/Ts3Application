@@ -43,15 +43,13 @@ public class RiotApiInterface {
 		JSONArray participantIdentities = (JSONArray) match.get("participantIdentities");
 		long participantId = -1;
 		
-		
 		//get each player that participated in the game until match is found for given nickname
 		for(int i = 0; i < participantIdentities.size(); i++) {
 			JSONObject player = (JSONObject)((JSONObject)participantIdentities.get(i)).get("player");
-			if(player.get("summonerName").equals(nickName)) {
+			if(player.get("summonerName").toString().equalsIgnoreCase(nickName)) {
 				participantId = (long) ((JSONObject)participantIdentities.get(i)).get("participantId");
 			}
 		}
-		
 		
 		if(participantId == -1) {
 			//defensive programmed should bever be executed
