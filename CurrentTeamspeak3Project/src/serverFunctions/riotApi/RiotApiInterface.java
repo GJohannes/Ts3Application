@@ -3,6 +3,7 @@ package serverFunctions.riotApi;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -24,6 +25,18 @@ public class RiotApiInterface {
 		long accountId =  (long) summenorData.get("accountId");
 
 	    return accountId;		
+	}
+	
+	public String getCaseCorrectNickNameByNickName(String nickName, String ApiKey) throws IOException, ParseException {
+		if(nickName.contains(" ")) {
+			nickName = nickName.replace(" ", "%20");
+		}
+		
+		URL url = new URL("https://euw1.api.riotgames.com/lol/summoner/v3/summoners/by-name/" + nickName + "?api_key=" + ApiKey);
+		JSONObject summenorData  = getJSONFromUrl(url);		
+		String caseCorrectNickName =  (String) summenorData.get("name");
+		
+		return caseCorrectNickName;
 	}
 	
 	public long getLastGameIdByAccId(long accId,String ApiKey) throws IOException, ParseException {

@@ -82,12 +82,14 @@ public class RiotApiNotification implements Runnable {
 	private boolean addUser(String nickName) throws IOException, ParseException {
 		for (int i = 0; i < userList.size(); i++) {
 			if (userList.get(i).getNickName().equalsIgnoreCase(nickName)) {
+				//case that user already added to the list
 				return false;
 			}
 		}
 		long accountId = riotInterface.getIdByNickName(nickName, apiKey);
 		long lastGameId = riotInterface.getLastGameIdByAccId(accountId, apiKey);
-		RiotApiUser newUser = new RiotApiUser(accountId, nickName, lastGameId);
+		String caseCorrectNickName = riotInterface.getCaseCorrectNickNameByNickName(nickName, apiKey);
+		RiotApiUser newUser = new RiotApiUser(accountId, caseCorrectNickName, lastGameId);
 		userList.add(newUser);
 		return true;
 	}
@@ -181,9 +183,9 @@ public class RiotApiNotification implements Runnable {
 						boolean win = riotInterface.getWinFromGameId(user.getLastGameId(), apiKey, user.getNickName());
 
 						if (win) {
-							api.sendServerMessage(user.getNickName() + " just won a game");
+							api.sendServerMessage(user.getNickName() + " just won a match in League of Legends");
 						} else {
-							api.sendServerMessage(user.getNickName() + " just lost a game. What a looser");
+							api.sendServerMessage(user.getNickName() + " just lost a match in League of Legends. What a looser");
 						}
 					}
 					Thread.sleep(1000);
