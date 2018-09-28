@@ -17,7 +17,8 @@ import miscellaneous.ExtendedTS3EventAdapter;
 public class RiotApiNotification implements Runnable {
 	private ExtendedTS3Api api;
 	private boolean threadRunningFlag = true;
-	//thread save list in case that add/remove is done while the lookup thread is using the list to to api requests
+	// thread save list in case that add/remove is done while the lookup thread is
+	// using the list to to api requests
 	private CopyOnWriteArrayList<RiotApiUser> userList = new CopyOnWriteArrayList<RiotApiUser>();
 	private RiotApiInterface riotInterface = new RiotApiInterface();
 	private String apiKey = "";
@@ -32,12 +33,12 @@ public class RiotApiNotification implements Runnable {
 
 	// should get message of add and nickname to add
 	private boolean splittStringAndAddUser(String message) throws IOException, ParseException {
-		String nickName = message.split(" ",2)[1];
+		String nickName = message.split(" ", 2)[1];
 		return this.addUser(nickName);
 	}
 
 	private boolean splittStringAndRemoveNickName(String message) {
-		String nickName = message.split(" ",2)[1];
+		String nickName = message.split(" ", 2)[1];
 		for (int i = 0; i < userList.size(); i++) {
 			if (userList.get(i).getNickName().equalsIgnoreCase(nickName)) {
 				userList.remove(i);
@@ -48,12 +49,11 @@ public class RiotApiNotification implements Runnable {
 		return false;
 	}
 
-	
 	private void splittStringAndUpdateKey(String message) {
 		String key = message.split(" ")[1];
 		this.apiKey = key;
 	}
-	
+
 	private void showAllRegisteredToClient(ExtendedTS3Api api, TextMessageEvent e) {
 		String allUsers = "";
 		if (userList.size() == 0) {
@@ -66,11 +66,8 @@ public class RiotApiNotification implements Runnable {
 	}
 
 	private void showHelp(ExtendedTS3Api api, TextMessageEvent e) {
-		api.sendPrivateMessage(e.getInvokerId(), " "
-				+ "\n ?help" 
-				+ "\n ?add \"League_Of_Legends_Summoner_Name\""
-				+ "\n ?remove \"League_Of_Legends_Summoner_Name\"" 
-				+ "\n ?show");
+		api.sendPrivateMessage(e.getInvokerId(), " " + "\n ?help" + "\n ?add \"League_Of_Legends_Summoner_Name\""
+				+ "\n ?remove \"League_Of_Legends_Summoner_Name\"" + "\n ?show");
 	}
 
 	/**
@@ -81,10 +78,10 @@ public class RiotApiNotification implements Runnable {
 	 * @throws IOException
 	 * @throws ParseException
 	 */
-	
+
 	private boolean addUser(String nickName) throws IOException, ParseException {
-		for(int i = 0; i < userList.size(); i++) {
-			if(userList.get(i).getNickName().equalsIgnoreCase(nickName)) {
+		for (int i = 0; i < userList.size(); i++) {
+			if (userList.get(i).getNickName().equalsIgnoreCase(nickName)) {
 				return false;
 			}
 		}
@@ -105,10 +102,11 @@ public class RiotApiNotification implements Runnable {
 					message = message.substring(1);
 					if (message.toLowerCase().startsWith("add")) {
 						try {
-							if(splittStringAndAddUser(message)) {
-								api.sendPrivateMessage(messageToBotEvent.getInvokerId(), "Successfully added");								
+							if (splittStringAndAddUser(message)) {
+								api.sendPrivateMessage(messageToBotEvent.getInvokerId(), "Successfully added");
 							} else {
-								api.sendPrivateMessage(messageToBotEvent.getInvokerId(), "User already registered. Duplicates not allowed");
+								api.sendPrivateMessage(messageToBotEvent.getInvokerId(),
+										"User already registered. Duplicates not allowed");
 							}
 						} catch (FileNotFoundException w) {
 							api.sendPrivateMessage(messageToBotEvent.getInvokerId(),
@@ -132,22 +130,23 @@ public class RiotApiNotification implements Runnable {
 					} else if (message.toLowerCase().startsWith("help")) {
 						showHelp(api, messageToBotEvent);
 					} else if (message.toLowerCase().startsWith("key")) {
-						//if only key then check validity
-						if(message.equalsIgnoreCase("key")) {
+						// if only key then check validity
+						if (message.equalsIgnoreCase("key")) {
 							try {
 								riotInterface.getIdByNickName("XZephiraX", apiKey);
 								api.sendPrivateMessage(messageToBotEvent.getInvokerId(), "Key is still valid");
 							} catch (IOException | ParseException e) {
-								api.sendPrivateMessage(messageToBotEvent.getInvokerId(), "Invalid Key - Please Update to proceed");
-							}							
-						//else update the key
-						} else {							
-						splittStringAndUpdateKey(message);
-						api.sendPrivateMessage(messageToBotEvent.getInvokerId(),
-								"Successful updated Key");
+								api.sendPrivateMessage(messageToBotEvent.getInvokerId(),
+										"Invalid Key - Please Update to proceed");
+							}
+							// else update the key
+						} else {
+							splittStringAndUpdateKey(message);
+							api.sendPrivateMessage(messageToBotEvent.getInvokerId(), "Successful updated Key");
 						}
 					} else {
-						api.sendPrivateMessage(messageToBotEvent.getInvokerId(),"Syntaxerror - could not read command");
+						api.sendPrivateMessage(messageToBotEvent.getInvokerId(),
+								"Syntaxerror - could not read command");
 					}
 				}
 			}
@@ -179,8 +178,7 @@ public class RiotApiNotification implements Runnable {
 					long newGameId = riotInterface.getLastGameIdByAccId(user.getAccountId(), apiKey);
 					if (newGameId != user.getLastGameId()) {
 						user.setLastGameId(newGameId);
-						boolean win = riotInterface.getWinFromGameId(user.getLastGameId(), apiKey,
-								user.getNickName());
+						boolean win = riotInterface.getWinFromGameId(user.getLastGameId(), apiKey, user.getNickName());
 
 						if (win) {
 							api.sendServerMessage(user.getNickName() + " just won a game");
@@ -197,8 +195,14 @@ public class RiotApiNotification implements Runnable {
 			api.logToCommandline("Thread for Riot api is still running");
 
 			try {
-				// check all 60 sec - sleep time - approximated time for all server query requests
-				Thread.sleep(60000 - (userList.size() * 1000)- (250 * userList.size()));
+				// check all 60 sec - sleep time - approximated time for all server query
+				// requests
+				int threadSleepTime = 60000 - (userList.size() * 1000) - (250 * userList.size());
+				// preventing negative thread sleep time
+				if (threadSleepTime < 0) {
+					threadSleepTime = 0;
+				}
+				Thread.sleep(threadSleepTime);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
