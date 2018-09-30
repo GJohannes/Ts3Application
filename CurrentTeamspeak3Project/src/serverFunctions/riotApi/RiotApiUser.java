@@ -3,12 +3,12 @@ package serverFunctions.riotApi;
 public class RiotApiUser {
 
 	private long accountId;
-	private String nickName;
+	private String caseCorrectNickName;
 	private long lastGameId;
 
 	public RiotApiUser(long Id, String name, long lastGameId) {
 		accountId = Id;
-		nickName = name;
+		caseCorrectNickName = name;
 		this.lastGameId = lastGameId;
 	}
 
@@ -20,8 +20,8 @@ public class RiotApiUser {
 		return lastGameId;
 	}
 
-	public String getNickName() {
-		return nickName;
+	public String getCaseCorrectNickName() {
+		return caseCorrectNickName;
 	}
 
 	public long getAccountId() {

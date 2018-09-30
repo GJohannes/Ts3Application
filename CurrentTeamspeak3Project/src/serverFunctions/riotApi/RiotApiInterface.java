@@ -15,7 +15,7 @@ import org.json.simple.parser.ParseException;
 
 public class RiotApiInterface {
 	
-	public long getIdByNickName(String nickName, String ApiKey) throws IOException, ParseException {
+	public AccountIdAndCaseCorrectNickNameHolder getIdAndCaseCorrectNickNameByNickName(String nickName, String ApiKey) throws IOException, ParseException {
 		//URL can not contain spaces which are possible in nicknames
 		if(nickName.contains(" ")) {
 			nickName = nickName.replace(" ", "%20");
@@ -23,22 +23,11 @@ public class RiotApiInterface {
 		URL url = new URL("https://euw1.api.riotgames.com/lol/summoner/v3/summoners/by-name/" + nickName + "?api_key=" + ApiKey);
 		JSONObject summenorData  = getJSONFromUrl(url);		
 		long accountId =  (long) summenorData.get("accountId");
-
-	    return accountId;		
-	}
-	
-	public String getCaseCorrectNickNameByNickName(String nickName, String ApiKey) throws IOException, ParseException {
-		if(nickName.contains(" ")) {
-			nickName = nickName.replace(" ", "%20");
-		}
-		
-		URL url = new URL("https://euw1.api.riotgames.com/lol/summoner/v3/summoners/by-name/" + nickName + "?api_key=" + ApiKey);
-		JSONObject summenorData  = getJSONFromUrl(url);		
 		String caseCorrectNickName =  (String) summenorData.get("name");
-		
-		return caseCorrectNickName;
+		AccountIdAndCaseCorrectNickNameHolder holder = new AccountIdAndCaseCorrectNickNameHolder(accountId, caseCorrectNickName);
+		return holder;		
 	}
-	
+		
 	public long getLastGameIdByAccId(long accId,String ApiKey) throws IOException, ParseException {
 		URL url = new URL("https://euw1.api.riotgames.com/lol/match/v3/matchlists/by-account/" + accId + "?api_key=" + ApiKey);
 		JSONObject matchData = getJSONFromUrl(url);

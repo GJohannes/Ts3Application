@@ -40,7 +40,7 @@ public class RiotApiNotification implements Runnable {
 	private boolean splittStringAndRemoveNickName(String message) {
 		String nickName = message.split(" ", 2)[1];
 		for (int i = 0; i < userList.size(); i++) {
-			if (userList.get(i).getNickName().equalsIgnoreCase(nickName)) {
+			if (userList.get(i).getCaseCorrectNickName().equalsIgnoreCase(nickName)) {
 				userList.remove(i);
 				return true;
 			}
@@ -60,7 +60,7 @@ public class RiotApiNotification implements Runnable {
 			allUsers = "No users currently added";
 		}
 		for (int i = 0; i < userList.size(); i++) {
-			allUsers = allUsers + userList.get(i).getNickName() + " -- ";
+			allUsers = allUsers + userList.get(i).getCaseCorrectNickName() + " -- ";
 		}
 		api.sendPrivateMessage(e.getInvokerId(), allUsers);
 	}
@@ -81,14 +81,15 @@ public class RiotApiNotification implements Runnable {
 
 	private boolean addUser(String nickName) throws IOException, ParseException {
 		for (int i = 0; i < userList.size(); i++) {
-			if (userList.get(i).getNickName().equalsIgnoreCase(nickName)) {
+			if (userList.get(i).getCaseCorrectNickName().equalsIgnoreCase(nickName)) {
 				//case that user already added to the list
 				return false;
 			}
 		}
-		long accountId = riotInterface.getIdByNickName(nickName, apiKey);
+		AccountIdAndCaseCorrectNickNameHolder holder = riotInterface.getIdAndCaseCorrectNickNameByNickName(nickName, apiKey); 
+		long accountId = holder.getAccountId();
+		String caseCorrectNickName = holder.getCaseCorrectNickName();
 		long lastGameId = riotInterface.getLastGameIdByAccId(accountId, apiKey);
-		String caseCorrectNickName = riotInterface.getCaseCorrectNickNameByNickName(nickName, apiKey);
 		RiotApiUser newUser = new RiotApiUser(accountId, caseCorrectNickName, lastGameId);
 		userList.add(newUser);
 		return true;
@@ -135,7 +136,7 @@ public class RiotApiNotification implements Runnable {
 						// if only key then check validity
 						if (message.equalsIgnoreCase("key")) {
 							try {
-								riotInterface.getIdByNickName("XZephiraX", apiKey);
+								riotInterface.getIdAndCaseCorrectNickNameByNickName("XZephiraX", apiKey);
 								api.sendPrivateMessage(messageToBotEvent.getInvokerId(), "Key is still valid");
 							} catch (IOException | ParseException e) {
 								api.sendPrivateMessage(messageToBotEvent.getInvokerId(),
@@ -180,12 +181,12 @@ public class RiotApiNotification implements Runnable {
 					long newGameId = riotInterface.getLastGameIdByAccId(user.getAccountId(), apiKey);
 					if (newGameId != user.getLastGameId()) {
 						user.setLastGameId(newGameId);
-						boolean win = riotInterface.getWinFromGameId(user.getLastGameId(), apiKey, user.getNickName());
+						boolean win = riotInterface.getWinFromGameId(user.getLastGameId(), apiKey, user.getCaseCorrectNickName());
 
 						if (win) {
-							api.sendServerMessage(user.getNickName() + " just won a match in League of Legends");
+							api.sendServerMessage(user.getCaseCorrectNickName() + " just won a match in League of Legends");
 						} else {
-							api.sendServerMessage(user.getNickName() + " just lost a match in League of Legends. What a looser");
+							api.sendServerMessage(user.getCaseCorrectNickName() + " just lost a match in League of Legends. What a looser");
 						}
 					}
 					Thread.sleep(1000);
