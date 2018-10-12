@@ -2,6 +2,7 @@ package miscellaneous;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -40,6 +41,7 @@ import login.LoginController;
 import login.Ts3Client;
 import serverFunctions.riotApi.RiotApiInterface;
 import serverFunctions.riotApi.RiotApiNotification;
+import serverFunctions.webServer.StartWebServer;
 
 public class AppMain extends Application {
 
@@ -62,8 +64,16 @@ public class AppMain extends Application {
 	}
 
 	public static void main(String[] args) throws IOException, ParseException {
-		launch(args);
+		//launch(args);
 		
+		
+		StartWebServer webServerStart = new StartWebServer();
+		try {
+			webServerStart.startWebServer();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 //		RiotApiInterface riotApi = new RiotApiInterface();
 //		RiotApiNotification riotN =new RiotApiNotification(null);
