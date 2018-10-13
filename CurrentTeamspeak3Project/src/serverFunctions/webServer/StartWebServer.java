@@ -23,7 +23,7 @@ import org.eclipse.jetty.servlet.ServletHolder;
 
 
 public class StartWebServer {
-	private static final String WEBROOT_INDEX = "/webroot/";
+	private static final String WEBROOT_INDEX = "/";
 	
 	
 	public void startWebServer() throws Exception {

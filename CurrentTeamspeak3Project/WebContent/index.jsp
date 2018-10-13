@@ -1,9 +1,8 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" %>
 <%@page import="serverFunctions.webServer.DoSomeJavaScript"%>
 <html>
 <head>
 <title>Embedded Jetty: JSP Examples</title>
-<link href="static/main.css" media="all" rel="stylesheet"
-	type="text/css" />
 </head>
 <body>
 	<h1>Embedded Jetty: JSP Examples</h1>
@@ -22,11 +21,37 @@
 		<li><a href="first.jsp">WORKING!!!!</a></li>
 	</ul>
 </body>
+<script src="jquery-3.3.1.js"></script>
 <script type="text/javascript">
-var randomNumber = <%=DoSomeJavaScript.getARandomNumber()%>;
-		console.log(randomNumber);
-		console.log("Something");
+	var randomNumber = <%=DoSomeJavaScript.getARandomNumber()%>;
+	console.log(randomNumber);
+	console.log("Something");	
+	myFunction();
+	
+	function myFunction() {
+	    setInterval(function(){ console.log(askServerForNewRandomNumbers()); }, 1000);
+	}
+	
+	function askServerForNewRandomNumbers (){
+			 var x = <%=DoSomeJavaScript.getARandomNumber()%>;
+			 return x;
+	}
 
-
+	$(document).ready(function(){
+		console.log("Document is now ready");
+		$.ajax({
+			url: 'update',
+			type: 'POST',
+			dataType: 'json',
+			data: "testsring form Javascruipt",
+			success: function(){
+				console.log("success on ajax call");
+			}
+			
+		})
+		
+		
+	})
+	
 </script>
 </html>
