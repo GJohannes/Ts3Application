@@ -17,9 +17,10 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import miscellaneous.ExtendedTS3Api;
-import serverFunctions.MusikBot;
-import serverFunctions.ServerLogger;
+import serverFunctions.loggerForServer.ServerLogger;
+import serverFunctions.musicBot.MusikBot;
 import serverFunctions.riotApi.RiotApiNotification;
+import serverFunctions.webServer.StartWebServer;
 
 public class ServerWindowController implements Initializable {
 	
@@ -30,6 +31,7 @@ public class ServerWindowController implements Initializable {
 	@FXML private BooleanButton testButton;
 	@FXML private BooleanButton musikBotButton;
 	@FXML private BooleanButton riotApiButton;
+	@FXML private BooleanButton webServerButton;
 	@FXML private Button vlcPathFileChooser;
 	@FXML private TextField vlcPathTextField;
 	
@@ -40,6 +42,9 @@ public class ServerWindowController implements Initializable {
 	//private RiotApiNotification apiThread;
 	RiotApiNotification apiThread;
 	Thread thread;
+	
+	StartWebServer webServerObject;
+	Thread threadOfWebServer;
 	
 	public void setIpAdress(String ipAdress) {
 		this.ipAdress.setText(ipAdress);
@@ -99,6 +104,22 @@ public class ServerWindowController implements Initializable {
  
 	}
 	
+	@FXML
+	public void toggleWebServer() {
+		if(webServerButton.isNowActive()) {
+			this.webServerObject = new StartWebServer(api, 8081);
+			threadOfWebServer = new Thread(webServerObject);
+			threadOfWebServer.start();
+		} else {
+			try {
+				webServerObject.stop();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		serverLoggerButton.setActiveText("Currently Active -- Stop Logging");
@@ -107,6 +128,8 @@ public class ServerWindowController implements Initializable {
 		musikBotButton.setDeActiveText("Music Bot is Deactive");
 		riotApiButton.setActiveText("Api check online");
 		riotApiButton.setDeActiveText("Api check offline");
+		webServerButton.setActiveText("WebServer is  online");
+		webServerButton.setDeActiveText("WebServer is offline");
 		this.vlcPathTextField.setText("C:\\Program Files\\VideoLAN\\VLC\\vlc.exe");
 	}
 

@@ -57,6 +57,10 @@
 				<BooleanButton fx:id="riotApiButton" prefWidth="200" onAction="#toggleRiotApi">
 				</BooleanButton>
 			</HBox>
+			<HBox >
+				<BooleanButton fx:id="webServerButton" prefWidth="200" onAction="#toggleWebServer">
+				</BooleanButton>
+			</HBox>
 		</VBox>
 	</StackPane>
 </AnchorPane>

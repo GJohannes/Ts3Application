@@ -25,8 +25,6 @@ import com.github.theholywaffle.teamspeak3.api.event.TS3EventAdapter;
 
 import java.util.logging.Level;
 
-
-
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -64,29 +62,49 @@ public class AppMain extends Application {
 	}
 
 	public static void main(String[] args) throws IOException, ParseException {
-		//launch(args);
-		
-		
-		StartWebServer webServerStart = new StartWebServer();
-		try {
-			webServerStart.startWebServer();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+		launch(args);
+
+//		ExtendedTS3Config config = new ExtendedTS3Config("127.0.0.1");
+//		ExtendedTS3Query query = new ExtendedTS3Query(config);
+//		ExtendedTS3Api api = new ExtendedTS3Api(query);
+//
+//		config.setHost("127.0.0.1");
+//		config.setDebugLevel(Level.ALL);
+//
+//		// throws exception if no connection could be established
+//		query.connect();
+//		api.logToCommandline("Connected to Server");
+//		// api.login(this.serverQueryName, this.serverQueryPassword);
+//		// is true if connect was successful
+//
+//		api.login("Ai_Overlord_Rudolf", "HndeFy2F", "Zephira", "giwLzOcXMB1fi+DVtV6uSDzCqGo=");
+//		
+//		api.selectVirtualServerByPort(9987);
+//		api.setNickname("Ai_Overlord_Rudolf");
+//		api.registerAllEvents();
+//		api.sendServerMessage(api.getConnectedConfigValues().getclientName() + "is now online!");
+//		api.logToCommandline("Logged in to Server Instance");
+//
+//		StartWebServer webServerStart = new StartWebServer();
+//		try {
+//			webServerStart.startWebServer(api);
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+
 //		RiotApiInterface riotApi = new RiotApiInterface();
 //		RiotApiNotification riotN =new RiotApiNotification(null);
 //		riotN.addUser("Lymoon");
 //		System.out.println("done"+riotN.addUser("Lymoon"));
-		//riotApi.getIdByNickName("", "");	
+		// riotApi.getIdByNickName("", "");
 //		try {
 //			Process process = new ProcessBuilder("C:\\Program Files\\VideoLAN\\VLC\\vlc.exe","https://www.youtube.com/watch?v=zWmx56kvLUA").start();
 //		} catch (IOException e) {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
-		
+
 //		ExtendedTS3EventAdapter extendedTS3EventAdapter = new ExtendedTS3EventAdapter(
 //				AllExistingEventAdapter.GREETING_MESSAGE) {
 //			@Override
