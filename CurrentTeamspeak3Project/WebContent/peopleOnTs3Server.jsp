@@ -57,9 +57,9 @@
 		document.getElementById('containerWithPersonaleMessageButtons').innerHTML = "";
 		
 		for (i = 0; i < returnData.allClientNicknames.length; i++) {
-			var nameOfCurrentUser = returnData.allClientNicknames[i];
 			var button = document.createElement("BUTTON");
-			var textOfButton = document.createTextNode(returnData.allClientNicknames[i]);
+			var textOfButton = document.createTextNode("Message to : " + returnData.allClientNicknames[i]);
+			button.value = returnData.allClientNicknames[i];
 			button.onclick = function(){
 				privateMessageButtonOnclick(this);
 			}
@@ -71,8 +71,7 @@
 	}
 	
 	function privateMessageButtonOnclick(button){
-		console.log(button.innerHTML);
-		window.open(window.location.href  + "/privateMessage?User=" + button.innerHTML);
+		window.open(window.location.href  + "/privateMessage?User=" + button.value);
 	}
 	
 	function sendServerMessage(){
