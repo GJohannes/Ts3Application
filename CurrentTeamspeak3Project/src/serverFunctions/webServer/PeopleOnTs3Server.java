@@ -59,19 +59,26 @@ public class PeopleOnTs3Server extends HttpServlet {
 	private void updateOnlinePeople(HttpServletResponse response) throws IOException {
 		JSONObject json = new JSONObject();
 
-		List<Client> allClients = api.getClients();
+		List<String> allClients = new ArrayList<String>();
+		allClients.add("Lymoon");
+		allClients.add("Grome");
+		
+		JSONObject returnData = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
 
 		for (int i = 0; i < allClients.size(); i++) {
-			jsonArray.add(allClients.get(i).getNickname());
+			jsonArray.add(allClients.get(i));
 		}
 
-		json.put("allClientNicknames", jsonArray.toJSONString());
+		json.put("allClientNicknames", jsonArray);
+		
+		
 		response.getWriter().append(json.toJSONString());
 	}
 
 	private void sendServerMessage(HttpServletRequest request) throws IOException {
-		api.sendServerMessage(request.getParameter("serverMessage"));
+		//api.sendServerMessage(request.getParameter("serverMessage"));
+		System.out.println("TS3 server successfully sent the simulated message");
 	}
 
 }
