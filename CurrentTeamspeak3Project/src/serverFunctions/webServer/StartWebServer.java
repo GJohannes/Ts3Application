@@ -8,6 +8,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
@@ -21,13 +23,19 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.webapp.Configuration;
 
+import com.github.theholywaffle.teamspeak3.api.event.TextMessageEvent;
+
+import miscellaneous.AllExistingEventAdapter;
 import miscellaneous.ExtendedTS3Api;
+import miscellaneous.ExtendedTS3EventAdapter;
 
 public class StartWebServer implements Runnable {
 	private static final String WEBROOT_INDEX = "/";
 	private ExtendedTS3Api api;
 	private int port;
 	private Server server;
+	private HashMap<String, ArrayList<String>> allMessages;
+	
 	
 	public StartWebServer(ExtendedTS3Api api, int port){
 		this.api = api;
@@ -81,7 +89,10 @@ public class StartWebServer implements Runnable {
 		updateHolder.setServlet(update);
 		servletContextHandler.addServlet(updateHolder, "/Update");
 		
-		
+		PrivateMessageChatServlet privateMessageChatServlet = new PrivateMessageChatServlet(api);
+		ServletHolder privateMessageServletHolder = new ServletHolder();
+		privateMessageServletHolder.setServlet(privateMessageChatServlet);
+		servletContextHandler.addServlet(privateMessageServletHolder, "/privateMessage");
 		
 		// Default Servlet (always last, always named "default")
 		ServletHolder holderDefault = new ServletHolder("default", DefaultServlet.class);
@@ -150,16 +161,37 @@ public class StartWebServer implements Runnable {
 	 public void stop() throws Exception
 	    {
 	        server.stop();
+	        api.removeTS3Listeners(AllExistingEventAdapter.WEB_SERVER_CHAT);
 	    }
 	
 	@Override
 	public void run() {
 		try {
 			this.startWebServer();
+			this.api.addTS3Listeners(this.getWebServerChat(api));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+	
+	private ArrayList<String> test;
+	
+	private ExtendedTS3EventAdapter getWebServerChat(ExtendedTS3Api api) {
+		ExtendedTS3EventAdapter webServerChat = new ExtendedTS3EventAdapter(AllExistingEventAdapter.WEB_SERVER_CHAT) {
+			@Override
+			public void onTextMessage(TextMessageEvent messageToBotEvent) {
+				// do not send to server since it is a bot command if the message starts with ! or ?
+				if(!(messageToBotEvent.getMessage().startsWith("!") || messageToBotEvent.getMessage().startsWith("?"))) {
+					messageToBotEvent.getInvokerName();
+				}
+				
+				
 
+			}
+
+		};
+		return webServerChat;
+	}
+	
 }
