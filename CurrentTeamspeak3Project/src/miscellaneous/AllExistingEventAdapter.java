@@ -8,4 +8,5 @@ public enum AllExistingEventAdapter {
 		CATCH_ME_IF_YOU_CAN,
 		MUSIK_BOT,
 		RIOT_API,
+		WEB_SERVER_CHAT,
 }

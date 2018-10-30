@@ -22,6 +22,7 @@ import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.webapp.Configuration;
+import org.json.simple.JSONArray;
 
 import com.github.theholywaffle.teamspeak3.api.event.TextMessageEvent;
 
@@ -34,14 +35,13 @@ public class StartWebServer implements Runnable {
 	private ExtendedTS3Api api;
 	private int port;
 	private Server server;
-	private HashMap<String, ArrayList<String>> allMessages;
-	
-	
-	public StartWebServer(ExtendedTS3Api api, int port){
+	private HashMap<String, ArrayList<String>> allMessages = new HashMap<>();
+
+	public StartWebServer(ExtendedTS3Api api, int port) {
 		this.api = api;
 		this.port = port;
 	}
-	
+
 	public void startWebServer() throws Exception {
 		int port = this.port;
 		this.server = new Server();
@@ -68,32 +68,36 @@ public class StartWebServer implements Runnable {
 		// Since this is a ServletContextHandler we must manually configure JSP support.
 		enableEmbeddedJspSupport(servletContextHandler);
 
-		
 		// Create Example of mapping jsp to path spec
 		ServletHolder holderAltMapping = new ServletHolder();
 		holderAltMapping.setName("peopleOnTs3Server.jsp");
 		holderAltMapping.setForcedPath("/peopleOnTs3Server.jsp");
 		servletContextHandler.addServlet(holderAltMapping, "/OnlinePeople");
-		
+
 		ServletHolder privateMessageHolder = new ServletHolder();
 		privateMessageHolder.setName("privateMessageDialog.jsp");
 		privateMessageHolder.setForcedPath("/privateMessageDialog.jsp");
 		servletContextHandler.addServlet(privateMessageHolder, "/OnlinePeople/privateMessage");
-		
-		//Class default as servlet
+
+		// Class default as servlet
 		servletContextHandler.addServlet(PeopleOnTs3Server.class, "/UpdateAsDefaultServlet");
 
-		//Instance of a class as servlet
-		PeopleOnTs3Server update = new PeopleOnTs3Server("some random test string" ,api);
+		// Instance of a class as servlet
+		PeopleOnTs3Server update = new PeopleOnTs3Server("some random test string", api);
 		ServletHolder updateHolder = new ServletHolder();
 		updateHolder.setServlet(update);
 		servletContextHandler.addServlet(updateHolder, "/Update");
-		
-		PrivateMessageChatServlet privateMessageChatServlet = new PrivateMessageChatServlet(api);
+
+		PrivateMessageChatServlet privateMessageChatServlet = new PrivateMessageChatServlet(api, allMessages);
 		ServletHolder privateMessageServletHolder = new ServletHolder();
 		privateMessageServletHolder.setServlet(privateMessageChatServlet);
 		servletContextHandler.addServlet(privateMessageServletHolder, "/privateMessage");
 		
+		UpdatePrivateChatBoxesServlet updatePrivateChatBoxesServlet = new UpdatePrivateChatBoxesServlet(allMessages);
+		ServletHolder updatePrivateChatBoxesServletHolder  = new ServletHolder();
+		updatePrivateChatBoxesServletHolder.setServlet(updatePrivateChatBoxesServlet);
+		servletContextHandler.addServlet(updatePrivateChatBoxesServletHolder, "/updatePrivateChatBoxes");
+
 		// Default Servlet (always last, always named "default")
 		ServletHolder holderDefault = new ServletHolder("default", DefaultServlet.class);
 		holderDefault.setInitParameter("resourceBase", baseUri.toASCIIString());
@@ -158,40 +162,49 @@ public class StartWebServer implements Runnable {
 
 	}
 
-	 public void stop() throws Exception
-	    {
-	        server.stop();
-	        api.removeTS3Listeners(AllExistingEventAdapter.WEB_SERVER_CHAT);
-	    }
-	
+	public void stop() throws Exception {
+		server.stop();
+		api.removeTS3Listeners(AllExistingEventAdapter.WEB_SERVER_CHAT);
+	}
+
 	@Override
 	public void run() {
 		try {
-			this.startWebServer();
 			this.api.addTS3Listeners(this.getWebServerChat(api));
+			this.startWebServer();
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+
 	private ArrayList<String> test;
-	
+
 	private ExtendedTS3EventAdapter getWebServerChat(ExtendedTS3Api api) {
 		ExtendedTS3EventAdapter webServerChat = new ExtendedTS3EventAdapter(AllExistingEventAdapter.WEB_SERVER_CHAT) {
 			@Override
 			public void onTextMessage(TextMessageEvent messageToBotEvent) {
-				// do not send to server since it is a bot command if the message starts with ! or ?
-				if(!(messageToBotEvent.getMessage().startsWith("!") || messageToBotEvent.getMessage().startsWith("?"))) {
-					messageToBotEvent.getInvokerName();
+				// do not send to server since it is a bot command if the message starts with !
+				// or ?
+				if (!(messageToBotEvent.getMessage().startsWith("!") || messageToBotEvent.getMessage().startsWith("?"))) {
+					synchronized (allMessages) {
+						ArrayList<String> messagesOfThisPerson;
+						if (allMessages.keySet().contains(messageToBotEvent.getInvokerName())) {
+							messagesOfThisPerson = allMessages.get(messageToBotEvent.getInvokerName());
+						} else {
+							messagesOfThisPerson = new ArrayList<>();
+							allMessages.put(messageToBotEvent.getInvokerName(), messagesOfThisPerson);
+						}
+						messagesOfThisPerson.add("Message From " + messageToBotEvent.getInvokerName() + ": " + messageToBotEvent.getMessage());
+						
+						
+					}
 				}
-				
-				
-
 			}
 
 		};
 		return webServerChat;
 	}
-	
+
 }
