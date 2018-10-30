@@ -11,7 +11,7 @@
 1.0 Rudolf --->> 2.0 Lilith -->> 3.0 Kinzie 
 
 1. Kinzie:
-    1. removed bug in which outdated vlc cases error stream to not start audio files
+    1. removed bug in which outdated vlc causes error stream to not start audio files
 1. Lilith:
     1. bot now follows
     1. volume implementation
