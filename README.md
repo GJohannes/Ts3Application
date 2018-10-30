@@ -30,6 +30,7 @@
 ## Riot Api (Since 2.1 Lilith)
 Register a Summoner to check every 60 seconds if he won/lost a game. If so it will post the result as a Server message.
 ?help to get the commands
+(3.0 Kinzie) bugfixe: Case incorrect name on entering the checkup periode no longer results in a always reported lost instead of win/lost
 
 ## Web Server (Since 3.0 Kinzie)
 A web server which runs on port 8081. The webserver is capable of private chatroom for each Teamspeak user as well as sending server messages 
