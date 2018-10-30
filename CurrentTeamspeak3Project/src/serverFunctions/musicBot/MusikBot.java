@@ -296,10 +296,11 @@ public class MusikBot {
 					ProcessBuilder processBuilder = new ProcessBuilder(vlcPath, audioLocation, soundHighCommand,
 							Double.toString(soundHighValue), prefferedResolutionCommand, prefferedResolutionValue,
 							endAgrumentAfterPlay);
-					processBuilder.redirectErrorStream(true);
+					processBuilder.redirectErrorStream(true); // !! important !!
 					
 					musicProcess = processBuilder.start();
 					
+					//pb.redirectOutput(Redirect.INHERIT); // alternative to closing the stream. will use command line output from regular application 
 					BufferedReader reader = new BufferedReader(new InputStreamReader(musicProcess.getInputStream()));
 					reader.close();
 					
