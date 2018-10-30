@@ -1,5 +1,7 @@
 package serverFunctions.musicBot;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -66,7 +68,7 @@ public class MusikBot {
 
 			@Override
 			public void onTextMessage(TextMessageEvent messageToBotEvent) {
-
+				api.logToCommandline("GOT MESSAGE FOR MUSIK BOT" + messageToBotEvent.getMessage());
 				// only accept message that has been send from a client, otherwise SERVER
 				// messages would also be interpreted
 				if (messageToBotEvent.getTargetMode().equals(TextMessageTargetMode.CLIENT)) {
@@ -288,11 +290,19 @@ public class MusikBot {
 				String prefferedResolutionValue = "144";
 				this.stopMusicInSeconds(0);
 				this.moveBotToMusicRequestingUser(messageToBotEvent);
+
 				// set playing TRUE HERE
 				try {
-					musicProcess = new ProcessBuilder(vlcPath, audioLocation, soundHighCommand,
+					ProcessBuilder processBuilder = new ProcessBuilder(vlcPath, audioLocation, soundHighCommand,
 							Double.toString(soundHighValue), prefferedResolutionCommand, prefferedResolutionValue,
-							endAgrumentAfterPlay).start();
+							endAgrumentAfterPlay);
+					processBuilder.redirectErrorStream(true);
+					
+					musicProcess = processBuilder.start();
+					
+					BufferedReader reader = new BufferedReader(new InputStreamReader(musicProcess.getInputStream()));
+					reader.close();
+					
 					api.logToCommandline("Started playing music");
 
 				//14400 secconds are 4 hours. After 4 hours audio is stopped to ensure performance on server
