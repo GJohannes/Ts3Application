@@ -1,0 +1,4 @@
+this folder and its sub folders are out dated
+they are legacy example of how structure in web server HTML (in my case JSP) pages (files) should look like
+I did however do not find any ways to access files in this directory. 
+instead i created sub directories beneath the file in which the web server is started

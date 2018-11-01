@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
+	<classpathentry excluding="someTest/|serverFunctions/webServer/test/|defgdf/" kind="src" path="src"/>
 	<classpathentry kind="src" path="res"/>
 	<classpathentry excluding="javascript/|javascript/" kind="src" path="WebContent"/>
 	<classpathentry kind="src" path="WebContent/javascript"/>

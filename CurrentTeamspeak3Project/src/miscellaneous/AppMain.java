@@ -62,7 +62,8 @@ public class AppMain extends Application {
 	}
 
 	public static void main(String[] args) throws IOException, ParseException {
-		launch(args);
+		//launch(args);
+
 		
 //		
 //		boolean test = true;
@@ -89,35 +90,35 @@ public class AppMain extends Application {
 //		
 		
 		
-//		ExtendedTS3Config config = new ExtendedTS3Config("127.0.0.1");
-//		ExtendedTS3Query query = new ExtendedTS3Query(config);
-//		ExtendedTS3Api api = new ExtendedTS3Api(query);
-//
-//		config.setHost("127.0.0.1");
-//		config.setDebugLevel(Level.ALL);
-//
-//		// throws exception if no connection could be established
-//		query.connect();
-//		api.logToCommandline("Connected to Server");
-//		// api.login(this.serverQueryName, this.serverQueryPassword);
-//		// is true if connect was successful
-//
-//		api.login("Ai_Overlord_Rudolf", "HndeFy2F", "Zephira", "giwLzOcXMB1fi+DVtV6uSDzCqGo=");
-//		
-//		api.selectVirtualServerByPort(9987);
-//		api.setNickname("Ai_Overlord_Rudolf");
-//		api.registerAllEvents();
-//		api.sendServerMessage(api.getConnectedConfigValues().getclientName() + "is now online!");
-//		api.logToCommandline("Logged in to Server Instance");
-//	
-//		StartWebServer webServerStart = new StartWebServer(api, 8081);
-//		Thread thread = new Thread(webServerStart);
-//		try {
-//			thread.start();
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		ExtendedTS3Config config = new ExtendedTS3Config("127.0.0.1");
+		ExtendedTS3Query query = new ExtendedTS3Query(config);
+		ExtendedTS3Api api = new ExtendedTS3Api(query);
+
+		config.setHost("127.0.0.1");
+		config.setDebugLevel(Level.ALL);
+
+		// throws exception if no connection could be established
+		query.connect();
+		api.logToCommandline("Connected to Server");
+		// api.login(this.serverQueryName, this.serverQueryPassword);
+		// is true if connect was successful
+
+		api.login("Ai_Overlord_Rudolf", "HndeFy2F", "Zephira", "giwLzOcXMB1fi+DVtV6uSDzCqGo=");
+		
+		api.selectVirtualServerByPort(9987);
+		api.setNickname("Ai_Overlord_Rudolf");
+		api.registerAllEvents();
+		api.sendServerMessage(api.getConnectedConfigValues().getclientName() + "is now online!");
+		api.logToCommandline("Logged in to Server Instance");
+	
+		StartWebServer webServerStart = new StartWebServer(api, 8081);
+		Thread thread = new Thread(webServerStart);
+		try {
+			thread.start();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 //		RiotApiInterface riotApi = new RiotApiInterface();
 //		RiotApiNotification riotN =new RiotApiNotification(null);
