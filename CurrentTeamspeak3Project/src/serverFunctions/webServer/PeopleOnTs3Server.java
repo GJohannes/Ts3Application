@@ -47,7 +47,6 @@ public class PeopleOnTs3Server extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println(request);
 		String whichMethod = request.getParameter("method");
 		if (whichMethod.equals("refreshUsers")) {
 			this.updateOnlinePeople(response);

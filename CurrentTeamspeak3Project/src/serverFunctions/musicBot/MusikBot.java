@@ -68,7 +68,6 @@ public class MusikBot {
 
 			@Override
 			public void onTextMessage(TextMessageEvent messageToBotEvent) {
-				api.logToCommandline("GOT MESSAGE FOR MUSIK BOT" + messageToBotEvent.getMessage());
 				// only accept message that has been send from a client, otherwise SERVER
 				// messages would also be interpreted
 				if (messageToBotEvent.getTargetMode().equals(TextMessageTargetMode.CLIENT)) {

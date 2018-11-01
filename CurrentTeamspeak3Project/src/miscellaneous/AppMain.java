@@ -63,7 +63,32 @@ public class AppMain extends Application {
 
 	public static void main(String[] args) throws IOException, ParseException {
 		launch(args);
-
+		
+//		
+//		boolean test = true;
+//		
+//		System.out.println("Vlc Opening!");
+//        Runtime runTime = Runtime.getRuntime();
+//        String []command = {"C:\\Program Files\\VideoLAN\\VLC\\vlc.exe", "C:\\Users\\Johannes\\Desktop\\TeamspeakProject\\Doh.mp3"}; 
+//          //Replace the D:\\java... with the location of your file
+//        Process process = runTime.exec(command);
+//		
+//		
+//		Runtime.getRuntime().exec("C:\\Program Files\\VideoLAN\\VLC\\vlc.exe");
+//		//Process wasd = new ProcessBuilder("C:\\Program Files\\VideoLAN\\VLC\\vlc.exe").start();
+//		Process wasd2 = new ProcessBuilder("C:\\Program Files\\Mozilla Firefox\\firefox.exe").start();
+//		
+//		
+//		
+//		
+//		while(test) {
+//			if(!test) {
+//				return;
+//			}
+//		}
+//		
+		
+		
 //		ExtendedTS3Config config = new ExtendedTS3Config("127.0.0.1");
 //		ExtendedTS3Query query = new ExtendedTS3Query(config);
 //		ExtendedTS3Api api = new ExtendedTS3Api(query);
@@ -84,10 +109,11 @@ public class AppMain extends Application {
 //		api.registerAllEvents();
 //		api.sendServerMessage(api.getConnectedConfigValues().getclientName() + "is now online!");
 //		api.logToCommandline("Logged in to Server Instance");
-//
-//		StartWebServer webServerStart = new StartWebServer();
+//	
+//		StartWebServer webServerStart = new StartWebServer(api, 8081);
+//		Thread thread = new Thread(webServerStart);
 //		try {
-//			webServerStart.startWebServer(api);
+//			thread.start();
 //		} catch (Exception e) {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
