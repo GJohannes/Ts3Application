@@ -31,8 +31,9 @@ import miscellaneous.ExtendedTS3Api;
 import miscellaneous.ExtendedTS3EventAdapter;
 
 public class StartWebServer implements Runnable {
-	private static final String WEBROOT_INDEX = ""; //!! different navigation inside IDE (eclipse) and exported runnable .jar  
-													// this.getClass().getResource("xyz"); is the prblem for navigating inside .jar files
+	private static final String WEBROOT_INDEX = "webContent/"; //!! different navigation inside IDE (eclipse) and exported runnable .jar  
+													// this.getClass().getResource("xyz"); is the problem for navigating inside .jar files
+													// only sub-directories seem to work
 	private ExtendedTS3Api api;
 	private int port;
 	private Server server;
@@ -124,6 +125,8 @@ public class StartWebServer implements Runnable {
 	}
 
 	private URI getWebRootResourceUri() throws FileNotFoundException, URISyntaxException {
+		//URL indexUri = this.getClass().getClassLoader().getResource(WEBROOT_INDEX);
+		//System.out.println(this.getClass().getClassLoader().getResource("index.jsp"));
 		URL indexUri = this.getClass().getResource(WEBROOT_INDEX);
 		 System.out.println(indexUri);
 		if (indexUri == null) {
