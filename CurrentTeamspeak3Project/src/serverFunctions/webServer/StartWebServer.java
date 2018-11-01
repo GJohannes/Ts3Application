@@ -31,7 +31,8 @@ import miscellaneous.ExtendedTS3Api;
 import miscellaneous.ExtendedTS3EventAdapter;
 
 public class StartWebServer implements Runnable {
-	private static final String WEBROOT_INDEX = "";
+	private static final String WEBROOT_INDEX = ""; //!! different navigation inside IDE (eclipse) and exported runnable .jar  
+													// this.getClass().getResource("xyz"); is the prblem for navigating inside .jar files
 	private ExtendedTS3Api api;
 	private int port;
 	private Server server;
