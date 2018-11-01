@@ -31,7 +31,7 @@ import miscellaneous.ExtendedTS3Api;
 import miscellaneous.ExtendedTS3EventAdapter;
 
 public class StartWebServer implements Runnable {
-	private static final String WEBROOT_INDEX = "/";
+	private static final String WEBROOT_INDEX = "";
 	private ExtendedTS3Api api;
 	private int port;
 	private Server server;
@@ -59,12 +59,25 @@ public class StartWebServer implements Runnable {
 
 		// Base URI for servlet context
 		URI baseUri = getWebRootResourceUri();
-		System.out.println("Base URI: " + baseUri);
+//		System.out.println("Base URI: " + baseUri);
+		
+		
+		
+		
+//		
+		
 		// Create Servlet context
 		ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
 		servletContextHandler.setContextPath("/");
+		//servletContextHandler.setResourceBase(baseUri.toASCIIString());
+		//String resourceBase = StartWebServer.class.getResource("").toExternalForm();
+	
+		
 		servletContextHandler.setResourceBase(baseUri.toASCIIString());
-
+		
+		 System.out.println(servletContextHandler.getBaseResource());
+	       System.out.println(servletContextHandler.getResourceBase());
+		
 		// Since this is a ServletContextHandler we must manually configure JSP support.
 		enableEmbeddedJspSupport(servletContextHandler);
 
@@ -111,6 +124,7 @@ public class StartWebServer implements Runnable {
 
 	private URI getWebRootResourceUri() throws FileNotFoundException, URISyntaxException {
 		URL indexUri = this.getClass().getResource(WEBROOT_INDEX);
+		 System.out.println(indexUri);
 		if (indexUri == null) {
 			throw new FileNotFoundException("Unable to find resource ");
 		}
