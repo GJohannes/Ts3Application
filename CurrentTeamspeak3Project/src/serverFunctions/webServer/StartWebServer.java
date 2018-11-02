@@ -85,13 +85,13 @@ public class StartWebServer implements Runnable {
 
 		// Create Example of mapping jsp to path spec
 		ServletHolder holderAltMapping = new ServletHolder();
-		holderAltMapping.setName("peopleOnTs3Server.jsp");
-		holderAltMapping.setForcedPath("/peopleOnTs3Server.jsp");
+		holderAltMapping.setName("peopleOnTs3Server.html");
+		holderAltMapping.setForcedPath("/peopleOnTs3Server.html");
 		servletContextHandler.addServlet(holderAltMapping, "/OnlinePeople");
 
 		ServletHolder privateMessageHolder = new ServletHolder();
-		privateMessageHolder.setName("privateMessageDialog.jsp");
-		privateMessageHolder.setForcedPath("/privateMessageDialog.jsp");
+		privateMessageHolder.setName("privateMessageDialog.html");
+		privateMessageHolder.setForcedPath("/privateMessageDialog.html");
 		servletContextHandler.addServlet(privateMessageHolder, "/OnlinePeople/privateMessage");
 
 		// Class default as servlet

@@ -10,7 +10,7 @@
 	<classpathentry kind="lib" path="lib/teamspeak3-api-1.0.14-with-dependencies.jar"/>
 	<classpathentry kind="lib" path="lib/apache-el-8.5.24.2.jar"/>
 	<classpathentry kind="lib" path="lib/apache-jsp-8.5.24.2.jar"/>
-	<classpathentry kind="lib" path="lib/apache-jsp-9.4.12.v20180830.jar"/>
+	<classpathentry kind="lib" path="lib/apache-jsp-9.4.12.v20180830.jar" sourcepath="C:/Users/Johannes/.m2/repository/org/eclipse/jetty/apache-jsp/9.4.12.v20180830/apache-jsp-9.4.12.v20180830-sources.jar"/>
 	<classpathentry kind="lib" path="lib/apache-jstl-9.4.12.v20180830.jar"/>
 	<classpathentry kind="lib" path="lib/asm-6.2.jar"/>
 	<classpathentry kind="lib" path="lib/asm-analysis-6.2.jar"/>
