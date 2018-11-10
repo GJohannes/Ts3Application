@@ -12,6 +12,7 @@
 		<div id="wasd">
 			<button onclick="sendServerMessage()">Send Message to the
 				TS3Server</button>
+			<button onclick="getLineChartData()">GET LINE CHART DATA</button>
 			<input type="text" id="messageToServerString"
 				value="Send stuff to display on the server">
 		</div>
@@ -22,42 +23,80 @@
 			<div id="containerWithPersonaleMessageButtons">
 			</div>
 		</div>
-		 <div id="curve_chart" style="width: 900px; height: 500px">https://developers.google.com/chart/interactive/docs/gallery/linechart</div>
+		 <div id="curve_chart" >https://developers.google.com/chart/interactive/docs/gallery/linechart</div>
+		  <div id="chart_div"  style="width: 900px; height: 500px"></div>
 	</ul>
 </body>
 <script src="javascript/jquery-3.3.1.js"></script>
 <script src="javascript/loader.js"></script>
 <script type="text/javascript">
 
-google.charts.load('current', {'packages':['corechart']});
-google.charts.setOnLoadCallback(drawChart);
 
-function drawChart() {
-  var data = google.visualization.arrayToDataTable([
-    ['Year', 'Sales', 'Expenses'],
-    ['2004',  1000,      400],
-    ['2005',  1170,      460],
-    ['2006',  660,       1120],
-    ['2007',  1030,      540]
-  ]);
 
-  var options = {
-    title: 'Company Performance',
-    curveType: 'function',
-    legend: { position: 'bottom' }
-  };
+function drawChart(data) {
+	
+	if(data === undefined){
+		refreshLineChart(); // in case that loading takes longer
+		return;	
+	}
+	
+	for(i = 1; i < data.length; i++){
+		data[i][0] = new Date(data[i][0]);// make unix time stamp into date
+	}
+	var time = new Date().getTime();
+    var date = new Date(time);
 
-  var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+	data[data.length] = [date, data[data.length-1][1]]; // add current date with last number of peoples
+	
+  	var data = google.visualization.arrayToDataTable(data);
 
-  chart.draw(data, options);
+  	var options = {
+   		 title: 'People on the Teamspeak3 Server Online',
+    	//curveType: 'function',
+    	vAxis: {
+    		title: "Number of people",
+    		viewWindow: {
+          		min: 0,
+          		//max: 32
+        	},
+    	},
+    legend: { position: 'bottom' },
+    width:  2000,
+    height: 500
+  	};
+
+  	var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+  	chart.draw(data, options);
+}
+
+function refreshLineChart() {
+	setInterval(function(){
+		getLineChartData();
+	}, 1000);
 }
 
 
-$(document).ready(function() {
-	document.getElementById('curve_chart').style.visibility='hidden'
+	function getLineChartData(){
+		$.ajax({
+			url : '/Update?method=getLineChartData',
+			type : 'POST',
+			dataType : 'json',
+			data : {
+				someName : "testName",
+			},
+			success : function(data) {
+				drawChart(data);
+		
+			},
+			failure : function(data){
+				console.log("ERROR!!! getting line chart data");
+				console.log(data);
+			}
+		})
+	}
 	
-})
-
+	
 	function refreshUsersOnline() {
 		setInterval(function(){
 			getUseresOnlineFromServer();
@@ -73,9 +112,8 @@ $(document).ready(function() {
 				someName : "testName",
 			},
 			success : function(data) {
-				console.log("success on ajax call");
 				$("#peopleOnServerDisplay").html(data.allClientNicknames);
-				updateButtonsForPersonalMessage(data);		
+				updateButtonsForPersonalMessage(data);	
 			},
 			failure : function(data){
 				console.log("ERROR!!!");
@@ -97,7 +135,6 @@ $(document).ready(function() {
 			}
 			button.appendChild(textOfButton);
 			document.getElementById('containerWithPersonaleMessageButtons').appendChild(button);
-			console.log("wasd");
 		}
 		
 	}
@@ -113,7 +150,6 @@ $(document).ready(function() {
 			dataType : 'json',
 			data : {serverMessage : document.getElementById('messageToServerString').value},
 			success : function(data) {
-				console.log("success on ajax call");
 				$("#peopleOnServerDisplay").html(data.allClientNicknames);
 			}
 		});
@@ -123,11 +159,14 @@ $(document).ready(function() {
 		
 	}
 	
+	google.charts.load('current', {'packages':['corechart']});
+	google.charts.setOnLoadCallback(drawChart);
+	
 	$(document).ready(function() {
 		console.log("Document is now ready");
 		getUseresOnlineFromServer();
 		refreshUsersOnline();
-		
+		refreshLineChart();
 	})
 </script>
 </html>

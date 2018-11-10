@@ -9,4 +9,5 @@ public enum AllExistingEventAdapter {
 		MUSIK_BOT,
 		RIOT_API,
 		WEB_SERVER_CHAT,
+		LOG_NUMBER_OF_PEOPLE_FOR_WEBPAGE
 }

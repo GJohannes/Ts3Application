@@ -16,7 +16,6 @@
 <script type="text/javascript">
 
 $(document).ready(function() {
-	
 	var url_string = window.location.href; //window.location.href
 	var url = new URL(url_string);
 	var c = url.searchParams.get("User");
@@ -108,7 +107,7 @@ function sendMessageToServer(){
 				
 				document.getElementById("chatBox").value = "Chat Messages:";
 				var messagesToDisplay = JSON.parse(data.chatContent);
-				console.log(messagesToDisplay.length)
+				console.log(messagesToDisplay.length);
 				console.log(messagesToDisplay);				
 				
 				for(i = 0; i < messagesToDisplay.length; i++){

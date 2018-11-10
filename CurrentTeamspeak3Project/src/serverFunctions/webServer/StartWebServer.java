@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -18,9 +19,12 @@ import org.eclipse.jetty.jsp.JettyJspServlet;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.webapp.Configuration;
 import org.json.simple.JSONArray;
 
@@ -45,6 +49,13 @@ public class StartWebServer implements Runnable {
 	}
 
 	public void startWebServer() throws Exception {
+//		otherServer();
+//		
+//		if(true) {
+//			return;
+//		}
+		
+		
 		int port = this.port;
 		this.server = new Server();
 
@@ -63,10 +74,6 @@ public class StartWebServer implements Runnable {
 		URI baseUri = getWebRootResourceUri();
 //		System.out.println("Base URI: " + baseUri);
 		
-		
-		
-		
-//		
 		
 		// Create Servlet context
 		ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
@@ -183,6 +190,7 @@ public class StartWebServer implements Runnable {
 	public void stop() throws Exception {
 		server.stop();
 		api.removeTS3Listeners(AllExistingEventAdapter.WEB_SERVER_CHAT);
+		api.removeTS3Listeners(AllExistingEventAdapter.LOG_NUMBER_OF_PEOPLE_FOR_WEBPAGE);
 	}
 
 	@Override
@@ -199,6 +207,69 @@ public class StartWebServer implements Runnable {
 
 	private ArrayList<String> test;
 
+	private void otherServer() throws FileNotFoundException, URISyntaxException, MalformedURLException {
+		 Server server = new Server(7000);
+
+		    URI url = getWebRootResourceUri();
+
+		    URI webRootUri = url;
+
+		    ResourceHandler context = new ResourceHandler();
+//		    context.setContextPath("/");
+//		    context.setBaseResource(Resource.newResource(webRootUri));
+//		    context.setWelcomeFiles(new String[] { "index.html" });
+
+		    ServletHolder holderPwd = new ServletHolder("default",
+		            DefaultServlet.class);
+		    holderPwd.setInitParameter("dirAllowed", "true");
+		    context.setResourceBase(WEBROOT_INDEX);
+		    context.setWelcomeFiles(new String[] {"index.html"});
+		    ServletContextHandler servletContextHandler = new ServletContextHandler();
+		    servletContextHandler.setResourceBase(WEBROOT_INDEX);
+		    
+			// Create Example of mapping jsp to path spec
+//			ServletHolder holderAltMapping = new ServletHolder();
+//			holderAltMapping.setName("peopleOnTs3Server.html");
+//			holderAltMapping.setForcedPath("/peopleOnTs3Server.html");
+//			context.addServlet(holderAltMapping);
+
+//			ServletHolder privateMessageHolder = new ServletHolder();
+//			privateMessageHolder.setName("privateMessageDialog.html");
+//			privateMessageHolder.setForcedPath("/privateMessageDialog.html");
+//			context.addServlet(privateMessageHolder);
+//
+		 // Class default as servlet
+			servletContextHandler.addServlet(PeopleOnTs3Server.class, "/UpdateAsDefaultServlet");
+
+			// Instance of a class as servlet
+			PeopleOnTs3Server update = new PeopleOnTs3Server("some random test string", api);
+			ServletHolder updateHolder = new ServletHolder();
+			updateHolder.setServlet(update);
+			servletContextHandler.addServlet(updateHolder, "/Update");
+
+			PrivateMessageChatServlet privateMessageChatServlet = new PrivateMessageChatServlet(api, allMessages);
+			ServletHolder privateMessageServletHolder = new ServletHolder();
+			privateMessageServletHolder.setServlet(privateMessageChatServlet);
+			servletContextHandler.addServlet(privateMessageServletHolder, "/privateMessage");
+			
+			UpdatePrivateChatBoxesServlet updatePrivateChatBoxesServlet = new UpdatePrivateChatBoxesServlet(allMessages);
+			ServletHolder updatePrivateChatBoxesServletHolder  = new ServletHolder();
+			updatePrivateChatBoxesServletHolder.setServlet(updatePrivateChatBoxesServlet);
+			servletContextHandler.addServlet(updatePrivateChatBoxesServletHolder, "/updatePrivateChatBoxes");
+		    
+			servletContextHandler.insertHandler(context);
+		    server.setHandler(servletContextHandler);
+		    
+		    
+		    try {
+		        server.start();
+		       // server.dump(System.err);
+		    } catch (Exception e1) {
+		        // TODO Auto-generated catch block
+		        e1.printStackTrace();
+		    }
+	}
+	
 	private ExtendedTS3EventAdapter getWebServerChat(ExtendedTS3Api api) {
 		ExtendedTS3EventAdapter webServerChat = new ExtendedTS3EventAdapter(AllExistingEventAdapter.WEB_SERVER_CHAT) {
 			@Override
