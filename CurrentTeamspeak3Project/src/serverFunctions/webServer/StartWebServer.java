@@ -16,16 +16,22 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import org.eclipse.jetty.jsp.JettyJspServlet;
-
+import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.server.HttpConfiguration;
+import org.eclipse.jetty.server.HttpConnectionFactory;
+import org.eclipse.jetty.server.SecureRequestCustomizer;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.server.SslConnectionFactory;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.resource.Resource;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.webapp.Configuration;
+import org.eclipse.jetty.webapp.WebAppContext;
 import org.json.simple.JSONArray;
 
 import com.github.theholywaffle.teamspeak3.api.event.TextMessageEvent;
@@ -35,35 +41,44 @@ import miscellaneous.ExtendedTS3Api;
 import miscellaneous.ExtendedTS3EventAdapter;
 
 public class StartWebServer implements Runnable {
-	private static final String WEBROOT_INDEX = "webContent/"; //!! different navigation inside IDE (eclipse) and exported runnable .jar  
-													// this.getClass().getResource("xyz"); is the problem for navigating inside .jar files
-													// only sub-directories seem to work
+	private static final String WEBROOT_INDEX = "webContent"; // !! different navigation inside IDE (eclipse) and
+																// exported runnable .jar
+	// this.getClass().getResource("xyz"); is the problem for navigating inside .jar
+	// files
+	// only sub-directories seem to work
 	private ExtendedTS3Api api;
 	private int port;
+	private int sslPort;
 	private Server server;
 	private HashMap<String, ArrayList<String>> allMessages = new HashMap<>();
 
-	public StartWebServer(ExtendedTS3Api api, int port) {
+	public StartWebServer(ExtendedTS3Api api, int port, int sslPort) {
 		this.api = api;
 		this.port = port;
+		this.sslPort = sslPort;
 	}
 
+	/**
+	 * only public for debugging usage. Start as a threat that will call this method
+	 * @throws Exception
+	 */
 	public void startWebServer() throws Exception {
-//		otherServer();
-//		
-//		if(true) {
-//			return;
-//		}
+		otherServer();
 		
-		
+
+		if (true) {
+			return;
+		}
+
 		int port = this.port;
 		this.server = new Server();
 
 		// Define ServerConnector
-		ServerConnector connector = new ServerConnector(server);
-		connector.setPort(port);
-		server.addConnector(connector);
+//		ServerConnector connector = new ServerConnector(server);
+//		connector.setPort(port);
+//		server.addConnector(connector);
 
+		this.addPortAndSSLPort();
 //		// Add annotation scanning (for WebAppContexts)
 //      Configuration.ClassList classlist = Configuration.ClassList.setServerDefault( server );
 //      classlist.addBefore(
@@ -73,20 +88,18 @@ public class StartWebServer implements Runnable {
 		// Base URI for servlet context
 		URI baseUri = getWebRootResourceUri();
 //		System.out.println("Base URI: " + baseUri);
-		
-		
+
 		// Create Servlet context
 		ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
 		servletContextHandler.setContextPath("/");
-		//servletContextHandler.setResourceBase(baseUri.toASCIIString());
-		//String resourceBase = StartWebServer.class.getResource("").toExternalForm();
-	
-		
+		// servletContextHandler.setResourceBase(baseUri.toASCIIString());
+		// String resourceBase = StartWebServer.class.getResource("").toExternalForm();
+
 		servletContextHandler.setResourceBase(baseUri.toASCIIString());
-		
-		 System.out.println(servletContextHandler.getBaseResource());
-	       System.out.println(servletContextHandler.getResourceBase());
-		
+
+		System.out.println(servletContextHandler.getBaseResource());
+		System.out.println(servletContextHandler.getResourceBase());
+
 		// Since this is a ServletContextHandler we must manually configure JSP support.
 		enableEmbeddedJspSupport(servletContextHandler);
 
@@ -114,9 +127,9 @@ public class StartWebServer implements Runnable {
 		ServletHolder privateMessageServletHolder = new ServletHolder();
 		privateMessageServletHolder.setServlet(privateMessageChatServlet);
 		servletContextHandler.addServlet(privateMessageServletHolder, "/privateMessage");
-		
+
 		UpdatePrivateChatBoxesServlet updatePrivateChatBoxesServlet = new UpdatePrivateChatBoxesServlet(allMessages);
-		ServletHolder updatePrivateChatBoxesServletHolder  = new ServletHolder();
+		ServletHolder updatePrivateChatBoxesServletHolder = new ServletHolder();
 		updatePrivateChatBoxesServletHolder.setServlet(updatePrivateChatBoxesServlet);
 		servletContextHandler.addServlet(updatePrivateChatBoxesServletHolder, "/updatePrivateChatBoxes");
 
@@ -132,10 +145,10 @@ public class StartWebServer implements Runnable {
 	}
 
 	private URI getWebRootResourceUri() throws FileNotFoundException, URISyntaxException {
-		//URL indexUri = this.getClass().getClassLoader().getResource(WEBROOT_INDEX);
-		//System.out.println(this.getClass().getClassLoader().getResource("index.jsp"));
+		// URL indexUri = this.getClass().getClassLoader().getResource(WEBROOT_INDEX);
+		// System.out.println(this.getClass().getClassLoader().getResource("index.jsp"));
 		URL indexUri = this.getClass().getResource(WEBROOT_INDEX);
-		 System.out.println(indexUri);
+		System.out.println(indexUri);
 		if (indexUri == null) {
 			throw new FileNotFoundException("Unable to find resource ");
 		}
@@ -186,6 +199,24 @@ public class StartWebServer implements Runnable {
 		servletContextHandler.addServlet(holderJsp, "*.jsp");
 
 	}
+	
+	/*
+	 * https://dzone.com/articles/adding-ssl-support-embedded
+	 */
+	private void addPortAndSSLPort() {
+		ServerConnector connector = new ServerConnector(server);
+		connector.setPort(this.port);
+		HttpConfiguration https = new HttpConfiguration();
+		https.addCustomizer(new SecureRequestCustomizer());
+		SslContextFactory sslContextFactory = new SslContextFactory();
+		sslContextFactory.setKeyStorePath(StartWebServer.class.getResource("/keystore.jks").toExternalForm());
+		sslContextFactory.setKeyStorePassword("wasdwasd");
+		sslContextFactory.setKeyManagerPassword("wasdwasd");
+		ServerConnector sslConnector = new ServerConnector(server,
+				new SslConnectionFactory(sslContextFactory, "http/1.1"), new HttpConnectionFactory(https));
+		sslConnector.setPort(this.sslPort);
+		server.setConnectors(new Connector[] { connector, sslConnector });
+	}
 
 	public void stop() throws Exception {
 		server.stop();
@@ -205,29 +236,63 @@ public class StartWebServer implements Runnable {
 		}
 	}
 
+	
+	/**
+	 * Event adapter for chatting of WebServer and TS3Server   
+	 */
+	private ExtendedTS3EventAdapter getWebServerChat(ExtendedTS3Api api) {
+		ExtendedTS3EventAdapter webServerChat = new ExtendedTS3EventAdapter(AllExistingEventAdapter.WEB_SERVER_CHAT) {
+			@Override
+			public void onTextMessage(TextMessageEvent messageToBotEvent) {
+				// do not send to server since it is a bot command if the message starts with !
+				// or ?
+				if (!(messageToBotEvent.getMessage().startsWith("!")
+						|| messageToBotEvent.getMessage().startsWith("?"))) {
+					synchronized (allMessages) {
+						ArrayList<String> messagesOfThisPerson;
+						if (allMessages.keySet().contains(messageToBotEvent.getInvokerName())) {
+							messagesOfThisPerson = allMessages.get(messageToBotEvent.getInvokerName());
+						} else {
+							messagesOfThisPerson = new ArrayList<>();
+							allMessages.put(messageToBotEvent.getInvokerName(), messagesOfThisPerson);
+						}
+						messagesOfThisPerson.add("Message From " + messageToBotEvent.getInvokerName() + ": "
+								+ messageToBotEvent.getMessage());
+
+					}
+				}
+			}
+
+		};
+		return webServerChat;
+	}
+	
+	
+	/**
+	 * WebServer which is using the WebContent folder for the HTML
+	 * files instead of servlets for JSP HTML files
+	 */
 	private ArrayList<String> test;
+	private void otherServer() throws Exception {
+		Server server = new Server(7000);
 
-	private void otherServer() throws FileNotFoundException, URISyntaxException, MalformedURLException {
-		 Server server = new Server(7000);
+//		URI url = getWebRootResourceUri();
+//
+//		URI webRootUri = url;
 
-		    URI url = getWebRootResourceUri();
-
-		    URI webRootUri = url;
-
-		    ResourceHandler context = new ResourceHandler();
+		ResourceHandler context = new ResourceHandler();
 //		    context.setContextPath("/");
 //		    context.setBaseResource(Resource.newResource(webRootUri));
 //		    context.setWelcomeFiles(new String[] { "index.html" });
 
-		    ServletHolder holderPwd = new ServletHolder("default",
-		            DefaultServlet.class);
-		    holderPwd.setInitParameter("dirAllowed", "true");
-		    context.setResourceBase(WEBROOT_INDEX);
-		    context.setWelcomeFiles(new String[] {"index.html"});
-		    ServletContextHandler servletContextHandler = new ServletContextHandler();
-		    servletContextHandler.setResourceBase(WEBROOT_INDEX);
-		    
-			// Create Example of mapping jsp to path spec
+		ServletHolder holderPwd = new ServletHolder("default", DefaultServlet.class);
+		holderPwd.setInitParameter("dirAllowed", "true");
+		context.setResourceBase("WebContent/");
+		context.setWelcomeFiles(new String[] { "index.html" });
+		ServletContextHandler servletContextHandler = new ServletContextHandler();
+		servletContextHandler.setResourceBase("WebContent/");
+
+		// Create Example of mapping jsp to path spec
 //			ServletHolder holderAltMapping = new ServletHolder();
 //			holderAltMapping.setName("peopleOnTs3Server.html");
 //			holderAltMapping.setForcedPath("/peopleOnTs3Server.html");
@@ -238,62 +303,34 @@ public class StartWebServer implements Runnable {
 //			privateMessageHolder.setForcedPath("/privateMessageDialog.html");
 //			context.addServlet(privateMessageHolder);
 //
-		 // Class default as servlet
-			servletContextHandler.addServlet(PeopleOnTs3Server.class, "/UpdateAsDefaultServlet");
+		// Class default as servlet
+		servletContextHandler.addServlet(PeopleOnTs3Server.class, "/UpdateAsDefaultServlet");
 
-			// Instance of a class as servlet
-			PeopleOnTs3Server update = new PeopleOnTs3Server("some random test string", api);
-			ServletHolder updateHolder = new ServletHolder();
-			updateHolder.setServlet(update);
-			servletContextHandler.addServlet(updateHolder, "/Update");
+		// Instance of a class as servlet
+		PeopleOnTs3Server update = new PeopleOnTs3Server("some random test string", api);
+		ServletHolder updateHolder = new ServletHolder();
+		updateHolder.setServlet(update);
+		servletContextHandler.addServlet(updateHolder, "/Update");
 
-			PrivateMessageChatServlet privateMessageChatServlet = new PrivateMessageChatServlet(api, allMessages);
-			ServletHolder privateMessageServletHolder = new ServletHolder();
-			privateMessageServletHolder.setServlet(privateMessageChatServlet);
-			servletContextHandler.addServlet(privateMessageServletHolder, "/privateMessage");
-			
-			UpdatePrivateChatBoxesServlet updatePrivateChatBoxesServlet = new UpdatePrivateChatBoxesServlet(allMessages);
-			ServletHolder updatePrivateChatBoxesServletHolder  = new ServletHolder();
-			updatePrivateChatBoxesServletHolder.setServlet(updatePrivateChatBoxesServlet);
-			servletContextHandler.addServlet(updatePrivateChatBoxesServletHolder, "/updatePrivateChatBoxes");
-		    
-			servletContextHandler.insertHandler(context);
-		    server.setHandler(servletContextHandler);
-		    
-		    
-		    try {
-		        server.start();
-		       // server.dump(System.err);
-		    } catch (Exception e1) {
-		        // TODO Auto-generated catch block
-		        e1.printStackTrace();
-		    }
+		PrivateMessageChatServlet privateMessageChatServlet = new PrivateMessageChatServlet(api, allMessages);
+		ServletHolder privateMessageServletHolder = new ServletHolder();
+		privateMessageServletHolder.setServlet(privateMessageChatServlet);
+		servletContextHandler.addServlet(privateMessageServletHolder, "/privateMessage");
+
+		UpdatePrivateChatBoxesServlet updatePrivateChatBoxesServlet = new UpdatePrivateChatBoxesServlet(allMessages);
+		ServletHolder updatePrivateChatBoxesServletHolder = new ServletHolder();
+		updatePrivateChatBoxesServletHolder.setServlet(updatePrivateChatBoxesServlet);
+		servletContextHandler.addServlet(updatePrivateChatBoxesServletHolder, "/updatePrivateChatBoxes");
+
+		servletContextHandler.insertHandler(context);
+		server.setHandler(servletContextHandler);
+
+		try {
+			server.start();
+			// server.dump(System.err);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
-	
-	private ExtendedTS3EventAdapter getWebServerChat(ExtendedTS3Api api) {
-		ExtendedTS3EventAdapter webServerChat = new ExtendedTS3EventAdapter(AllExistingEventAdapter.WEB_SERVER_CHAT) {
-			@Override
-			public void onTextMessage(TextMessageEvent messageToBotEvent) {
-				// do not send to server since it is a bot command if the message starts with !
-				// or ?
-				if (!(messageToBotEvent.getMessage().startsWith("!") || messageToBotEvent.getMessage().startsWith("?"))) {
-					synchronized (allMessages) {
-						ArrayList<String> messagesOfThisPerson;
-						if (allMessages.keySet().contains(messageToBotEvent.getInvokerName())) {
-							messagesOfThisPerson = allMessages.get(messageToBotEvent.getInvokerName());
-						} else {
-							messagesOfThisPerson = new ArrayList<>();
-							allMessages.put(messageToBotEvent.getInvokerName(), messagesOfThisPerson);
-						}
-						messagesOfThisPerson.add("Message From " + messageToBotEvent.getInvokerName() + ": " + messageToBotEvent.getMessage());
-						
-						
-					}
-				}
-			}
-
-		};
-		return webServerChat;
-	}
-
 }

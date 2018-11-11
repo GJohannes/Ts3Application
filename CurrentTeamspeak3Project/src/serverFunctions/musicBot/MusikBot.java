@@ -38,7 +38,7 @@ public class MusikBot {
 
 			@Override
 			public void onClientJoin(ClientJoinEvent e) {
-				api.sendPrivateMessage(e.getClientId(), ">>>><<<<----Music Bot Lilith---->>>><<<< \r\n"
+				api.sendPrivateMessage(e.getClientId(), ">>>><<<<----Music Bot " + api.getConnectedConfigValues().getclientName() + "---->>>><<<< \r\n"
 						+ "                                                                  type !help or !commands for further information");
 				// if (process == null) {
 				// ClientInfo botInfo =
@@ -299,8 +299,19 @@ public class MusikBot {
 					
 					musicProcess = processBuilder.start();
 					
-					//pb.redirectOutput(Redirect.INHERIT); // alternative to closing the stream. will use command line output from regular application 
+					//prints error stream to command line instead of just closing. bad for production since it is spamming the shell but better for debugging
 					BufferedReader reader = new BufferedReader(new InputStreamReader(musicProcess.getInputStream()));
+//					pb.redirectOutput(Redirect.INHERIT); // alternative to closing the stream. will use command line output from regular application 
+//					
+					String line = "";
+					
+					line = reader.readLine();
+					while(line != null) {
+						System.out.println(line);
+						line = reader.readLine();
+					}
+					
+					
 					reader.close();
 					
 					api.logToCommandline("Started playing music");

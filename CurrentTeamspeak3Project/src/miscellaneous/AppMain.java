@@ -111,7 +111,7 @@ public class AppMain extends Application {
 		api.sendServerMessage(api.getConnectedConfigValues().getclientName() + "is now online!");
 		api.logToCommandline("Logged in to Server Instance");
 	
-		StartWebServer webServerStart = new StartWebServer(api, 8081);
+		StartWebServer webServerStart = new StartWebServer(api, 8081, 8082);
 		Thread thread = new Thread(webServerStart);
 		try {
 			thread.start();

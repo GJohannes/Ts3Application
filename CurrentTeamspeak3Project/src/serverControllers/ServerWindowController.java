@@ -107,7 +107,7 @@ public class ServerWindowController implements Initializable {
 	@FXML
 	public void toggleWebServer() {
 		if(webServerButton.isNowActive()) {
-			this.webServerObject = new StartWebServer(api, 8081);
+			this.webServerObject = new StartWebServer(api, 8081, 8082);
 			threadOfWebServer = new Thread(webServerObject);
 			threadOfWebServer.start();
 		} else {
