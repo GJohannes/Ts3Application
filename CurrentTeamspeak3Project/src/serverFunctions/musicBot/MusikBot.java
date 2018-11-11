@@ -308,6 +308,12 @@ public class MusikBot {
 					line = reader.readLine();
 					while(line != null) {
 						System.out.println(line);
+						// case that lua was outdated results offten in a http 403 from youtube
+						if(line.contains("403")) {
+							stopMusicInSeconds(0);
+							api.sendPrivateMessage(messageToBotEvent.getInvokerId(), "Could not play Music - Outdated yutube.lua - please notify an Admin");
+							return; // remove for debugging! return results in less command line output. 
+						}
 						line = reader.readLine();
 					}
 					
