@@ -64,7 +64,7 @@ public class ConnectToServer extends Task<ExtendedTS3Api> {
 				if (api.selectVirtualServerByPort(this.serverPort)) {
 					api.setNickname(this.serverQueryName);
 					api.registerAllEvents();
-					api.sendServerMessage(api.getConnectedConfigValues().getclientName() + "is now online!");
+					api.sendServerMessage(api.getConnectedConfigValues().getServerQueryName() + " is now online!");
 					api.logToCommandline("Logged in to Server Instance");
 					// exception is thrown if no connection could be established and
 					// therefore a null pointer gets to this information
