@@ -1,8 +1,8 @@
 <html>
 <head>
 <title>Embedded Jetty: JSP Examples</title>
-<link href="static/main.css" media="all" rel="stylesheet"
-	type="text/css" />
+<!-- <link href="static/main.css" media="all" rel="stylesheet"
+	type="text/css" /> -->
 </head>
 <body>
 	<h1>Online People</h1>
@@ -33,7 +33,6 @@
 
 
 function drawChart(data) {
-	
 	if(data === undefined){
 		refreshLineChart(); // in case that loading takes longer
 		return;	
@@ -79,14 +78,10 @@ function refreshLineChart() {
 	function getLineChartData(){
 		$.ajax({
 			url : '/Update?method=getLineChartData',
-			type : 'POST',
+			type : 'GET',
 			dataType : 'json',
-			data : {
-				someName : "testName",
-			},
 			success : function(data) {
 				drawChart(data);
-		
 			},
 			failure : function(data){
 				console.log("ERROR!!! getting line chart data");
@@ -102,10 +97,13 @@ function refreshLineChart() {
 		}, 5000);
 	}
 
+	/*
+	* GET type and data result in http parameters of the data
+	*/
 	function getUseresOnlineFromServer(){
 		$.ajax({
 			url : '/Update?method=refreshUsers',
-			type : 'POST',
+			type : 'GET',
 			dataType : 'json',
 			data : {
 				someName : "testName",

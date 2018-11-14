@@ -30,17 +30,20 @@ import miscellaneous.ExtendedTS3EventAdapter;
 @WebServlet("/Update")
 public class PeopleOnTs3Server extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private String loadValue = "";
 	private ExtendedTS3Api api;
 	private int peopleOnTS3ServerCounter;
 	private JSONArray jsonArrayOfAllEventStamps;
 
-	public PeopleOnTs3Server(String load, ExtendedTS3Api api) {
+	public PeopleOnTs3Server(ExtendedTS3Api api) {
 		super();
-		this.loadValue = load;
 		this.api = api;
 		peopleOnTS3ServerCounter = api.getClients().size();
 		this.jsonArrayOfAllEventStamps = new JSONArray();
+
+		ArrayList<String> legendOfGraph = new ArrayList<>();
+		legendOfGraph.add("Time");
+		legendOfGraph.add("Number of People on Server");
+
 		JSONArray legendGraph = new JSONArray();
 		legendGraph.add("Time");
 		legendGraph.add("Number of People on Server");
@@ -58,49 +61,35 @@ public class PeopleOnTs3Server extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		System.out.println("Update get was called");
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String whichMethod = request.getParameter("method");
+		if (whichMethod.equals("refreshUsers")) {
+			this.updateOnlinePeople(response);
+		} else if (whichMethod.equals("getLineChartData")) {
+			this.getLineChartData(response);
+		} else {
+			this.sendServeltMethodNotFound(response);
+		}
+
+		
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String whichMethod = request.getParameter("method");
-		if (whichMethod.equals("refreshUsers")) {
-			this.updateOnlinePeople(response);
-		} else if (whichMethod.equals("sendServerMessage")) {
+		if (whichMethod.equals("sendServerMessage")) {
 			this.sendServerMessage(request);
-		} else if (whichMethod.equals("getLineChartData")) {
-			this.getLineChartData(response);
+		} else {
+			this.sendServeltMethodNotFound(response);
 		}
-	}
-
-	private void getLineChartData(HttpServletResponse response) throws IOException {
-//		JSONArray outerArray = new JSONArray();
-//		JSONArray legendGraph = new JSONArray();
-//		legendGraph.add("Time");
-//		legendGraph.add("Number of People on Server");
-//		outerArray.add(legendGraph);
-//
-//		for (int i = 0; i < 100; i++) {
-//			JSONArray responseDataPoint = new JSONArray();
-//			responseDataPoint.add("sdfdssdf");
-//			responseDataPoint.add(Math.random() * 10);
-//			outerArray.add(responseDataPoint);
-//		}
-
-		response.getWriter().append(this.jsonArrayOfAllEventStamps.toString());
 	}
 
 	private void updateOnlinePeople(HttpServletResponse response) throws IOException {
 		JSONObject json = new JSONObject();
-
 		List<Client> allClients = api.getClients();
-
 		JSONObject returnData = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
 
@@ -109,21 +98,26 @@ public class PeopleOnTs3Server extends HttpServlet {
 		}
 
 		json.put("allClientNicknames", jsonArray);
-
 		response.getWriter().append(json.toString());
 	}
 
+	private void sendServeltMethodNotFound(HttpServletResponse response) throws IOException {
+		response.getWriter().append("Requested Method not found");
+	}
+	
 	private void sendServerMessage(HttpServletRequest request) throws IOException {
 		api.sendServerMessage(request.getParameter("serverMessage"));
 	}
 
+	private void getLineChartData(HttpServletResponse response) throws IOException {
+		response.getWriter().append(this.jsonArrayOfAllEventStamps.toString());
+	}
+
 	private ExtendedTS3EventAdapter getEventsForLoggingNumberOfPeopleOnTheServer() {
-		ExtendedTS3EventAdapter eventsForLoggingNumberOfPeopleOnTheServer = new ExtendedTS3EventAdapter(
-				AllExistingEventAdapter.LOG_NUMBER_OF_PEOPLE_FOR_WEBPAGE) {
+		ExtendedTS3EventAdapter eventsForLoggingNumberOfPeopleOnTheServer = new ExtendedTS3EventAdapter(AllExistingEventAdapter.LOG_NUMBER_OF_PEOPLE_FOR_WEBPAGE) {
 
 			@Override
 			public void onClientJoin(ClientJoinEvent e) {
-			
 				peopleOnTS3ServerCounter++;
 				long currentMiliSeconds = System.currentTimeMillis();
 				removeEventStamps(currentMiliSeconds);
@@ -135,13 +129,13 @@ public class PeopleOnTs3Server extends HttpServlet {
 
 			@Override
 			public void onClientLeave(ClientLeaveEvent e) {
-					peopleOnTS3ServerCounter--;
-					long currentMiliSeconds = System.currentTimeMillis();
-					removeEventStamps(currentMiliSeconds);
-					JSONArray eventStamp = new JSONArray();
-					eventStamp.add(currentMiliSeconds);
-					eventStamp.add(peopleOnTS3ServerCounter);
-					jsonArrayOfAllEventStamps.add(eventStamp);
+				peopleOnTS3ServerCounter--;
+				long currentMiliSeconds = System.currentTimeMillis();
+				removeEventStamps(currentMiliSeconds);
+				JSONArray eventStamp = new JSONArray();
+				eventStamp.add(currentMiliSeconds);
+				eventStamp.add(peopleOnTS3ServerCounter);
+				jsonArrayOfAllEventStamps.add(eventStamp);
 			}
 
 		};
@@ -151,8 +145,8 @@ public class PeopleOnTs3Server extends HttpServlet {
 	private void removeEventStamps(Long currentMiliSeconds) {
 		int isDisntanceToRemove = 86400000; // 24 hours in miliseconds
 		for (int i = jsonArrayOfAllEventStamps.size() - 1; i >= 0; i--) { // go through list high to low so that removed items do not change index of i to remove
-			if((((JSONArray) jsonArrayOfAllEventStamps.get(i)).get(0)) instanceof Long){ // if the first entry is a long it is a eventStamp
-				long miliSecondOfEventStamp = (long)(((JSONArray) jsonArrayOfAllEventStamps.get(i)).get(0)); // get long of eventstemp which is Unix Timestamp for date
+			if ((((JSONArray) jsonArrayOfAllEventStamps.get(i)).get(0)) instanceof Long) { // if the first entry is a long it is a eventStamp
+				long miliSecondOfEventStamp = (long) (((JSONArray) jsonArrayOfAllEventStamps.get(i)).get(0)); // get long of eventstemp which is Unix Timestamp for date
 				if (currentMiliSeconds - miliSecondOfEventStamp > isDisntanceToRemove) { // if the checked is longer than 24h away then remove
 					jsonArrayOfAllEventStamps.remove(i);
 				}

@@ -63,20 +63,15 @@ public class StartWebServer implements Runnable {
 	 * @throws Exception
 	 */
 	public void startWebServer() throws Exception {
-		otherServer();
-		
-
-		if (true) {
-			return;
-		}
+//		otherServer();
+//		
+//
+//		if (true) {
+//			return;
+//		}
 
 		int port = this.port;
 		this.server = new Server();
-
-		// Define ServerConnector
-//		ServerConnector connector = new ServerConnector(server);
-//		connector.setPort(port);
-//		server.addConnector(connector);
 
 		this.addPortAndSSLPort();
 //		// Add annotation scanning (for WebAppContexts)
@@ -118,7 +113,7 @@ public class StartWebServer implements Runnable {
 		servletContextHandler.addServlet(PeopleOnTs3Server.class, "/UpdateAsDefaultServlet");
 
 		// Instance of a class as servlet
-		PeopleOnTs3Server update = new PeopleOnTs3Server("some random test string", api);
+		PeopleOnTs3Server update = new PeopleOnTs3Server(api);
 		ServletHolder updateHolder = new ServletHolder();
 		updateHolder.setServlet(update);
 		servletContextHandler.addServlet(updateHolder, "/Update");
@@ -307,7 +302,7 @@ public class StartWebServer implements Runnable {
 		servletContextHandler.addServlet(PeopleOnTs3Server.class, "/UpdateAsDefaultServlet");
 
 		// Instance of a class as servlet
-		PeopleOnTs3Server update = new PeopleOnTs3Server("some random test string", api);
+		PeopleOnTs3Server update = new PeopleOnTs3Server(api);
 		ServletHolder updateHolder = new ServletHolder();
 		updateHolder.setServlet(update);
 		servletContextHandler.addServlet(updateHolder, "/Update");
