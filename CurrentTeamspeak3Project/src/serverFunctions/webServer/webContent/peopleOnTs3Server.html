@@ -28,140 +28,17 @@
 </body>
 <script src="javascript/jquery-3.3.1.js"></script>
 <script src="javascript/loader.js"></script>
+<script src="javascript/peopleOnTs3ServerGraph.js"></script>
+<script src="javascript/peopleOnTs3ServerServerMessage.js"></script>
+<script src="javascript/peopleOnTs3ServerUsersOnlinePrivateMessage.js"></script>
 <script type="text/javascript">
-
-
-
-function drawChart(data) {
-	if(data === undefined){
-		refreshLineChart(); // in case that loading takes longer
-		return;	
-	}
-	
-	for(i = 1; i < data.length; i++){
-		data[i][0] = new Date(data[i][0]);// make unix time stamp into date
-	}
-	var time = new Date().getTime();
-    var date = new Date(time);
-
-	data[data.length] = [date, data[data.length-1][1]]; // add current date with last number of peoples
-	
-  	var data = google.visualization.arrayToDataTable(data);
-
-  	var options = {
-   		 title: 'People on the Teamspeak3 Server Online',
-    	//curveType: 'function',
-    	vAxis: {
-    		title: "Number of people",
-    		viewWindow: {
-          		min: 0,
-          		//max: 32
-        	},
-    	},
-    legend: { position: 'bottom' },
-    width:  2000,
-    height: 500
-  	};
-
-  	var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-
-  	chart.draw(data, options);
-}
-
-function refreshLineChart() {
-	setInterval(function(){
-		getLineChartData();
-	}, 1000);
-}
-
-
-	function getLineChartData(){
-		$.ajax({
-			url : '/Update?method=getLineChartData',
-			type : 'GET',
-			dataType : 'json',
-			success : function(data) {
-				drawChart(data);
-			},
-			failure : function(data){
-				console.log("ERROR!!! getting line chart data");
-				console.log(data);
-			}
-		})
-	}
-	
-	
-	function refreshUsersOnline() {
-		setInterval(function(){
-			getUseresOnlineFromServer();
-		}, 5000);
-	}
-
-	/*
-	* GET type and data result in http parameters of the data
-	*/
-	function getUseresOnlineFromServer(){
-		$.ajax({
-			url : '/Update?method=refreshUsers',
-			type : 'GET',
-			dataType : 'json',
-			data : {
-				someName : "testName",
-			},
-			success : function(data) {
-				$("#peopleOnServerDisplay").html(data.allClientNicknames);
-				updateButtonsForPersonalMessage(data);	
-			},
-			failure : function(data){
-				console.log("ERROR!!!");
-				console.log(data);
-			}
-		})
-	}
-	
-	function updateButtonsForPersonalMessage(returnData){
-		// clear old buttons 
-		document.getElementById('containerWithPersonaleMessageButtons').innerHTML = "";
-		
-		for (i = 0; i < returnData.allClientNicknames.length; i++) {
-			var button = document.createElement("BUTTON");
-			var textOfButton = document.createTextNode("Message to : " + returnData.allClientNicknames[i]);
-			button.value = returnData.allClientNicknames[i];
-			button.onclick = function(){
-				privateMessageButtonOnclick(this);
-			}
-			button.appendChild(textOfButton);
-			document.getElementById('containerWithPersonaleMessageButtons').appendChild(button);
-		}
-		
-	}
-	
-	function privateMessageButtonOnclick(button){
-		window.open(window.location.href  + "/privateMessage?User=" + button.value);
-	}
-	
-	function sendServerMessage(){
-		$.ajax({
-			url : '/Update?method=sendServerMessage',
-			type : 'POST',
-			dataType : 'json',
-			data : {serverMessage : document.getElementById('messageToServerString').value},
-			success : function(data) {
-				$("#peopleOnServerDisplay").html(data.allClientNicknames);
-			}
-		});
-	}
-	
-	function getUsersFromServer(){
-		
-	}
 	
 	google.charts.load('current', {'packages':['corechart']});
 	google.charts.setOnLoadCallback(drawChart);
 	
 	$(document).ready(function() {
 		console.log("Document is now ready");
-		getUseresOnlineFromServer();
+		getUsersOnlineFromServer();
 		refreshUsersOnline();
 		refreshLineChart();
 	})
