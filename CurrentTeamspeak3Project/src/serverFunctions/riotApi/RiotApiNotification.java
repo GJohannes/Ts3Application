@@ -181,12 +181,14 @@ public class RiotApiNotification implements Runnable {
 					long newGameId = riotInterface.getLastGameIdByAccId(user.getAccountId(), apiKey);
 					if (newGameId != user.getLastGameId()) {
 						user.setLastGameId(newGameId);
-						boolean win = riotInterface.getWinFromGameId(user.getLastGameId(), apiKey, user.getCaseCorrectNickName());
+						WinAndKdaHolder winAndKdaHolder = riotInterface.getWinAndKdaFromGameId(user.getLastGameId(), apiKey, user.getCaseCorrectNickName());
 
-						if (win) {
-							api.sendServerMessage(user.getCaseCorrectNickName() + " just won a match in League of Legends");
+						if (winAndKdaHolder.isWin()) {
+							api.sendServerMessage(user.getCaseCorrectNickName() + 
+									" just WON a match in League of Legends (KDA: " + winAndKdaHolder.getKda() + ")");
 						} else {
-							api.sendServerMessage(user.getCaseCorrectNickName() + " just lost a match in League of Legends. What a looser");
+							api.sendServerMessage(user.getCaseCorrectNickName() + 
+									" just LOST a match in League of Legends. What a looser (KDA: " + winAndKdaHolder.getKda() + ")");
 						}
 					}
 					Thread.sleep(1000);
