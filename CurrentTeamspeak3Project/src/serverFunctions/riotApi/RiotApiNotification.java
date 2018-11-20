@@ -179,17 +179,24 @@ public class RiotApiNotification implements Runnable {
 			for (RiotApiUser user : userList) {
 				try {
 					long newGameId = riotInterface.getLastGameIdByAccId(user.getAccountId(), apiKey);
-					if (newGameId != user.getLastGameId()) {
+					if (newGameId == user.getLastGameId()) {
+						String message = "";
+						
 						user.setLastGameId(newGameId);
-						WinAndKdaHolder winAndKdaHolder = riotInterface.getWinAndKdaFromGameId(user.getLastGameId(), apiKey, user.getCaseCorrectNickName());
+						WinKdaMostDamageHolder winAndKdaHolder = riotInterface.getWinAndKdaFromGameId(user.getLastGameId(), apiKey, user.getCaseCorrectNickName());
 
 						if (winAndKdaHolder.isWin()) {
-							api.sendServerMessage(user.getCaseCorrectNickName() + 
-									" just WON a match in League of Legends (KDA: " + winAndKdaHolder.getKda() + ")");
+							message =  user.getCaseCorrectNickName() + 
+									" just WON in League of Legends ( KDA: " + winAndKdaHolder.getKda() + " )";
 						} else {
-							api.sendServerMessage(user.getCaseCorrectNickName() + 
-									" just LOST a match in League of Legends. What a looser (KDA: " + winAndKdaHolder.getKda() + ")");
+							message = user.getCaseCorrectNickName() + 
+									" just LOST in League of Legends. What a looser ( KDA: " + winAndKdaHolder.getKda() + " )";
 						}
+						if(winAndKdaHolder.isHighestDamageDealer()) {
+							message = message + " ( Most damage )";
+						}
+						
+						api.sendServerMessage(message);
 					}
 					Thread.sleep(1000);
 				} catch (IOException | ParseException | InterruptedException e) {

@@ -39,14 +39,15 @@ public class RiotApiInterface {
 	/*
 	 * returns true if last game was won; returns false if last game was lost
 	 */
-	public WinAndKdaHolder getWinAndKdaFromGameId(long gameId, String ApiKey, String nickName) throws IOException, ParseException {		
+	public WinKdaMostDamageHolder getWinAndKdaFromGameId(long gameId, String ApiKey, String nickName) throws IOException, ParseException {		
 		URL url = new URL("https://euw1.api.riotgames.com/lol/match/v3/matches/" + gameId + "?api_key=" + ApiKey);
 		JSONObject match = getJSONFromUrl(url); 
 		JSONArray participantIdentities = (JSONArray) match.get("participantIdentities");
 		long participantId = -1;
 		double kda = -1;
 		boolean win = false;
-		WinAndKdaHolder winAndKdaHolder = new WinAndKdaHolder(win, kda);
+		
+		WinKdaMostDamageHolder winAndKdaHolder = new WinKdaMostDamageHolder(win, kda);
 		
 		//get each player that participated in the game until match is found for given nickname
 		for(int i = 0; i < participantIdentities.size(); i++) {
@@ -62,22 +63,34 @@ public class RiotApiInterface {
 		}
 		
 		JSONArray participants = (JSONArray) match.get("participants");
+		long mostTotalDamageDealtFromPlayer = 0;
+		long playerIdOfMostDamageDealt = -1;
 		
 		for(int i = 0; i < participants.size(); i++) {
 			JSONObject oneParticipant = (JSONObject) participants.get(i);
+			
+			//make sure that 
+			if(mostTotalDamageDealtFromPlayer < (long)((JSONObject) oneParticipant.get("stats")).get("totalDamageDealtToChampions")) {
+				mostTotalDamageDealtFromPlayer = (long)((JSONObject) oneParticipant.get("stats")).get("totalDamageDealtToChampions");
+				playerIdOfMostDamageDealt = (long)((JSONObject) oneParticipant.get("stats")).get("participantId");
+			}
 			
 			if(((long)(oneParticipant.get("participantId"))) == participantId){
 				long kills = (long) ((JSONObject)oneParticipant.get("stats")).get("kills");
 				long deaths =  (long) ((JSONObject)oneParticipant.get("stats")).get("deaths");
 				long assists = (long) ((JSONObject)oneParticipant.get("stats")).get("assists");
+				
 				if(deaths == 0) {
 					deaths = 1; // to prevent math error while calculating kda
 				}
 				kda = (double) (kills + assists) / deaths;
 				win = (boolean) ((JSONObject)oneParticipant.get("stats")).get("win");
-				winAndKdaHolder = new WinAndKdaHolder(win, kda);
-				return winAndKdaHolder;
+				winAndKdaHolder = new WinKdaMostDamageHolder(win, kda);
 			}
+		}
+		
+		if(participantId == playerIdOfMostDamageDealt) {
+			winAndKdaHolder.setHighestDamageDealer(true);
 		}
 		return winAndKdaHolder;
 	}
