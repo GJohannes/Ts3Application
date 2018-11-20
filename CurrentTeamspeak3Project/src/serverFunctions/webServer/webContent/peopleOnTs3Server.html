@@ -4,8 +4,6 @@
 <script src="javascript/peopleOnTs3ServerGraph.js"></script>
 <script src="javascript/peopleOnTs3ServerServerMessage.js"></script>
 <script src="javascript/peopleOnTs3ServerUsersOnlinePrivateMessage.js"></script>
-<script src="javascript/angular.min.js"></script>
-<script src="javascript/angular-animate.js"></script>
 <script type="text/javascript"></script>
 <link rel="stylesheet" type="text/css" href="css/overallCSS.css">
 
@@ -58,14 +56,13 @@
 		</div>
 
 		<div>
-			<div id="curve_chart" class="chart">
+			<div id="curve_chart" class="chart" align="center">
 				<img alt="Teamspeak Icon" src="images/loading3.gif">
 			</div>
 		</div>
 	</div>
 </body>
 <script type="text/javascript">
-	var app = angular.module('myApp', [ 'ngAnimate' ]);
 
 	$(window).resize(function() {
 		drawChart();
