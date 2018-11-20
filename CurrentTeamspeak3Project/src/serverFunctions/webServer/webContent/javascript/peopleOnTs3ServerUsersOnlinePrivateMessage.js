@@ -16,7 +16,8 @@
 				someName : "testName",
 			},
 			success : function(data) {
-				$("#peopleOnServerDisplay").html(data.allClientNicknames);
+				displayAllPeopleOnline(data);
+				
 				updateButtonsForPersonalMessage(data);	
 			},
 			failure : function(data){
@@ -24,6 +25,18 @@
 				console.log(data);
 			}
 		})
+	}
+	
+	function displayAllPeopleOnline(returnData){
+		$("#peopleOnServerDisplay").html("");
+		var element = document.getElementById("peopleOnServerDisplay");
+		
+		for(i = 0; i < returnData.allClientNicknames.length; i++){			
+			var paragraph = document.createElement("p");
+			var node = document.createTextNode(returnData.allClientNicknames[i]);
+			paragraph.appendChild(node);
+			element.appendChild(paragraph);
+		}
 	}
 	
 	function updateButtonsForPersonalMessage(returnData){
@@ -38,6 +51,7 @@
 				privateMessageButtonOnclick(this);
 			}
 			button.appendChild(textOfButton);
+			button.className = "buttonGreenStandart";
 			document.getElementById('containerWithPersonaleMessageButtons').appendChild(button);
 		}
 		

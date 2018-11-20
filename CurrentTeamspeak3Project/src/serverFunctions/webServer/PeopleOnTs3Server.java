@@ -39,7 +39,8 @@ public class PeopleOnTs3Server extends HttpServlet {
 		this.api = api;
 		peopleOnTS3ServerCounter = api.getClients().size();
 		this.jsonArrayOfAllEventStamps = new JSONArray();
-
+		
+		// legend of the graph that is displayed on the webpage
 		ArrayList<String> legendOfGraph = new ArrayList<>();
 		legendOfGraph.add("Time");
 		legendOfGraph.add("Number of People on Server");

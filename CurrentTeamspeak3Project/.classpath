@@ -2,8 +2,8 @@
 <classpath>
 	<classpathentry excluding="someTest/|serverFunctions/webServer/test/|defgdf/" kind="src" path="src"/>
 	<classpathentry kind="src" path="res"/>
-	<classpathentry excluding="javascript/|javascript/" kind="src" path="WebContent"/>
 	<classpathentry kind="src" path="WebContent/javascript"/>
+	<classpathentry excluding="javascript/" kind="src" path="WebContent"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="con" path="org.eclipse.fx.ide.jdt.core.JAVAFX_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/json-simple-1.1.1.jar"/>
@@ -29,9 +29,9 @@
 	<classpathentry kind="lib" path="lib/jetty-quickstart-9.4.12.v20180830.jar"/>
 	<classpathentry kind="lib" path="lib/jetty-schemas-3.1.jar"/>
 	<classpathentry kind="lib" path="lib/jetty-security-9.4.12.v20180830.jar"/>
-	<classpathentry kind="lib" path="lib/jetty-server-9.4.12.v20180830.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-server-9.4.12.v20180830.jar" sourcepath="C:/Users/Johannes/.m2/repository/org/eclipse/jetty/jetty-server/9.4.12.v20180830/jetty-server-9.4.12.v20180830-sources.jar"/>
 	<classpathentry kind="lib" path="lib/jetty-servlet-9.4.12.v20180830.jar"/>
-	<classpathentry kind="lib" path="lib/jetty-util-9.4.12.v20180830.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-util-9.4.12.v20180830.jar" sourcepath="C:/Users/Johannes/.m2/repository/org/eclipse/jetty/jetty-util/9.4.12.v20180830/jetty-util-9.4.12.v20180830-sources.jar"/>
 	<classpathentry kind="lib" path="lib/jetty-webapp-9.4.12.v20180830.jar"/>
 	<classpathentry kind="lib" path="lib/jetty-xml-9.4.12.v20180830.jar"/>
 	<classpathentry kind="lib" path="lib/taglibs-standard-impl-1.2.5.jar"/>

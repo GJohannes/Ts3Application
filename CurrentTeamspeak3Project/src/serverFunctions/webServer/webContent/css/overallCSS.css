@@ -1,0 +1,58 @@
+/* Button
+https://www.w3schools.com/css/css3_buttons.asp
+*/
+
+.buttonGreenStandart {
+	display: inline-block;
+	padding: 15px 25px;
+	font-size: 24px;
+	cursor: pointer;
+	text-align: center;
+	text-decoration: none;
+	outline: none;
+	color: #fff;
+	background-color: #4CAF50;
+	border: none;
+	border-radius: 15px;
+	box-shadow: 0 9px #999;
+	margin: 10px 10px 10px 10px;
+}
+
+.buttonGreenStandart:hover {
+	background-color: #3e8e41
+}
+
+.buttonGreenStandart:active {
+	background-color: #3e8e41;
+	box-shadow: 0 5px #666;
+	transform: translateY(4px);
+}
+
+
+/* TABLE (ROWS + COLUMNS)
+https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_two_columns_responsive
+*/
+.column {
+    float: left;
+    width: 50%;
+    padding: 10px;
+}
+
+/* Clearfix (clear floats) */
+.row::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+
+/* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+    .column {
+        width: 100%;
+    }
+}
+
+* {
+    box-sizing: border-box;
+}

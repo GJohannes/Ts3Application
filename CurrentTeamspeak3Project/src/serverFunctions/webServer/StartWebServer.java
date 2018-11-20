@@ -282,11 +282,12 @@ public class StartWebServer implements Runnable {
 
 		ServletHolder holderPwd = new ServletHolder("default", DefaultServlet.class);
 		holderPwd.setInitParameter("dirAllowed", "true");
-		context.setResourceBase("WebContent/");
+		//context.setResourceBase("webContent"); 
 		context.setWelcomeFiles(new String[] { "index.html" });
 		ServletContextHandler servletContextHandler = new ServletContextHandler();
-		servletContextHandler.setResourceBase("WebContent/");
-
+		servletContextHandler.setResourceBase("webContent");
+		System.out.println(servletContextHandler.getResourceBase());
+		System.out.println(context.getResourceBase());
 		// Create Example of mapping jsp to path spec
 //			ServletHolder holderAltMapping = new ServletHolder();
 //			holderAltMapping.setName("peopleOnTs3Server.html");
