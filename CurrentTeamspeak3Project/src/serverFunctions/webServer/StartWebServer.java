@@ -108,6 +108,11 @@ public class StartWebServer implements Runnable {
 		privateMessageHolder.setName("privateMessageDialog.html");
 		privateMessageHolder.setForcedPath("/privateMessageDialog.html");
 		servletContextHandler.addServlet(privateMessageHolder, "/OnlinePeople/privateMessage");
+		
+		ServletHolder impressumHolder = new ServletHolder();
+		impressumHolder.setName("impressum.html");
+		impressumHolder.setForcedPath("/impressum.html");
+		servletContextHandler.addServlet(impressumHolder, "/Impressum");
 
 		// Class default as servlet
 		servletContextHandler.addServlet(PeopleOnTs3Server.class, "/UpdateAsDefaultServlet");

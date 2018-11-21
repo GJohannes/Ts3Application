@@ -28,6 +28,11 @@ https://www.w3schools.com/css/css3_buttons.asp
 	transform: translateY(4px);
 }
 
+.divCenter {
+	margin: auto;
+	width: 60%;
+	text-align: center;
+}
 
 /* TABLE (ROWS + COLUMNS)
 https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_two_columns_responsive
