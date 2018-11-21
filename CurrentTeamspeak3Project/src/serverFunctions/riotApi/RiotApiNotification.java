@@ -179,20 +179,20 @@ public class RiotApiNotification implements Runnable {
 			for (RiotApiUser user : userList) {
 				try {
 					long newGameId = riotInterface.getLastGameIdByAccId(user.getAccountId(), apiKey);
-					if (newGameId == user.getLastGameId()) {
+					if (newGameId != user.getLastGameId()) {
 						String message = "";
 						
 						user.setLastGameId(newGameId);
-						WinKdaMostDamageHolder winAndKdaHolder = riotInterface.getWinAndKdaFromGameId(user.getLastGameId(), apiKey, user.getCaseCorrectNickName());
+						WinKdaMostDamageHolder winKdaMostDamageHolder = riotInterface.getWinAndKdaFromGameId(user.getLastGameId(), apiKey, user.getCaseCorrectNickName());
 
-						if (winAndKdaHolder.isWin()) {
+						if (winKdaMostDamageHolder.isWin()) {
 							message =  user.getCaseCorrectNickName() + 
-									" just WON in League of Legends ( KDA: " + winAndKdaHolder.getKda() + " )";
+									" just WON in League of Legends ( KDA: " + winKdaMostDamageHolder.getKda() + " )";
 						} else {
 							message = user.getCaseCorrectNickName() + 
-									" just LOST in League of Legends. What a looser ( KDA: " + winAndKdaHolder.getKda() + " )";
+									" just LOST in League of Legends. What a looser ( KDA: " + winKdaMostDamageHolder.getKda() + " )";
 						}
-						if(winAndKdaHolder.isHighestDamageDealer()) {
+						if(winKdaMostDamageHolder.isHighestDamageDealer()) {
 							message = message + " ( Most damage )";
 						}
 						
