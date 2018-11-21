@@ -75,6 +75,17 @@ body {
 </body>
 <script type="text/javascript">
 	
+	/* does not work in .js files for some reason*/
+	$("#messageToServerString").focus(function() {
+		console.log("triggered textarea focus")
+		if (this.value === this.defaultValue) {
+			this.value = '';
+		}
+	}).blur(function() {
+		if (this.value === '') {
+			this.value = this.defaultValue;
+		}
+	});
 
 	var booleanCheck = false;
 
