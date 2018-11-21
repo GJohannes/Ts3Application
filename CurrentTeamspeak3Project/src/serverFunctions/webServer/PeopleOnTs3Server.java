@@ -82,7 +82,7 @@ public class PeopleOnTs3Server extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String whichMethod = request.getParameter("method");
 		if (whichMethod.equals("sendServerMessage")) {
-			this.sendServerMessage(request);
+			this.sendServerMessage(request, response);
 		} else {
 			this.sendServeltMethodNotFound(response);
 		}
@@ -106,8 +106,17 @@ public class PeopleOnTs3Server extends HttpServlet {
 		response.getWriter().append("Requested Method not found");
 	}
 	
-	private void sendServerMessage(HttpServletRequest request) throws IOException {
-		api.sendServerMessage(request.getParameter("serverMessage"));
+	private void sendServerMessage(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String password = "1234";
+		JSONObject responseJSON = new JSONObject();
+		if(request.getParameter("password").equals(password)) {
+			api.sendServerMessage(request.getParameter("serverMessage"));
+			responseJSON.put("passwordCorrect", "true");
+			
+		} else {
+			responseJSON.put("passwordCorrect", "false");			
+		}
+		response.getWriter().append(responseJSON.toJSONString());
 	}
 
 	private void getLineChartData(HttpServletResponse response) throws IOException {

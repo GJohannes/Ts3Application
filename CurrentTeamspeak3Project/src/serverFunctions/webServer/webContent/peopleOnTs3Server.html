@@ -6,22 +6,25 @@
 <script src="javascript/peopleOnTs3ServerUsersOnlinePrivateMessage.js"></script>
 <script type="text/javascript"></script>
 <link rel="stylesheet" type="text/css" href="css/overallCSS.css">
-
+<head>
+<title>People on TS3 Server</title>
 <style>
 .chart {
 	width: 100%;
 	min-height: 450px;
 }
-</style>
-<head>
-<title>People on TS3 Server</title>
-<style>
+
+body {
+	background-color: #000022;
+}
+
 .pageDiv {
 	margin: auto;
 	width: 100%;
 	border: 3px solid #73AD21;
 	padding: 10px;
-	background-color: lightblue;
+	background-color: #aaaaaa;
+	display: block;
 }
 
 .headDiv {
@@ -29,28 +32,34 @@
 	width: 60%;
 	text-align: center;
 }
-
 </style>
 </head>
 <body>
 	<div class="pageDiv">
 		<div class="headDiv">
 			<h1>Teamspeak3 Server</h1>
-			<div> People Currently Online:
+			<div>
+				People Currently Online:
 				<div id="peopleOnServerDisplay">
 					<h2>NO PEOPLE ON SERVER</h2>
 				</div>
 			</div>
 		</div>
 		<div id="messagesDiv" class="row">
-			<div class="column" style="background-color:#aaa;">
-				<button onclick="sendServerMessage()">Send Message to the
-					TS3Serve </button>
-				<input type="text" id="messageToServerString"
-					value="Send stuff to display on the server">
+			<div class="column40" style="background-color: #dddd;">
+				<div style="width: 100%;">
+					<button onclick="sendServerMessage()" style="width: 100%;">Send Message to the TS3Server</button>
+				</div>
+				<div>
+					Message to Server:
+					<textarea id="messageToServerString" style="width: 100%; resize: none;" rows="4"> Insert Server Message
+					</textarea>
+				</div>
+				<div>
+					Password: <input type="password" id="passwordForMessageToServerString" value="enter password" style="width: 100%;">
+				</div>
 			</div>
-			<div class="column" style="background-color:#bbb;">
-
+			<div class="column60" style="background-color: #bbb;">
 				<div id="containerWithPersonaleMessageButtons"></div>
 			</div>
 		</div>
@@ -63,12 +72,6 @@
 	</div>
 </body>
 <script type="text/javascript">
-
-	$(window).resize(function() {
-		drawChart();
-		console.log("resize triggered");
-	});
-
 	var booleanCheck = false;
 
 	google.charts.load('current', {

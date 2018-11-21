@@ -38,6 +38,18 @@ https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_two_columns_respon
     padding: 10px;
 }
 
+.column40 {
+    float: left;
+    width: 40%;
+    padding: 10px;
+}
+
+.column60 {
+    float: left;
+    width: 60%;
+    padding: 10px;
+}
+
 /* Clearfix (clear floats) */
 .row::after {
     content: "";
