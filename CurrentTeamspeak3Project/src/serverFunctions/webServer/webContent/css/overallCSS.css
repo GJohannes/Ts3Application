@@ -77,11 +77,11 @@ https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_two_columns_respon
 
 /* Background Style*/
 body  {
-	background-image: url("/images/bgUniverse.jpg");    
+	background-image: url("../images/bgUniverse.jpg");    
 }
 
 .divBackgroundGrid {
-	background-image: url("/images/gridbg.png");
+	background-image: url("../images/gridbg.png");
 	height: 100%;
 }
 
