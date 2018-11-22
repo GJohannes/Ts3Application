@@ -42,7 +42,6 @@ public class IPv4IPv6Validator {
 			return true;
 		// case that 1block:: 0-6 blocks (e.g.: 2a4c::d014:c34:f9ef:b893:ab:aa:aa) || (e.g.: 2a4c::d014)
 		} else if(Pattern.matches("(((([0-9]|[a-f]){1,4}?):){1}):(((([0-9]|[a-f]){1,4}?):){0,5}?)(([0-9]|[a-f]){1,4}?)", s)) {
-			System.out.println("Executed");
 			return true;
 		// case that 1 block followed by only :: (e.g.: 2a4c::)
 		} else if(Pattern.matches("(((([0-9]|[a-f]){1,4}?):){1}):(((([0-9]|[a-f]){1,4}?):){0}?)(([0-9]|[a-f]){1,4}?){0,1}?", s)) {
