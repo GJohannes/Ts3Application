@@ -111,10 +111,9 @@ public class PeopleOnTs3Server extends HttpServlet {
 		JSONObject responseJSON = new JSONObject();
 		if(request.getParameter("password").equals(password)) {
 			api.sendServerMessage(request.getParameter("serverMessage"));
-			responseJSON.put("passwordCorrect", "true");
-			
+			responseJSON.put("passwordCorrect", true);
 		} else {
-			responseJSON.put("passwordCorrect", "false");			
+			responseJSON.put("passwordCorrect", false);			
 		}
 		response.getWriter().append(responseJSON.toJSONString());
 	}
