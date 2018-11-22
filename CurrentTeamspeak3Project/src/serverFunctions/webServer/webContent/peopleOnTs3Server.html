@@ -35,46 +35,47 @@ body {
 </style>
 </head>
 <body>
-	<div class="pageDiv">
-		<div class="headDiv">
-			<h1>Teamspeak3 Server</h1>
-			<div>
-				People Currently Online:
-				<div id="peopleOnServerDisplay">
-					<h2>NO PEOPLE ON SERVER</h2>
-				</div>
-			</div>
-		</div>
-		<div id="messagesDiv" class="row">
-			<div class="column40" style="background-color: #dddd;">
-				<div style="width: 100%;">
-					<button onclick="sendServerMessage()" style="width: 100%;">Send Message to the TS3Server</button>
-				</div>
+	<div class="divBackgroundGrid">
+		<div class="pageDiv divFont">
+			<div class="headDiv">
+				<h1>Teamspeak3 Server</h1>
 				<div>
-					Message to Server:
-					<textarea id="messageToServerString" style="width: 100%; resize: none;" rows="4">Insert Server Message</textarea>
-				</div>
-				<div>
-					Password: <input type="password" id="passwordForMessageToServerString" value="enter password" style="width: 100%;">
+					People Currently Online:
+					<div id="peopleOnServerDisplay">
+						<h2>NO PEOPLE ON SERVER</h2>
+					</div>
 				</div>
 			</div>
-			<div class="column60" style="background-color: #bbb;">
-				<div id="containerWithPersonaleMessageButtons"></div>
+			<div id="messagesDiv" class="row">
+				<div class="column40" style="background-color: #dddd;">
+					<div style="width: 100%;">
+						<button onclick="sendServerMessage()" style="width: 100%;">Send Message to the TS3Server</button>
+					</div>
+					<div>
+						Message to Server:
+						<textarea id="messageToServerString" style="width: 100%; resize: none;" rows="4">Insert Server Message</textarea>
+					</div>
+					<div>
+						Password: <input type="password" id="passwordForMessageToServerString" value="enter password" style="width: 100%;">
+					</div>
+				</div>
+				<div class="column60" style="background-color: #bbb;">
+					<div id="containerWithPersonaleMessageButtons"></div>
+				</div>
 			</div>
-		</div>
 
-		<div>
-			<div id="curve_chart" class="chart" align="center">
-				<img alt="Teamspeak Icon" src="images/loading3.gif">
+			<div>
+				<div id="curve_chart" class="chart" align="center">
+					<img alt="Teamspeak Icon" src="images/loading3.gif">
+				</div>
 			</div>
-		</div>
-		<div class="divCenter">
-			<a href="Impressum"> Impressum </a>
+			<div class="divCenter">
+				<a href="Impressum"> Impressum </a>
+			</div>
 		</div>
 	</div>
 </body>
 <script type="text/javascript">
-	
 	/* does not work in .js files for some reason*/
 	$("#messageToServerString").focus(function() {
 		console.log("triggered textarea focus")

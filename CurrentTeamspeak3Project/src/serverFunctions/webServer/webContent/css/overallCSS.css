@@ -73,3 +73,20 @@ https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_two_columns_respon
 * {
     box-sizing: border-box;
 }
+
+
+/* Background Style*/
+body  {
+	background-image: url("/images/bgUniverse.jpg");    
+}
+
+.divBackgroundGrid {
+	background-image: url("/images/gridbg.png");
+	height: 100%;
+}
+
+/* Div Font*/
+
+.divFont{
+	font-size: 150%;
+}
