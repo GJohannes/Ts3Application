@@ -26,4 +26,11 @@ public class WinKdaMostDamageHolder {
 		return kda;
 	}
 	
+	/*
+	 * rounded to two digits for visual representation purposes
+	 */
+	public String getKdaVisual() {
+		return String.format("%.2f", kda);
+	}
+	
 }

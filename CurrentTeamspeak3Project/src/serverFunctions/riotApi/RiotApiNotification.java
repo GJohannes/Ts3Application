@@ -187,10 +187,10 @@ public class RiotApiNotification implements Runnable {
 
 						if (winKdaMostDamageHolder.isWin()) {
 							message =  user.getCaseCorrectNickName() + 
-									" just WON in League of Legends ( KDA: " + winKdaMostDamageHolder.getKda() + " )";
+									" just WON in League of Legends ( KDA: " + winKdaMostDamageHolder.getKdaVisual() + " )";
 						} else {
 							message = user.getCaseCorrectNickName() + 
-									" just LOST in League of Legends. What a looser ( KDA: " + winKdaMostDamageHolder.getKda() + " )";
+									" just LOST in League of Legends. What a looser ( KDA: " + winKdaMostDamageHolder.getKdaVisual() + " )";
 						}
 						if(winKdaMostDamageHolder.isHighestDamageDealer()) {
 							message = message + " ( Most damage )";
