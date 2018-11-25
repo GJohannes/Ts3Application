@@ -2,7 +2,6 @@ package serverFunctions.riotApi;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.json.simple.parser.ParseException;

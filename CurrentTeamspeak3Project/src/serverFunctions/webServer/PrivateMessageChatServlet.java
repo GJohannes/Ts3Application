@@ -1,7 +1,6 @@
 package serverFunctions.webServer;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,18 +12,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import com.github.theholywaffle.teamspeak3.api.event.ClientJoinEvent;
-import com.github.theholywaffle.teamspeak3.api.event.TextMessageEvent;
 import com.github.theholywaffle.teamspeak3.api.wrapper.Client;
 
-import miscellaneous.AllExistingEventAdapter;
 import miscellaneous.ExtendedTS3Api;
-import miscellaneous.ExtendedTS3EventAdapter;
 
 @WebServlet("/privateMessage")
 public class PrivateMessageChatServlet extends HttpServlet {

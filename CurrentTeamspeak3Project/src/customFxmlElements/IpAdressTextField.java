@@ -1,6 +1,5 @@
 package customFxmlElements;
 
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
