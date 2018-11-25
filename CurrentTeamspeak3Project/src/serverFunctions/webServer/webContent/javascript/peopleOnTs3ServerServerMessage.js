@@ -1,5 +1,4 @@
 
-
 function sendServerMessage() {
 	$
 			.ajax({
@@ -26,3 +25,14 @@ function sendServerMessage() {
 			});
 	document.getElementById('messageToServerString').value = "";
 }
+
+$("#messageToServerString").focus(function() {
+	console.log("triggered textarea focus")
+	if (this.value === this.defaultValue) {
+		this.value = '';
+	}
+}).blur(function() {
+	if (this.value === '') {
+		this.value = this.defaultValue;
+	}
+});

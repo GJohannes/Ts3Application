@@ -1,9 +1,6 @@
 <html>
 <script src="javascript/jquery-3.3.1.js"></script>
 <script src="javascript/loader.js"></script>
-<script src="javascript/peopleOnTs3ServerGraph.js"></script>
-<script src="javascript/peopleOnTs3ServerServerMessage.js"></script>
-<script src="javascript/peopleOnTs3ServerUsersOnlinePrivateMessage.js"></script>
 <script type="text/javascript"></script>
 <link rel="stylesheet" type="text/css" href="css/overallCSS.css">
 <head>
@@ -75,19 +72,10 @@ body {
 		</div>
 	</div>
 </body>
+<script src="javascript/peopleOnTs3ServerGraph.js"></script>
+<script src="javascript/peopleOnTs3ServerServerMessage.js"></script>
+<script src="javascript/peopleOnTs3ServerUsersOnlinePrivateMessage.js"></script>
 <script type="text/javascript">
-	/* does not work in .js files for some reason*/
-	$("#messageToServerString").focus(function() {
-		console.log("triggered textarea focus")
-		if (this.value === this.defaultValue) {
-			this.value = '';
-		}
-	}).blur(function() {
-		if (this.value === '') {
-			this.value = this.defaultValue;
-		}
-	});
-
 	var booleanCheck = false;
 
 	google.charts.load('current', {
