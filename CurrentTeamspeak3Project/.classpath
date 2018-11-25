@@ -36,5 +36,6 @@
 	<classpathentry kind="lib" path="lib/jetty-xml-9.4.12.v20180830.jar"/>
 	<classpathentry kind="lib" path="lib/taglibs-standard-impl-1.2.5.jar"/>
 	<classpathentry kind="lib" path="lib/taglibs-standard-spec-1.2.5.jar"/>
+	<classpathentry kind="lib" path="lib/commons-validator-1.6.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

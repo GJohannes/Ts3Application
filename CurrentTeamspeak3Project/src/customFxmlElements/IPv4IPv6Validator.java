@@ -2,8 +2,21 @@ package customFxmlElements;
 
 import java.util.regex.Pattern;
 
+import org.apache.commons.validator.routines.InetAddressValidator;
+
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.stage.Stage;
+
 public class IPv4IPv6Validator {
 
+	/**
+	 * checks weather the string is a acceptable IPv4 or IPv6 Ip Address 
+	 */
 	public boolean validateIpAdress(String s) {
 		if(this.validateIPv4Adress(s) || this.validateIPv6Adress(s)) {
 			return true;
@@ -31,7 +44,7 @@ public class IPv4IPv6Validator {
 		// ask for a hex number that occurs between 0 and 4 times without the following :
 		//(([0-9]|[a-fA-F]){0,4}?)
 		
-		//regular case that there are no :: blocks 99.9% this is the relevant part. rest are edge cases with :: blocks
+		//regular case that there are no :: blocks. 99.988% this is the relevant part. rest are edge cases with :: blocks
 		if(Pattern.matches("(((([0-9]|[a-fA-F]){1,4}?):){7})(([0-9]|[a-fA-F]){1,4}?)", s)) {
 			return true;
 		//case that :: followed by 1-7 blocks (e.g.: ::d014:c34:f9ef:b893:ab:aa:aa)
@@ -71,9 +84,38 @@ public class IPv4IPv6Validator {
 		//case 7 blocks followed by only one :: possible
 		} else if(Pattern.matches("(((([0-9]|[a-fA-F]){1,4}?):){7}):(((([0-9]|[a-fA-F]){1,4}?):){0,0}?)(([0-9]|[a-fA-F]){1,4}?){0}", s)) {
 			return true;
+		//ideally never true if self built validation method never fails
+		} else if(InetAddressValidator.getInstance().isValid(s)) {
+			openPopup();
+			System.out.println("Error using self built IPv6 validation - Validation from library accepts the IPv6 Adress");
+			return true;
 		} else {
 			return false;
 		}
 	}
+	
+	/*
+	 * in case that the self built IPv6 Address validation returns a 
+	 * false and the library returns a true then open this error popUp
+	 */
+	private void openPopup() {
+		VBox box = new VBox();
+		box.setSpacing(20);
+		box.setAlignment(Pos.CENTER);
+		
+		StackPane stackPane = new StackPane();
+		stackPane.getChildren().add(box);
+		
+		Label label = new Label();
+		label.setFont(new Font("Cambria", 20));
+		label.setText("IPv6 validity questionable. Please save the IPv6 adress and contact an admin with it.");
+		Scene secondScene = new Scene(stackPane, 800, 100);
 
+		// New window (Stage)
+		Stage newWindow = new Stage();
+		newWindow.setTitle("IPv6 Validation - Inconsistency");
+		box.getChildren().add(label);
+		newWindow.setScene(secondScene);
+		newWindow.show();
+	}
 }
