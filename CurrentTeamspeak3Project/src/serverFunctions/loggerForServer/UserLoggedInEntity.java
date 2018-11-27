@@ -30,8 +30,8 @@ public class UserLoggedInEntity {
 		LocalDateTime now = LocalDateTime.now();
 		JSONObject json = new JSONObject();
 
-		json.put("Event", event);
-		json.put("LocalDateTime ", now);
+		json.put("Event", event.toString());
+		json.put("LocalDateTime ", now.toString());
 		json.put("Nickname", this.nickname);
 		json.put("UniqueId", this.uId);
 
