@@ -1,5 +1,6 @@
 <html>
 <script src="javascript/jquery-3.3.1.js"></script>
+<script src="javascript/jquery-ui.js"></script>
 <script src="javascript/loader.js"></script>
 <script type="text/javascript"></script>
 <link rel="stylesheet" type="text/css" href="css/overallCSS.css">
@@ -65,6 +66,12 @@ body {
 				<div id="curve_chart" class="chart" align="center">
 					<img alt="Teamspeak Icon" src="images/loading3.gif">
 				</div>
+			</div>
+			<div>
+				<!--  https://jqueryui.com/datepicker/  -->
+				<p>Date: <input type="text" id="datepicker"></p>
+				<div><button onclick="getHistoryData()"> GetHistoryGraph</button></div>
+				<div id="history_chart" class="chart" align="center"></div>
 			</div>
 			<div class="divCenter">
 				<a href="Impressum"> Impressum </a>

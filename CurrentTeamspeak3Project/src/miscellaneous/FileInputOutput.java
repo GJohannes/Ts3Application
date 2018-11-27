@@ -7,16 +7,20 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.json.simple.*;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
+import javafx.print.JobSettings;
 
 public class FileInputOutput {
 
@@ -50,7 +54,6 @@ public class FileInputOutput {
 		writer.close();
 	}
 
-	
 	// uId of user who left + the time on the server in seconds
 	public void updateStayedOnServer(String uID, long additionalStayedOnServerTime) throws IOException {
 		List<String> allLines;
@@ -88,7 +91,6 @@ public class FileInputOutput {
 			allLines.add(uID + " " + additionalStayedOnServerTime);
 		}
 
-		
 		FileWriter fileWriter = new FileWriter(file);
 		BufferedWriter writer = new BufferedWriter(fileWriter);
 		for (int i = 0; i < allLines.size(); i++) {
@@ -100,21 +102,21 @@ public class FileInputOutput {
 		writer.flush();
 		writer.close();
 	}
-	
+
 	/**
 	 * 
 	 * @return time on server in seconds
-	 * @throws IOException 
+	 * @throws IOException
 	 */
-	public long readTimeOnServer(String uID) throws IOException{
+	public long readTimeOnServer(String uID) throws IOException {
 		List<String> allLines;
 		File file = new File("TimeOnServer/PeoplesTimesOnTheServer.txt");
 		Path path = Paths.get(file.getAbsolutePath());
-		
-		if(file.exists()){
+
+		if (file.exists()) {
 			allLines = Files.readAllLines(path);
-			
-			for(int i = 0; i < allLines.size(); i++){
+
+			for (int i = 0; i < allLines.size(); i++) {
 				if (allLines.get(i).startsWith(uID)) {
 					String[] test = allLines.get(i).split(" ");
 					long timeOnThisServer = Long.parseLong(test[1]);
@@ -124,13 +126,12 @@ public class FileInputOutput {
 		}
 		return -1;
 	}
-	
-	
+
 	/*
 	 * Add json t a text file that is
 	 */
 	public void writeServerLog(JSONObject json) throws IOException {
-		File directory = new File("log");
+		File directory = new File(DefinedStrings.logFolderName.getValue());
 		if (!directory.exists()) {
 			directory.mkdir();
 		}
@@ -139,7 +140,7 @@ public class FileInputOutput {
 		LocalDateTime now = LocalDateTime.now();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		String fileName = now.format(formatter);
-		fileName = "log/" + fileName + ".txt";
+		fileName = DefinedStrings.logFolderName.getValue() + "/" + fileName + ".txt";
 
 		File file = new File(fileName.toString());
 		if (!file.exists()) {
@@ -175,5 +176,34 @@ public class FileInputOutput {
 		//
 		// e.printStackTrace();
 		// }
+	}
+
+	// TODO HANDLE IO EXCEPTION !!!!!!!
+
+	public ArrayList<JSONObject> getHistoryFromLocalDateTime(LocalDateTime localDateTime) throws IOException {
+		String fileName = localDateTime.toString().split("T")[0];
+		fileName = fileName + ".txt";
+
+		String folderName = DefinedStrings.logFolderName.getValue();
+		File file = new File(folderName + "/" + fileName);
+		Path path = Paths.get(file.getAbsolutePath());
+		ArrayList<JSONObject> allEventsAsJSON = new ArrayList<>(100);
+		JSONParser parser = new JSONParser();
+
+		try {
+			List<String> allEvents = Files.readAllLines(path);
+			for (int i = 0; i < allEvents.size(); i++) {
+				try {
+					allEventsAsJSON.add((JSONObject) parser.parse(allEvents.get(i).trim()));
+				} catch (ParseException e) {
+					System.out.println("ERROR - parsing written jsons. log file has to be manipulated or corrupted");
+					e.printStackTrace();
+				}
+			}
+		} catch (NoSuchFileException e) {
+			System.out.println("Selected a date from which no data was found");
+		}
+
+		return allEventsAsJSON;
 	}
 }

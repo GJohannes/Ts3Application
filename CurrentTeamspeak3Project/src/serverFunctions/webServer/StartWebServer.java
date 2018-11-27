@@ -123,6 +123,11 @@ public class StartWebServer implements Runnable {
 		ServletHolder updatePrivateChatBoxesServletHolder = new ServletHolder();
 		updatePrivateChatBoxesServletHolder.setServlet(updatePrivateChatBoxesServlet);
 		servletContextHandler.addServlet(updatePrivateChatBoxesServletHolder, "/updatePrivateChatBoxes");
+		
+		HistoryData historyData = new HistoryData();
+		ServletHolder historyDataHolder = new ServletHolder();
+		historyDataHolder.setServlet(historyData);
+		servletContextHandler.addServlet(historyDataHolder, "/historyData");
 
 		// Default Servlet (always last, always named "default")
 		ServletHolder holderDefault = new ServletHolder("default", DefaultServlet.class);

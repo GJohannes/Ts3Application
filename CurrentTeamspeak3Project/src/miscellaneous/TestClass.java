@@ -1,19 +1,26 @@
 package miscellaneous;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
+
 public class TestClass {
 
 	public void test() {
-		Number number = Math.random() * 1000;
-		int i = number.intValue();
-		while(true){
-			System.out.println(i);
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		
+		
+		FileInputOutput inOut = new FileInputOutput();
+		Date date = new Date();
+		LocalDateTime localDateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+		
+		try {
+			inOut.getHistoryFromLocalDateTime(localDateTime);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
 	}
 	
 }

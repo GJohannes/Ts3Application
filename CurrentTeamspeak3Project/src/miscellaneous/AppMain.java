@@ -15,6 +15,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
+import javax.servlet.ServletException;
+
 import org.json.simple.parser.ParseException;
 
 import com.github.theholywaffle.teamspeak3.TS3Api;
@@ -22,6 +24,8 @@ import com.github.theholywaffle.teamspeak3.TS3Config;
 import com.github.theholywaffle.teamspeak3.TS3Query;
 import com.github.theholywaffle.teamspeak3.api.event.ClientJoinEvent;
 import com.github.theholywaffle.teamspeak3.api.event.TS3EventAdapter;
+
+import customFxmlElements.IPv4IPv6Validator;
 
 import java.util.logging.Level;
 
@@ -39,6 +43,7 @@ import login.LoginController;
 import login.Ts3Client;
 import serverFunctions.riotApi.RiotApiInterface;
 import serverFunctions.riotApi.RiotApiNotification;
+import serverFunctions.webServer.HistoryData;
 import serverFunctions.webServer.StartWebServer;
 
 public class AppMain extends Application {
@@ -62,11 +67,19 @@ public class AppMain extends Application {
 	}
 
 	public static void main(String[] args) throws IOException, ParseException {
-		//launch(args);
+		launch(args);	
 
 		
-//		
-//		boolean test = true;
+		HistoryData historyData = new HistoryData();
+		try {
+			historyData.doPost(null, null);
+		} catch (ServletException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		System.exit(0);
+		
+		
 //		
 //		System.out.println("Vlc Opening!");
 //        Runtime runTime = Runtime.getRuntime();
@@ -80,21 +93,13 @@ public class AppMain extends Application {
 //		Process wasd2 = new ProcessBuilder("C:\\Program Files\\Mozilla Firefox\\firefox.exe").start();
 //		
 //		
-//		
-//		
-//		while(test) {
-//			if(!test) {
-//				return;
-//			}
-//		}
-//		
-		
-		
-		ExtendedTS3Config config = new ExtendedTS3Config("127.0.0.1");
+
+		ExtendedTS3Config config = new ExtendedTS3Config("[::1]");
 		ExtendedTS3Query query = new ExtendedTS3Query(config);
 		ExtendedTS3Api api = new ExtendedTS3Api(query);
 
-		config.setHost("127.0.0.1");
+//		config.setHost("127.0.0.1");
+		config.setHost("[::1]");
 		config.setDebugLevel(Level.ALL);
 
 		// throws exception if no connection could be established
