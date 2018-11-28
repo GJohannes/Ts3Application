@@ -26,7 +26,7 @@ public class UserLoggedInEntity {
 		this.timeUserJoinedTheServer = timeUserJoinedTheServer;
 	}
 
-	public void logUser(LoggedServerEvents event) {
+	public void logUser(LoggedServerEvents event, int numberOfPeopleOnServer) {
 		LocalDateTime now = LocalDateTime.now();
 		JSONObject json = new JSONObject();
 
@@ -34,6 +34,7 @@ public class UserLoggedInEntity {
 		json.put("LocalDateTime ", now.toString());
 		json.put("Nickname", this.nickname);
 		json.put("UniqueId", this.uId);
+		json.put("numberOfPeopleOnServer", numberOfPeopleOnServer);
 
 		FileInputOutput inOut = new FileInputOutput();
 		try {

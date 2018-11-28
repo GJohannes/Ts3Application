@@ -29,7 +29,7 @@ public class HistoryData extends HttpServlet {
 		
 		FileInputOutput inOut = new FileInputOutput();
 		allEventsOfOneDay = new JSONArray();
-		int numberOfPeopleCounter = 0;
+
 		ArrayList<JSONObject> allEvents = inOut.getHistoryFromLocalDateTime(requestedDate);
 
 		JSONArray legendGraph = new JSONArray();
@@ -42,15 +42,12 @@ public class HistoryData extends HttpServlet {
 			long milis = date.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
 
 			String event = (String) allEvents.get(i).get("Event");
-			if (event.equals(LoggedServerEvents.STARTED_LOG.toString()) || event.equals(LoggedServerEvents.JOIN_SERVER.toString())) {
-				numberOfPeopleCounter++;
-			} else {
-				numberOfPeopleCounter--;
-			}
 
+			long numberOfpeoleOnServer = (long) allEvents.get(i).get("numberOfPeopleOnServer");
+			
 			JSONArray eventStamp = new JSONArray();
 			eventStamp.add(milis);
-			eventStamp.add(numberOfPeopleCounter);
+			eventStamp.add(numberOfpeoleOnServer);
 			allEventsOfOneDay.add(eventStamp);
 		}
 

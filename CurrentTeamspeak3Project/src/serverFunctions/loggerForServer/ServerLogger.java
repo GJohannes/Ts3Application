@@ -26,14 +26,15 @@ public class ServerLogger {
 		this.api = api;
 		ArrayList<Client> allClientsWhileStartingtoLogg = new ArrayList<Client>();
 		allClientsWhileStartingtoLogg = (ArrayList<Client>) api.getClients();
-
+		int numberOfPeopleOnTheServer = allClientsWhileStartingtoLogg.size();
+		
 		for (int i = 0; i < allClientsWhileStartingtoLogg.size(); i++) {
 			UserLoggedInEntity userAlreadyOnline = new UserLoggedInEntity();
 
 			userAlreadyOnline.setId(allClientsWhileStartingtoLogg.get(i).getId());
 			userAlreadyOnline.setNickname(allClientsWhileStartingtoLogg.get(i).getNickname());
 			userAlreadyOnline.setuId(allClientsWhileStartingtoLogg.get(i).getUniqueIdentifier());
-			userAlreadyOnline.logUser(LoggedServerEvents.STARTED_LOG);
+			userAlreadyOnline.logUser(LoggedServerEvents.STARTED_LOG, numberOfPeopleOnTheServer);
 			userAlreadyOnline.setTimeUserJoinedTheServer(LocalDateTime.now());
 
 			usersLoggedIn.add(userAlreadyOnline);
@@ -73,7 +74,7 @@ public class ServerLogger {
 				newUser.setuId(e.getUniqueClientIdentifier());
 				newUser.setTimeUserJoinedTheServer(LocalDateTime.now());
 
-				newUser.logUser(LoggedServerEvents.JOIN_SERVER);
+				newUser.logUser(LoggedServerEvents.JOIN_SERVER, api.getClients().size());
 
 				usersLoggedIn.add(newUser);
 			}
@@ -90,7 +91,7 @@ public class ServerLogger {
 						LogTimeOnServer logTimeOnServer = new LogTimeOnServer();
 						logTimeOnServer.updateAbsoluteTimeOnServer(usersLoggedIn.get(i).getTimeUserJoinedTheServer(),
 								usersLoggedIn.get(i).getuId());
-						usersLoggedIn.get(i).logUser(LoggedServerEvents.LEFT_SERVER);
+						usersLoggedIn.get(i).logUser(LoggedServerEvents.LEFT_SERVER, api.getClients().size());
 
 						usersLoggedIn.remove(i);
 						break;
