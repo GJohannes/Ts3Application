@@ -120,7 +120,7 @@ public class LoginController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		FileInputOutput inOut = new FileInputOutput();
+		FileInputOutput inOut = FileInputOutput.getInstance();
 		JSONObject json = new JSONObject();
 		try {
 			json = inOut.readFile("LoginData");
@@ -147,7 +147,7 @@ public class LoginController implements Initializable {
 	}
 
 	public void saveLogin(ActionEvent e) {
-		FileInputOutput inOut = new FileInputOutput();
+		FileInputOutput inOut = FileInputOutput.getInstance();
 		JSONObject json = new JSONObject();
 		json.put("userName", userNameTextField.getText().toString());
 		json.put("serverPort", serverPortTextField.getText().toString());

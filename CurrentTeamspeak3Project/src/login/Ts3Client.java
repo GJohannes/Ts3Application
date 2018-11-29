@@ -13,7 +13,7 @@ public class Ts3Client {
 		parts[0] = parts[0] +":\""; 
 		parts[1] = parts[1] + "\"";
 		String execString = parts[0] + parts[1];
-		FileInputOutput writer = new FileInputOutput();
+		FileInputOutput writer = FileInputOutput.getInstance();
 		
 		writer.wirteTs3ClientBatch(execString,filename);
 		

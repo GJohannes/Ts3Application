@@ -10,7 +10,7 @@ public class LogTimeOnServer {
 
 	
 	public void updateAbsoluteTimeOnServer(LocalDateTime timeUserJoinedServer, String uID){
-		FileInputOutput inOut = new FileInputOutput();
+		FileInputOutput inOut = FileInputOutput.getInstance();
 		
 		long stayedOnServer = calculateTimeDifference(timeUserJoinedServer, LocalDateTime.now());
 		

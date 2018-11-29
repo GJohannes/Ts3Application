@@ -36,7 +36,7 @@ public class UserLoggedInEntity {
 		json.put("UniqueId", this.uId);
 		json.put("numberOfPeopleOnServer", numberOfPeopleOnServer);
 
-		FileInputOutput inOut = new FileInputOutput();
+		FileInputOutput inOut = FileInputOutput.getInstance();
 		try {
 			Files.createDirectories(Paths.get("log"));
 			inOut.writeServerLog(json);

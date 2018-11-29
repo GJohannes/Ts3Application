@@ -103,7 +103,7 @@ public class ServerLogger {
 	}
 	
 	private String getWelcomeMessage(ClientJoinEvent e){
-		FileInputOutput inOut = new FileInputOutput();
+		FileInputOutput inOut = FileInputOutput.getInstance();
 		try {
 			long timeOnServer = inOut.readTimeOnServer(e.getUniqueClientIdentifier());
 			if (timeOnServer == -1) {

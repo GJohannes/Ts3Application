@@ -14,17 +14,37 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
+
 import java.util.List;
 
 import org.json.simple.*;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import javafx.print.JobSettings;
 
+/**
+ * This class is used for all Hard Drive access of the application.
+ * Each methdo that can be accessd by multiple threads is synchronized to prevent lost updates from happening 
+ * 
+ * 
+ * @author Johannes
+ *
+ */
 public class FileInputOutput {
 
+	 private static FileInputOutput instance = null;
+	
+	private FileInputOutput() {
+		
+	}
+	
+	public static FileInputOutput getInstance() {
+		if(instance == null) {
+			instance = new FileInputOutput();			
+		}
+		return instance;
+	}
+	
 	public JSONObject readFile(String filename) throws IOException, ParseException {
 		JSONParser parser = new JSONParser();
 		InputStreamReader read = new FileReader(filename);
@@ -56,7 +76,7 @@ public class FileInputOutput {
 	}
 
 	// uId of user who left + the time on the server in seconds
-	public void updateStayedOnServer(String uID, long additionalStayedOnServerTime) throws IOException {
+	public synchronized void updateStayedOnServer(String uID, long additionalStayedOnServerTime) throws IOException {
 		List<String> allLines;
 		// directory
 		File directory = new File("TimeOnServer");
@@ -109,7 +129,7 @@ public class FileInputOutput {
 	 * @return time on server in seconds
 	 * @throws IOException
 	 */
-	public long readTimeOnServer(String uID) throws IOException {
+	public synchronized long readTimeOnServer(String uID) throws IOException {
 		List<String> allLines;
 		File file = new File("TimeOnServer/PeoplesTimesOnTheServer.txt");
 		Path path = Paths.get(file.getAbsolutePath());
@@ -129,38 +149,40 @@ public class FileInputOutput {
 	}
 
 	/*
-	 * Add json t a text file that is
+	 * This method can be invoked from multiple threads and therefore has to be 
+	 * synchronized since a lost update for the log files is possible and is suspected for the past (29.11.2018)
 	 */
-	public void writeServerLog(JSONObject json) throws IOException {
-		File directory = new File(DefinedStrings.logFolderName.getValue());
-		if (!directory.exists()) {
-			directory.mkdir();
-		}
+	public synchronized void writeServerLog(JSONObject json) throws IOException {
+			File directory = new File(DefinedStrings.logFolderName.getValue());
+			if (!directory.exists()) {
+				directory.mkdir();
+			}
 
-		List<String> allLines;
-		LocalDateTime now = LocalDateTime.now();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		String fileName = now.format(formatter);
-		fileName = DefinedStrings.logFolderName.getValue() + "/" + fileName + ".txt";
+			List<String> allLines;
+			LocalDateTime now = LocalDateTime.now();
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			String fileName = now.format(formatter);
+			fileName = DefinedStrings.logFolderName.getValue() + "/" + fileName + ".txt";
 
-		File file = new File(fileName.toString());
-		if (!file.exists()) {
-			file.createNewFile();
-		}
-		Path path = Paths.get(file.getAbsolutePath());
-		allLines = Files.readAllLines(path);
+			File file = new File(fileName.toString());
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			Path path = Paths.get(file.getAbsolutePath());
+			allLines = Files.readAllLines(path);
 
-		FileWriter fileWriter = new FileWriter(file);
-		BufferedWriter writer = new BufferedWriter(fileWriter);
+			FileWriter fileWriter = new FileWriter(file);
+			BufferedWriter writer = new BufferedWriter(fileWriter);
 
-		for (int i = 0; i < allLines.size(); i++) {
-			writer.write(allLines.get(i));
-			writer.newLine();
-		}
+			for (int i = 0; i < allLines.size(); i++) {
+				writer.write(allLines.get(i));
+				writer.newLine();
+			}
 
-		writer.write(json.toJSONString());
-		writer.flush();
-		writer.close();
+			writer.write(json.toJSONString());
+			writer.flush();
+			writer.close();
+
 
 		// code if json date has to be read and difference calculated
 		// LocalDateTime now = LocalDateTime.now();
@@ -179,9 +201,7 @@ public class FileInputOutput {
 		// }
 	}
 
-	// TODO HANDLE IO EXCEPTION !!!!!!!
-
-	public ArrayList<JSONObject> getHistoryFromLocalDateTime(LocalDateTime localDateTime) throws IOException {
+	public synchronized ArrayList<JSONObject> getHistoryFromLocalDateTime(LocalDateTime localDateTime) throws IOException {
 		String fileName = localDateTime.toString().split("T")[0];
 		fileName = fileName + ".txt";
 

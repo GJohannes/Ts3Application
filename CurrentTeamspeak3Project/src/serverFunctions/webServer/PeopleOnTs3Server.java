@@ -143,7 +143,6 @@ public class PeopleOnTs3Server extends HttpServlet {
 				eventStamp.add(peopleOnTS3ServerCounter);
 				jsonArrayOfAllEventStamps.add(eventStamp);
 			}
-
 		};
 		return eventsForLoggingNumberOfPeopleOnTheServer;
 	}

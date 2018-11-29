@@ -94,7 +94,7 @@ public class MainWindowController implements Initializable{
     
     @FXML
     private void startStopMusikOnMove(ActionEvent event)  {
-    	FileInputOutput writerReaderObject = new FileInputOutput();
+    	FileInputOutput writerReaderObject = FileInputOutput.getInstance();
     	MusicOnMove musikMove = new MusicOnMove();
     	
     	if(musicOnMoveButton.isNowActive()) {
@@ -129,7 +129,7 @@ public class MainWindowController implements Initializable{
 		JSONObject output = new JSONObject();
 		output.put("audioFileName", audioFileNameTextField.getText().toString());
 		output.put("audioLenght", audioFileLenghtTextField.getText().toString());
-		FileInputOutput inOut = new FileInputOutput();
+		FileInputOutput inOut = FileInputOutput.getInstance();
 		try {
 			inOut.writeFile(output, "MainData");
 		} catch (IOException e) {
@@ -153,7 +153,7 @@ public class MainWindowController implements Initializable{
     
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		FileInputOutput inOut = new FileInputOutput();
+		FileInputOutput inOut = FileInputOutput.getInstance();
 		JSONObject json = new JSONObject();
 		musicOnMoveButton.setActiveText("Active -- Click to Deactivate");
 		musicOnMoveButton.setDeActiveText("Currently Deactive -- Click To Activate");

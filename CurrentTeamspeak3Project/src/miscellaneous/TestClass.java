@@ -10,7 +10,7 @@ public class TestClass {
 	public void test() {
 		
 		
-		FileInputOutput inOut = new FileInputOutput();
+		FileInputOutput inOut = FileInputOutput.getInstance();
 		Date date = new Date();
 		LocalDateTime localDateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 		
