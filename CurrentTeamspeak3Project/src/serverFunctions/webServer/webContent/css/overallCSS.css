@@ -1,7 +1,6 @@
 /* Button
 https://www.w3schools.com/css/css3_buttons.asp
 */
-
 .buttonGreenStandart {
 	display: inline-block;
 	padding: 15px 25px;
@@ -38,46 +37,66 @@ https://www.w3schools.com/css/css3_buttons.asp
 https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_two_columns_responsive
 */
 .column {
-    float: left;
-    width: 50%;
-    padding: 10px;
+	float: left;
+	width: 50%;
+	padding: 10px;
 }
 
 .column40 {
-    float: left;
-    width: 40%;
-    padding: 10px;
+	float: left;
+	width: 40%;
+	padding: 10px;
+}
+
+.column20 {
+	float: left;
+	width: 20%;
+	padding: 10px;
+}
+
+.column80 {
+	float: left;
+	width: 80%;
+	padding: 10px;
 }
 
 .column60 {
-    float: left;
-    width: 60%;
-    padding: 10px;
+	float: left;
+	width: 60%;
+	padding: 10px;
 }
 
 /* Clearfix (clear floats) */
 .row::after {
-    content: "";
-    display: table;
-    clear: both;
+	padding: 10px;
+	content: "";
+	display: table;
+	clear: both;
 }
 
-
 /* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
-@media screen and (max-width: 600px) {
-    .column {
-        width: 100%;
-    }
+@media screen and (max-width: 1200px) {
+	.column20 {
+		width: 100%;
+	}
+	.column40 {
+		width: 100%;
+	}
+	.column60 {
+		width: 100%;
+	}
+	.column80 {
+		width: 100%;
+	}
 }
 
 * {
-    box-sizing: border-box;
+	box-sizing: border-box;
 }
 
-
 /* Background Style*/
-body  {
-	background-image: url("../images/bgUniverse.jpg");    
+body {
+	background-image: url("../images/bgUniverse.jpg");
 }
 
 .divBackgroundGrid {
@@ -86,7 +105,66 @@ body  {
 }
 
 /* Div Font*/
+.divFont {
+	font-size: 2vw;
+}
 
-.divFont{
-	font-size: 150%;
+.inputDate {
+	height: 100px;
+	margin: 0 auto;
+	width: 100%;
+	font-family: arial, sans-serif;
+	font-size: 5vw;
+	font-weight: bold;
+	text-transform: uppercase;
+	background-color: #eeeeee;
+	outline: none;
+	border: 0;
+	border-radius: 3px;
+	padding: 0 3px;
+	&::
+	-webkit-datetime-edit-month-field
+	{
+	color
+	:
+	black;
+}
+
+&
+::-webkit-datetime-edit-day-field {
+	color: black;
+}
+
+&
+::-webkit-datetime-edit-year-field {
+	color: black;
+}
+
+&
+::-webkit-clear-button {
+	font-size: 0px;
+	height: 0px;
+	right: 0px;
+	margin-right: 0px;
+}
+
+&
+::-webkit-inner-spin-button {
+	height: 0px;
+	width: 200px;
+	background-color: #aaaaaa;
+	margin-right: 20px;
+}
+
+&
+::-webkit-calendar-picker-indicator {
+	font-size: 32px; &: hover { background-color : lighten( #000000, 40%);
+	color: darken(#000000, 10%);
+	cursor: pointer;
+}
+
+&
+:active {
+	color: blue;
+}
 }

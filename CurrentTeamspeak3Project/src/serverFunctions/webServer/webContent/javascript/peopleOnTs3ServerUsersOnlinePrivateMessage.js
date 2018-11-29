@@ -32,7 +32,7 @@
 		var element = document.getElementById("peopleOnServerDisplay");
 		
 		for(i = 0; i < returnData.allClientNicknames.length; i++){			
-			var paragraph = document.createElement("p");
+			var paragraph = document.createElement("div");
 			var node = document.createTextNode(returnData.allClientNicknames[i]);
 			paragraph.appendChild(node);
 			element.appendChild(paragraph);

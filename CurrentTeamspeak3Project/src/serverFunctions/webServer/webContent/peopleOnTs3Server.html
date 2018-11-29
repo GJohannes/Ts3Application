@@ -26,7 +26,7 @@ body {
 
 .headDiv {
 	margin: auto;
-	width: 60%;
+	width: 100%;
 	text-align: center;
 }
 </style>
@@ -44,7 +44,22 @@ body {
 				</div>
 			</div>
 			<div id="messagesDiv" class="row">
-				<div class="column40" style="background-color: #dddd;">
+				<div class="column80" style="background-color: #dddd;">
+					<div class="row">
+						<div>
+							<p>
+							<div>
+								<input class="inputDate" type="date" id="datepicker">
+							</div>
+							Date: (Data is only existing in ServerLogger was active at the given day)
+							</p>
+						</div>
+						<div>
+							<div id="curve_chart" align="center">
+								<img alt="Teamspeak Icon" src="images/loading3.gif">
+							</div>
+						</div>
+					</div>
 					<div style="width: 100%;">
 						<button onclick="sendServerMessage()" style="width: 100%;">Send Message to the TS3Server</button>
 					</div>
@@ -56,24 +71,16 @@ body {
 						Password: <input type="password" id="passwordForMessageToServerString" value="enter password" style="width: 100%;">
 					</div>
 				</div>
-				<div class="column60" style="background-color: #bbb;">
+				<div class="column20" style="background-color: #bbb;">
 					<div id="containerWithPersonaleMessageButtons"></div>
 				</div>
 			</div>
-			<div>
-				<p>
-					Date: <input type="date" id="datepicker"> (Data is only existing in ServerLogger was active at the given day)
-				</p>
-			</div>
-			<div>
-				<div id="curve_chart" align="center">
-					<img alt="Teamspeak Icon" src="images/loading3.gif">
-				</div>
-			</div>
+
 
 			<div class="divCenter" align="center">
 				<a href="Impressum"> Impressum </a>
 			</div>
+			<br><br><br><br><br><br><br><br><br>
 		</div>
 	</div>
 </body>
@@ -82,7 +89,7 @@ body {
 <script src="javascript/peopleOnTs3ServerUsersOnlinePrivateMessage.js"></script>
 <script type="text/javascript">
 	var booleanCheck = false;
-	
+
 	google.charts.load('current', {
 		'packages' : [ 'corechart' ]
 	});
@@ -96,13 +103,13 @@ body {
 		refreshLineChart();
 		$('#datepicker').val(currentDate());
 	})
-	
-	function currentDate(){
+
+	function currentDate() {
 		var now = new Date();
-	    var day = ("0" + now.getDate()).slice(-2);
-	    var month = ("0" + (now.getMonth() + 1)).slice(-2);
-	    var today = now.getFullYear()+"-"+(month)+"-"+(day);
-	    return today;
-	} 
+		var day = ("0" + now.getDate()).slice(-2);
+		var month = ("0" + (now.getMonth() + 1)).slice(-2);
+		var today = now.getFullYear() + "-" + (month) + "-" + (day);
+		return today;
+	}
 </script>
 </html>
