@@ -9,7 +9,7 @@
 .chart {
 	width: 100%;
 	min-height: 450px;
-	}
+}
 
 body {
 	background-color: #000022;
@@ -44,15 +44,16 @@ body {
 				</div>
 			</div>
 			<div id="messagesDiv" class="row">
-				<div class="column80" style="background-color: #dddd;">
+				<div class="column80">
 					<div class="row">
 						<div>
-							<p>
 							<div>
-								<input class="inputDate" type="date" id="datepicker">
+								<div>
+									<input class="inputDate" type="date" id="datepicker">
+								</div>
+								<div style="width: 100%; padding-top: 10px; padding-bottom: 10px; color: ffffff;">(Data is only existing in ServerLogger was active at the given
+									day)</div>
 							</div>
-							Date: (Data is only existing in ServerLogger was active at the given day)
-							</p>
 						</div>
 						<div>
 							<div id="curve_chart" align="center">
@@ -60,18 +61,20 @@ body {
 							</div>
 						</div>
 					</div>
-					<div style="width: 100%;">
-						<button onclick="sendServerMessage()" style="width: 100%;">Send Message to the TS3Server</button>
-					</div>
-					<div>
-						Message to Server:
-						<textarea id="messageToServerString" style="width: 100%; resize: none;" rows="4">Insert Server Message</textarea>
-					</div>
-					<div>
-						Password: <input type="password" id="passwordForMessageToServerString" value="enter password" style="width: 100%;">
+					<div style="width: 100%; background-color: #ffffff;">
+						<div style="width: 100%;">
+							<button onclick="sendServerMessage()" style="width: 100%;">Send Message to the TS3Server</button>
+						</div>
+						<div>
+							Message to Server:
+							<textarea id="messageToServerString" style="width: 100%; resize: none;" rows="4">Insert Server Message</textarea>
+						</div>
+						<div>
+							Password: <input type="password" id="passwordForMessageToServerString" value="enter password" style="width: 100%;">
+						</div>
 					</div>
 				</div>
-				<div class="column20" >
+				<div class="column20">
 					<div id="containerWithPersonaleMessageButtons"></div>
 				</div>
 			</div>
@@ -80,7 +83,7 @@ body {
 			<div class="divCenter" align="center">
 				<a href="Impressum"> Impressum </a>
 			</div>
-			<br><br><br><br><br><br><br><br><br>
+			<br> <br> <br> <br> <br> <br> <br> <br> <br>
 		</div>
 	</div>
 </body>

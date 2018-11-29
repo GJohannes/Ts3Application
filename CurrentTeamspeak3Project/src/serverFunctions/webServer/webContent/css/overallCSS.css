@@ -110,11 +110,10 @@ body {
 }
 
 .dot {
-	font-size: 3vw;
-    background-color: #bbbaaa;
-    border-radius: 50%;
-    display: inline-block;
-    padding: 30px;
+	font-size: 2vw;
+	border-radius: 50%;
+	display: inline-block;
+	padding: 30px;
 }
 
 .inputDate {
@@ -125,53 +124,43 @@ body {
 	font-size: 5vw;
 	font-weight: bold;
 	text-transform: uppercase;
-	background-color: #eeeeee;
 	outline: none;
-	border: 0;
-	border-radius: 3px;
+	border: 0px;
+	border-radius: 3333px;
 	padding: 0 3px;
-	&::
-	-webkit-datetime-edit-month-field
-	{
-	color
-	:
-	black;
 }
 
-&
+::-webkit-datetime-edit-month-field {
+	color: black;
+}
+
 ::-webkit-datetime-edit-day-field {
 	color: black;
 }
 
-&
 ::-webkit-datetime-edit-year-field {
 	color: black;
 }
 
-&
 ::-webkit-clear-button {
-	font-size: 0px;
-	height: 0px;
-	right: 0px;
-	margin-right: 0px;
+	visibility: hidden;
 }
 
-&
 ::-webkit-inner-spin-button {
 	height: 0px;
+	visibility: hidden;
 	width: 200px;
 	background-color: #aaaaaa;
 	margin-right: 20px;
 }
 
-&
 ::-webkit-calendar-picker-indicator {
-	font-size: 32px; &: hover { background-color : lighten( #000000, 40%);
+	font-size: 5vw; &: hover { background-color : lighten( #000000, 40%);
 	color: darken(#000000, 10%);
 	cursor: pointer;
+	margin-right: 20px;
 }
 
-&
 :active {
 	color: blue;
 }
