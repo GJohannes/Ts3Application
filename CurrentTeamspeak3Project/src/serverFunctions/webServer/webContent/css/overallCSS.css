@@ -13,7 +13,7 @@ https://www.w3schools.com/css/css3_buttons.asp
 	background-color: #4CAF50;
 	border: none;
 	border-radius: 15px;
-	box-shadow: 0 9px #999;
+	/*	box-shadow: 0 9px #999;*/
 	margin: 10px 10px 10px 10px;
 }
 
@@ -106,7 +106,15 @@ body {
 
 /* Div Font*/
 .divFont {
-	font-size: 2vw;
+	font-size: 1.5vw;
+}
+
+.dot {
+	font-size: 3vw;
+    background-color: #bbbaaa;
+    border-radius: 50%;
+    display: inline-block;
+    padding: 30px;
 }
 
 .inputDate {

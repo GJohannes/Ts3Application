@@ -32,10 +32,11 @@
 		var element = document.getElementById("peopleOnServerDisplay");
 		
 		for(i = 0; i < returnData.allClientNicknames.length; i++){			
-			var paragraph = document.createElement("div");
+			var span = document.createElement("span");
 			var node = document.createTextNode(returnData.allClientNicknames[i]);
-			paragraph.appendChild(node);
-			element.appendChild(paragraph);
+			span.appendChild(node);
+			span.className = "dot";
+			element.appendChild(span);
 		}
 	}
 	
