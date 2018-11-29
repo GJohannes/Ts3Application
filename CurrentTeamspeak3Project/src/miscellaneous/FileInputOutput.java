@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
@@ -191,7 +192,7 @@ public class FileInputOutput {
 		JSONParser parser = new JSONParser();
 
 		try {
-			List<String> allEvents = Files.readAllLines(path);
+			List<String> allEvents = Files.readAllLines(path, StandardCharsets.ISO_8859_1);
 			for (int i = 0; i < allEvents.size(); i++) {
 				try {
 					allEventsAsJSON.add((JSONObject) parser.parse(allEvents.get(i).trim()));
