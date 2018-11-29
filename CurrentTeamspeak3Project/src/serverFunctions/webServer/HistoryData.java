@@ -25,7 +25,12 @@ public class HistoryData extends HttpServlet {
 	private JSONArray allEventsOfOneDay;
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		LocalDateTime requestedDate = LocalDateTime.ofInstant(Instant.ofEpochMilli(Long.parseLong(request.getParameter("dateInMilis"))), ZoneId.systemDefault());
+		LocalDateTime requestedDate = LocalDateTime.now();
+		try {
+			requestedDate = LocalDateTime.ofInstant(Instant.ofEpochMilli(Long.parseLong(request.getParameter("dateInMilis"))), ZoneId.systemDefault());			
+		} catch (Exception e) {
+			return;
+		}
 		
 		FileInputOutput inOut = FileInputOutput.getInstance();
 		allEventsOfOneDay = new JSONArray();
