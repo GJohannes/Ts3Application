@@ -1,6 +1,5 @@
 <html>
 <script src="javascript/jquery-3.3.1.js"></script>
-<script src="javascript/jquery-ui.js"></script>
 <script src="javascript/loader.js"></script>
 <script type="text/javascript"></script>
 <link rel="stylesheet" type="text/css" href="css/overallCSS.css">
@@ -61,19 +60,18 @@ body {
 					<div id="containerWithPersonaleMessageButtons"></div>
 				</div>
 			</div>
-
 			<div>
-				<div id="curve_chart" class="chart" align="center">
+				<p>
+					Date: <input type="date" id="datepicker"> (Data is only existing in ServerLogger was active at the given day)
+				</p>
+			</div>
+			<div>
+				<div id="curve_chart" align="center">
 					<img alt="Teamspeak Icon" src="images/loading3.gif">
 				</div>
 			</div>
-			<div>
-				<!--  https://jqueryui.com/datepicker/  -->
-				<p>Date: <input type="text" id="datepicker"></p>
-				<div><button onclick="getHistoryData()"> GetHistoryGraph</button></div>
-				<div id="history_chart" class="chart" align="center"></div>
-			</div>
-			<div class="divCenter">
+
+			<div class="divCenter" align="center">
 				<a href="Impressum"> Impressum </a>
 			</div>
 		</div>
@@ -84,21 +82,27 @@ body {
 <script src="javascript/peopleOnTs3ServerUsersOnlinePrivateMessage.js"></script>
 <script type="text/javascript">
 	var booleanCheck = false;
-
+	
 	google.charts.load('current', {
 		'packages' : [ 'corechart' ]
 	});
 	google.charts.setOnLoadCallback(drawChart);
 
 	$(document).ready(function() {
+		document.getElementById('datepicker').value = currentDate();
 		console.log("Document is now ready");
 		getUsersOnlineFromServer();
 		refreshUsersOnline();
 		refreshLineChart();
+		$('#datepicker').val(currentDate());
 	})
-
-	function clicked() {
-		booleanCheck = true;
-	}
+	
+	function currentDate(){
+		var now = new Date();
+	    var day = ("0" + now.getDate()).slice(-2);
+	    var month = ("0" + (now.getMonth() + 1)).slice(-2);
+	    var today = now.getFullYear()+"-"+(month)+"-"+(day);
+	    return today;
+	} 
 </script>
 </html>
