@@ -218,11 +218,11 @@ public class FileInputOutput {
 					allEventsAsJSON.add((JSONObject) parser.parse(allEvents.get(i).trim()));
 				} catch (ParseException e) {
 					System.out.println("ERROR - parsing written jsons. log file has to be manipulated or corrupted");
-					e.printStackTrace();
 				}
 			}
 		} catch (NoSuchFileException e) {
-			System.out.println("Selected a date from which no data was found");
+			//System.out.println("Selected a date from which no data was found");
+			return allEventsAsJSON;
 		}
 
 		return allEventsAsJSON;

@@ -24,10 +24,10 @@ body {
 }
 
 .headDiv {
-	margin: auto;
 	width: 100%;
 	text-align: center;
 	color: white;
+	font-size: 2vw;
 }
 </style>
 </head>
@@ -51,7 +51,7 @@ body {
 								<div>
 									<input class="inputDate" type="date" id="datepicker">
 								</div>
-								<div style="width: 100%; padding-top: 10px; padding-bottom: 10px; color: ffffff;">(Data is only existing in ServerLogger was active at the given
+								<div style="width: 100%; padding-top: 10px; padding-bottom: 10px; color: ffffff;">(Data is only existing if ServerLogger was active at the given
 									day)</div>
 							</div>
 						</div>
@@ -61,16 +61,16 @@ body {
 							</div>
 						</div>
 					</div>
-					<div style="width: 100%; background-color: #ffffff;">
-						<div style="width: 100%;">
-							<button onclick="sendServerMessage()" style="width: 100%;">Send Message to the TS3Server</button>
+					<div style="width: 100%; color: white; border: 3px solid #ffffff; border-radius: 10px;">
+						<div style="width: 90%;" class="divCenter">
+							<button class="buttonGreenStandart" onclick="sendServerMessage()" style="width: 100%;">Send Message to the TS3Server</button>
 						</div>
-						<div>
+						<div style="width: 100%; font-size: 2vw;">
 							Message to Server:
-							<textarea id="messageToServerString" style="width: 100%; resize: none;" rows="4">Insert Server Message</textarea>
+							<textarea id="messageToServerString" style="width: 100%; font-size: 2vw; border-radius: 5px; resize: none;" rows="2">Insert Server Message</textarea>
 						</div>
-						<div>
-							Password: <input type="password" id="passwordForMessageToServerString" value="enter password" style="width: 100%;">
+						<div style="width: 100%; font-size: 2vw; ">
+							Password: <input type="password" id="passwordForMessageToServerString" value="enter password" style="width: 100%; font-size: 2vw; border-radius: 10px; ">
 						</div>
 					</div>
 				</div>

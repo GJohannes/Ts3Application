@@ -6,36 +6,48 @@
 .infoDiv {
 	margin: auto;
 	width: 60%;
-	border: 2px solid #000000;
+	/*border: 2px solid #000000;*/
+	background: rgb(0, 0, 139, 0.1);
 	border-radius: 25px;
 	padding: 10px;
+	color: white;
+	font-size: 2vw;
 	text-align: center;
-	background-color: lightblue;
 }
 
 img {
 	border-radius: 50%;
 	width: 100px;
 	height: 100px;
-	margin: 100px 100px 100px 100px;
+	margin: 100px 80px 100px 80px;
+}
+
+@media screen and (max-width: 1200px) {
+	img {
+		border-radius: 50%;
+		width: 100px;
+		height: 100px;
+		margin: 100px 20px 100px 20px;
+	}
 }
 </style>
 </head>
 <body>
 	<div class="divBackgroundGrid">
-		<div class="infoDiv divFont">
+		<div class="infoDiv">
 			<h1>Ts3 Server Communication</h1>
 			<br>
 			<button class="buttonGreenStandart" onclick="window.location.href='OnlinePeople'">>>>>>>>>>Let`s Go!<<<<<<<<<<</button>
 			<br>
-			<div style="height: 30px;"></div>
+			<div style="height: 30px; opacity: 0.1;"></div>
 			<div>
-				<img alt="Teamspeak Icon" src="images/Teamspeak3Icon.png"> <img alt="Jetty Icon" src="images/jetty_logo.jpg"> <img alt="Teamspeak Icon New"
+				<img alt="Teamspeak Icon" src="images/Teamspeak3Icon.png"> <img alt="Jetty Icon" src="images/jettyIcon.png"> <img alt="Teamspeak Icon New"
 					src="images/TeamspeakNewIcon.jpg">
 			</div>
-			<div class="divCenter">
-				<a href="Impressum"> Impressum </a>
-			</div>
+
+		</div>
+		<div class="divCenter">
+			<a href="Impressum"> Impressum </a>
 		</div>
 	</div>
 </body>
