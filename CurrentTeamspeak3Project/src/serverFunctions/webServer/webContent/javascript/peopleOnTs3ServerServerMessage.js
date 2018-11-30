@@ -13,7 +13,6 @@ function sendServerMessage() {
 				},
 				success : function(data) {
 					var passwordCorrect = data.passwordCorrect;
-					console.log(passwordCorrect);
 					if (passwordCorrect == true) {
 						alert("Succesfully sent Server message");
 					} else {
@@ -27,7 +26,6 @@ function sendServerMessage() {
 }
 
 $("#messageToServerString").focus(function() {
-	console.log("triggered textarea focus")
 	if (this.value === this.defaultValue) {
 		this.value = '';
 	}
