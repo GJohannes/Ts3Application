@@ -28,13 +28,12 @@ import miscellaneous.ExtendedTS3EventAdapter;
 public class PeopleOnTs3Server extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private ExtendedTS3Api api;
-	private int peopleOnTS3ServerCounter;
 	private JSONArray jsonArrayOfAllEventStamps;
 
 	public PeopleOnTs3Server(ExtendedTS3Api api) {
 		super();
 		this.api = api;
-		peopleOnTS3ServerCounter = api.getClients().size();
+		int peopleOnTS3Server = api.getClients().size();
 		this.jsonArrayOfAllEventStamps = new JSONArray();
 		
 		// legend of the graph that is displayed on the webpage
@@ -49,7 +48,7 @@ public class PeopleOnTs3Server extends HttpServlet {
 
 		JSONArray eventStamp = new JSONArray();
 		eventStamp.add(System.currentTimeMillis());
-		eventStamp.add(peopleOnTS3ServerCounter);
+		eventStamp.add(peopleOnTS3Server);
 		jsonArrayOfAllEventStamps.add(eventStamp);
 
 		api.addTS3Listeners(getEventsForLoggingNumberOfPeopleOnTheServer());
@@ -107,6 +106,7 @@ public class PeopleOnTs3Server extends HttpServlet {
 		String password = "1234";
 		JSONObject responseJSON = new JSONObject();
 		if(request.getParameter("password").equals(password)) {
+			System.out.println(request.getParameter("serverMessage"));
 			api.sendServerMessage(request.getParameter("serverMessage"));
 			responseJSON.put("passwordCorrect", true);
 		} else {
@@ -124,23 +124,23 @@ public class PeopleOnTs3Server extends HttpServlet {
 
 			@Override
 			public void onClientJoin(ClientJoinEvent e) {
-				peopleOnTS3ServerCounter++;
+				int peopleOnTS3Server= api.getClients().size();
 				long currentMiliSeconds = System.currentTimeMillis();
 				removeEventStamps(currentMiliSeconds);
 				JSONArray eventStamp = new JSONArray();
 				eventStamp.add(currentMiliSeconds);
-				eventStamp.add(peopleOnTS3ServerCounter);
+				eventStamp.add(peopleOnTS3Server);
 				jsonArrayOfAllEventStamps.add(eventStamp);
 			}
 
 			@Override
 			public void onClientLeave(ClientLeaveEvent e) {
-				peopleOnTS3ServerCounter--;
+				int peopleOnTS3Server = api.getClients().size();
 				long currentMiliSeconds = System.currentTimeMillis();
 				removeEventStamps(currentMiliSeconds);
 				JSONArray eventStamp = new JSONArray();
 				eventStamp.add(currentMiliSeconds);
-				eventStamp.add(peopleOnTS3ServerCounter);
+				eventStamp.add(peopleOnTS3Server);
 				jsonArrayOfAllEventStamps.add(eventStamp);
 			}
 		};
