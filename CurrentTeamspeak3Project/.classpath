@@ -37,5 +37,6 @@
 	<classpathentry kind="lib" path="lib/taglibs-standard-impl-1.2.5.jar"/>
 	<classpathentry kind="lib" path="lib/taglibs-standard-spec-1.2.5.jar"/>
 	<classpathentry kind="lib" path="lib/commons-validator-1.6.jar"/>
+	<classpathentry kind="lib" path="lib/commons-codec-1.11.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

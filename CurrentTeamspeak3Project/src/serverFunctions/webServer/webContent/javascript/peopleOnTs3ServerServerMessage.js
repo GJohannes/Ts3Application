@@ -34,3 +34,21 @@ $("#messageToServerString").focus(function() {
 		this.value = this.defaultValue;
 	}
 });
+
+/*
+ * only accesible throught the console. enter correct characters to get the current password for server messages
+ */
+function calculatePassword(aString) {
+	$
+			.ajax({
+				url : '/Update?method=getPassword',
+				type : 'POST',
+				dataType : 'json',
+				data : {
+					passwordToConvert : aString
+				},
+				success : function(data) {
+					console.log(data);
+				}
+			});
+}

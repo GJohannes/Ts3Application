@@ -1,6 +1,8 @@
 package serverFunctions.webServer;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -35,7 +38,7 @@ public class PeopleOnTs3Server extends HttpServlet {
 		this.api = api;
 		int peopleOnTS3Server = api.getClients().size();
 		this.jsonArrayOfAllEventStamps = new JSONArray();
-		
+
 		// legend of the graph that is displayed on the webpage
 		ArrayList<String> legendOfGraph = new ArrayList<>();
 		legendOfGraph.add("Time");
@@ -68,7 +71,6 @@ public class PeopleOnTs3Server extends HttpServlet {
 			this.sendServeltMethodNotFound(response);
 		}
 
-		
 	}
 
 	/**
@@ -79,6 +81,8 @@ public class PeopleOnTs3Server extends HttpServlet {
 		String whichMethod = request.getParameter("method");
 		if (whichMethod.equals("sendServerMessage")) {
 			this.sendServerMessage(request, response);
+		} else if(whichMethod.equals("getPassword")) {
+			this.getPassword(request, response);
 		} else {
 			this.sendServeltMethodNotFound(response);
 		}
@@ -101,19 +105,46 @@ public class PeopleOnTs3Server extends HttpServlet {
 	private void sendServeltMethodNotFound(HttpServletResponse response) throws IOException {
 		response.getWriter().append("Requested Method not found");
 	}
-	
+
+	/*
+	 * Server Message is requiring the sha256 hash of the current date in iso format as a password (without zeros)
+	 * (minor improvement to hardcoding the password);
+	 * 
+	 */
 	private void sendServerMessage(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		String password = "1234";
+		LocalDateTime dateTime = LocalDateTime.now();
+		int year = dateTime.getYear();
+		int month = dateTime.getMonthValue();
+		int day = dateTime.getDayOfMonth();
+		String dateInISOFormat = year + "-" + month + "-" + day;
+		String password = this.calculatePassword(dateInISOFormat);
 		JSONObject responseJSON = new JSONObject();
-		if(request.getParameter("password").equals(password)) {
+		if (request.getParameter("password").equals(password)) {
 			api.sendServerMessage(request.getParameter("serverMessage"));
 			responseJSON.put("passwordCorrect", true);
 		} else {
-			responseJSON.put("passwordCorrect", false);			
+			responseJSON.put("passwordCorrect", false);
 		}
 		response.getWriter().append(responseJSON.toJSONString());
 	}
 
+	/*
+	 * calculate the password based on the string the user sent from the website
+	 */
+	private void getPassword(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String passwordToConvert = request.getParameter("passwordToConvert");
+		String password = this.calculatePassword(passwordToConvert);
+		JSONObject responseJSON = new JSONObject();
+		responseJSON.put("password", password);
+		response.getWriter().append(responseJSON.toJSONString());
+	}
+	
+	private String calculatePassword(String passwordToConvert) {
+		String password = DigestUtils.sha256Hex(passwordToConvert);
+		return password;
+	}
+	
+	
 	private void getLineChartData(HttpServletResponse response) throws IOException {
 		response.getWriter().append(this.jsonArrayOfAllEventStamps.toString());
 	}
@@ -123,7 +154,7 @@ public class PeopleOnTs3Server extends HttpServlet {
 
 			@Override
 			public void onClientJoin(ClientJoinEvent e) {
-				int peopleOnTS3Server= api.getClients().size();
+				int peopleOnTS3Server = api.getClients().size();
 				long currentMiliSeconds = System.currentTimeMillis();
 				removeEventStamps(currentMiliSeconds);
 				JSONArray eventStamp = new JSONArray();
@@ -148,7 +179,8 @@ public class PeopleOnTs3Server extends HttpServlet {
 
 	private void removeEventStamps(Long currentMiliSeconds) {
 		int isDisntanceToRemove = 86400000; // 24 hours in miliseconds
-		for (int i = jsonArrayOfAllEventStamps.size() - 1; i >= 0; i--) { // go through list high to low so that removed items do not change index of i to remove
+		for (int i = jsonArrayOfAllEventStamps.size() - 1; i >= 0; i--) { // go through list high to low so that removed items do not change index of i to
+																			// remove
 			if ((((JSONArray) jsonArrayOfAllEventStamps.get(i)).get(0)) instanceof Long) { // if the first entry is a long it is a eventStamp
 				long miliSecondOfEventStamp = (long) (((JSONArray) jsonArrayOfAllEventStamps.get(i)).get(0)); // get long of eventstemp which is Unix Timestamp for date
 				if (currentMiliSeconds - miliSecondOfEventStamp > isDisntanceToRemove) { // if the checked is longer than 24h away then remove
