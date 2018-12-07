@@ -36,13 +36,14 @@ Register a Summoner to check every 60 seconds if he won/lost a game. If so it wi
 
 ## Web Server (Since 4.0 Ajax)
 A web server which runs on port 80 (HTTP-default) /  443 (HTTPS-Default). 
-1.The webserver is capable of:
-    1.Sending messages to the server (password protection)
-    1.Sending private messages to each individual that is online on the server
-    1.Showing how many people are on the server in the last 24 hours
-    1.Showing a history of the number of people on the server (only if server - logger is activated)
-    1.Displaying who is on the server at any given times
-    1.Ajax calls to the server
+
+1. The webserver is capable of:
+    1. Sending messages to the server (password protection)
+    1. Sending private messages to each individual that is online on the server
+    1. Showing how many people are on the server in the last 24 hours
+    1. Showing a history of the number of people on the server (only if server - logger is activated)
+    1. Displaying who is on the server at any given times
+    1. Ajax calls to the server
     
 # Client Side
 
