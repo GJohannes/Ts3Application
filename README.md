@@ -11,7 +11,7 @@
 1.0 Rudolf --->> 2.0 Lilith -->> 3.0 Kinzie -->> 4.0 Ajax
 
 1. Ajax
-    -No Music bot changes
+    1. No Music bot changes
 1. Kinzie:
     1. removed bug in which outdated vlc causes error stream to not start audio files
 1. Lilith:
