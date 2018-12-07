@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 
 
 import customFxmlElements.BooleanButton;
+import customFxmlElements.PortTextField;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -33,6 +34,9 @@ public class ServerWindowController implements Initializable {
 	@FXML private BooleanButton webServerButton;
 	@FXML private Button vlcPathFileChooser;
 	@FXML private TextField vlcPathTextField;
+	@FXML private PortTextField httpTextField;
+	@FXML private PortTextField httpsTextField;
+	
 	
 	private ExtendedTS3Api api;
 	private ServerLogger logger;
@@ -75,10 +79,7 @@ public class ServerWindowController implements Initializable {
 			musicBot.startMusikBot(api, this.vlcPathTextField.getText());
 		} else {
 			musicBot.stopMusicBot(api);
-		}
-		
-		
-		
+		}		
 	}
 	
 	@FXML
@@ -106,7 +107,7 @@ public class ServerWindowController implements Initializable {
 	@FXML
 	public void toggleWebServer() {
 		if(webServerButton.isNowActive()) {
-			this.webServerObject = new StartWebServer(api, 8081, 8082);
+			this.webServerObject = new StartWebServer(api, Integer.parseInt(this.httpTextField.getText()), Integer.parseInt(this.httpsTextField.getText()));
 			threadOfWebServer = new Thread(webServerObject);
 			threadOfWebServer.start();
 		} else {
@@ -130,6 +131,8 @@ public class ServerWindowController implements Initializable {
 		webServerButton.setActiveText("WebServer is  online");
 		webServerButton.setDeActiveText("WebServer is offline");
 		this.vlcPathTextField.setText("C:\\Program Files\\VideoLAN\\VLC\\vlc.exe");
+		httpTextField.checkValidity();
+		httpsTextField.checkValidity();
 	}
 
 	public void setApi(ExtendedTS3Api ts3Api) {

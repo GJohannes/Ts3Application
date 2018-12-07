@@ -43,23 +43,37 @@
 				</StackPane>
 			</HBox>
 			<HBox spacing="10" alignment="CENTER">
-				<BooleanButton prefWidth="200" fx:id="serverLoggerButton" onAction="#logging" />
+				<BooleanButton prefWidth="200"
+					fx:id="serverLoggerButton" onAction="#logging" />
 			</HBox>
 			<HBox>
 				<BooleanButton prefWidth="200" fx:id="testButton" />
 			</HBox>
 			<HBox>
-				<BooleanButton fx:id="musikBotButton" prefWidth="200" onAction="#toggleMusikBot" />
-				<TextField fx:id="vlcPathTextField"  prefWidth="200" />
-				<Button text="choose vlc location" fx:id="vlcPathFileChooser" prefWidth="200" onAction="#chooseVlcPathLocation" />
+				<BooleanButton fx:id="musikBotButton" prefWidth="200"
+					onAction="#toggleMusikBot" />
+				<TextField fx:id="vlcPathTextField" prefWidth="200" />
+				<Button text="choose vlc location" fx:id="vlcPathFileChooser"
+					prefWidth="200" onAction="#chooseVlcPathLocation" />
 			</HBox>
-			<HBox >
-				<BooleanButton fx:id="riotApiButton" prefWidth="200" onAction="#toggleRiotApi">
+			<HBox>
+				<BooleanButton fx:id="riotApiButton" prefWidth="200"
+					onAction="#toggleRiotApi">
 				</BooleanButton>
 			</HBox>
-			<HBox >
-				<BooleanButton fx:id="webServerButton" prefWidth="200" onAction="#toggleWebServer">
-				</BooleanButton>
+			<HBox spacing="10">
+				<VBox alignment="CENTER">
+					<BooleanButton fx:id="webServerButton"
+						prefWidth="200" onAction="#toggleWebServer"></BooleanButton>
+				</VBox>
+				<VBox>
+					<Label> Port http</Label>
+					<PortTextField fx:id="httpTextField">80</PortTextField>
+				</VBox>
+				<VBox>
+					<Label> Port https</Label>
+					<PortTextField  fx:id="httpsTextField">443</PortTextField>
+				</VBox>
 			</HBox>
 		</VBox>
 	</StackPane>

@@ -17,6 +17,7 @@ import java.util.logging.SimpleFormatter;
 
 import javax.servlet.ServletException;
 
+import org.apache.commons.validator.routines.InetAddressValidator;
 import org.json.simple.parser.ParseException;
 
 import com.github.theholywaffle.teamspeak3.TS3Api;
@@ -68,19 +69,8 @@ public class AppMain extends Application {
 
 	public static void main(String[] args) throws IOException, ParseException {
 		launch(args);	
-
-		
-		HistoryData historyData = new HistoryData();
-		try {
-			historyData.doPost(null, null);
-		} catch (ServletException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		System.exit(0);
 		
 		
-//		
 //		System.out.println("Vlc Opening!");
 //        Runtime runTime = Runtime.getRuntime();
 //        String []command = {"C:\\Program Files\\VideoLAN\\VLC\\vlc.exe", "C:\\Users\\Johannes\\Desktop\\TeamspeakProject\\Doh.mp3"}; 
@@ -91,8 +81,6 @@ public class AppMain extends Application {
 //		Runtime.getRuntime().exec("C:\\Program Files\\VideoLAN\\VLC\\vlc.exe");
 //		//Process wasd = new ProcessBuilder("C:\\Program Files\\VideoLAN\\VLC\\vlc.exe").start();
 //		Process wasd2 = new ProcessBuilder("C:\\Program Files\\Mozilla Firefox\\firefox.exe").start();
-//		
-//		
 
 		ExtendedTS3Config config = new ExtendedTS3Config("[::1]");
 		ExtendedTS3Query query = new ExtendedTS3Query(config);
