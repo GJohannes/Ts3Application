@@ -6,6 +6,8 @@
 ## Server Log (Since the beginning)
 - Loggs the time for all identities that joined the server. 
 - Creates custom log files for user join/leave on server.
+- (4.0 Ajax) added number of people on Server
+- (4.0 Ajax) time and server events are now stored as Strings
 
 ## MusicBot
 1.0 Rudolf --->> 2.0 Lilith -->> 3.0 Kinzie -->> 4.0 Ajax
@@ -32,7 +34,8 @@
 ## Riot Api (Since 2.1 Lilith)
 Register a Summoner to check every 60 seconds if he won/lost a game. If so it will post the result as a Server message.
 ?help to get the commands
- -- (3.0 Kinzie) bugfix: Case incorrect name on entering the checkup periode no longer results in a always reported lost instead of win/lost
+ - (3.0 Kinzie) bugfix: Case incorrect name on entering the checkup periode no longer results in a always reported lost instead of win/lost
+ - (4.0 Ajax) displaying kda and most damage 
 
 ## Web Server (Since 4.0 Ajax)
 A web server which runs on port 80 (HTTP-default) /  443 (HTTPS-Default). 
