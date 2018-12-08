@@ -6,10 +6,6 @@ var lastCheckedHistoryDate;
 
 $(window).resize(function() {
 	drawChart();
-	if(historyChartData !== undefined){
-		drawHistoryChart();		
-	}
-	
 });
 
 function drawChart() {
@@ -50,6 +46,12 @@ function drawChart() {
 		
 	// case that an older/newer date should be displayed
 	} else {
+		// not sure if needed
+		if (historyChartData === undefined) {
+			return;
+		}
+		
+		
 		for (i = 1; i < historyChartData.length; i++) {
 			historyChartData[i][0] = new Date(historyChartData[i][0]);// make unix time stamp into date
 		}
