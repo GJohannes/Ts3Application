@@ -37,15 +37,19 @@ Register a Summoner to check every 60 seconds if he won/lost a game. If so it wi
  - (3.0 Kinzie) bugfix: Case incorrect name on entering the checkup periode no longer results in a always reported lost instead of win/lost
  - (4.0 Ajax) displaying kda and most damage 
 
-## Web Server (Since 4.0 Ajax)
+## Web Server (Since 3.0 Kinzie)
 A web server which runs on port 80 (HTTP-default) /  443 (HTTPS-Default). 
 
-1. The webserver is capable of:
-    1. Sending messages to the server (password protection)
-    1. Sending private messages to each individual that is online on the server
+1. Ajax:
+    1. Sending messages to the server global chat is now password protected
     1. Showing how many people are on the server in the last 24 hours
     1. Showing a history of the number of people on the server (only if server - logger is activated)
-    1. Displaying who is on the server at any given times
+    1. Visual upgrades for the displayed webpages   
+ 1. Kinzie:
+    1. !BUG! preventing loading the webserver in compiled binary
+    1. Sending messages to the server global chat
+    1. Sending private messages to each individual that is online on the server
+    1. Displaying who is on the server at current time
     1. Ajax calls to the server
     
 # Client Side
