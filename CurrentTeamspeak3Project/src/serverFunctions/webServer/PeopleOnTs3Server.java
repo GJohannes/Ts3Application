@@ -119,7 +119,7 @@ public class PeopleOnTs3Server extends HttpServlet {
 		String dateInISOFormat = year + "-" + month + "-" + day;
 		String password = this.calculatePassword(dateInISOFormat);
 		JSONObject responseJSON = new JSONObject();
-		if (request.getParameter("password").equals(password)) {
+		if (request.getParameter("password").equalsIgnoreCase(password)) {
 			api.sendServerMessage(request.getParameter("serverMessage"));
 			responseJSON.put("passwordCorrect", true);
 		} else {
