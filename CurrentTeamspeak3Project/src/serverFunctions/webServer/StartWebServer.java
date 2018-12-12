@@ -41,7 +41,7 @@ public class StartWebServer implements Runnable {
 	private int port;
 	private int sslPort;
 	private Server server;
-	private HashMap<String, ArrayList<String>> allMessages = new HashMap<>();
+	private HashMap<String, ArrayList<SingleMessage>> allMessages = new HashMap<>();
 
 	public StartWebServer(ExtendedTS3Api api, int port, int sslPort) {
 		this.api = api;
@@ -245,16 +245,16 @@ public class StartWebServer implements Runnable {
 				if (!(messageToBotEvent.getMessage().startsWith("!")
 						|| messageToBotEvent.getMessage().startsWith("?"))) {
 					synchronized (allMessages) {
-						ArrayList<String> messagesOfThisPerson;
+						ArrayList<SingleMessage> messagesOfThisPerson;
 						if (allMessages.keySet().contains(messageToBotEvent.getInvokerName())) {
 							messagesOfThisPerson = allMessages.get(messageToBotEvent.getInvokerName());
 						} else {
 							messagesOfThisPerson = new ArrayList<>();
 							allMessages.put(messageToBotEvent.getInvokerName(), messagesOfThisPerson);
 						}
-						messagesOfThisPerson.add("Message From " + messageToBotEvent.getInvokerName() + ": "
+						SingleMessage newSingleMessage = new SingleMessage("Message From " + messageToBotEvent.getInvokerName() + ": "
 								+ messageToBotEvent.getMessage());
-
+						messagesOfThisPerson.add(newSingleMessage);
 					}
 				}
 			}

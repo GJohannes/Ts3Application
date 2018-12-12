@@ -17,9 +17,9 @@ import org.json.simple.parser.ParseException;
 
 public class UpdatePrivateChatBoxesServlet extends HttpServlet{
 
-	HashMap<String, ArrayList<String>> allMessages;
+	HashMap<String, ArrayList<SingleMessage>> allMessages;
 	
-	public UpdatePrivateChatBoxesServlet(HashMap<String, ArrayList<String>> allMessages) {
+	public UpdatePrivateChatBoxesServlet(HashMap<String, ArrayList<SingleMessage>> allMessages) {
 		this.allMessages = allMessages;
 	}
 	
@@ -57,20 +57,23 @@ public class UpdatePrivateChatBoxesServlet extends HttpServlet{
 			//if not there is no message history that can be sent to the server
 			if(allMessages.containsKey(teamspeakUser)) {
 				JSONObject jsonToWebPage = new JSONObject();
-				JSONArray lastTenMessages = new JSONArray();
-				ArrayList<String> messageHistory = allMessages.get(teamspeakUser);
+				JSONArray messages = new JSONArray();
+				ArrayList<SingleMessage> messageHistory = allMessages.get(teamspeakUser);
+				Long currentTimeInMiliSeconds = System.currentTimeMillis();
 				
-				if(messageHistory.size() > 10) {
-					for(int i = messageHistory.size()-10 ; i < messageHistory.size(); i++) {
-						lastTenMessages.add(messageHistory.get(i));
-					}
-				} else {
-					for(int i = 0; i < messageHistory.size(); i++) {
-						lastTenMessages.add(messageHistory.get(i));
+				for(int i = messageHistory.size(); i > 0; i--) {
+					// 600000 is 10 miniutes. delete if message is older than 10 minutes
+					if(currentTimeInMiliSeconds - messageHistory.get(i-1).getMessageCreatedInUnixStamp() > 600000) {
+						messageHistory.remove(i-1);
 					}
 				}
 				
-				jsonToWebPage.put("chatContent", lastTenMessages.toString());
+				//transform so that webpage can read messages
+				for(int i = 0; i < messageHistory.size(); i++) {
+					messages.add(messageHistory.get(i).getMessage());
+				}
+				
+				jsonToWebPage.put("chatContent", messages.toString());
 				jsonToWebPage.put("personExisting", "true");
 				response.getWriter().append(jsonToWebPage.toString());
 			} else {

@@ -23,9 +23,9 @@ import miscellaneous.ExtendedTS3Api;
 @WebServlet("/privateMessage")
 public class PrivateMessageChatServlet extends HttpServlet {
 	ExtendedTS3Api api;
-	HashMap<String, ArrayList<String>> allMessages;
+	HashMap<String, ArrayList<SingleMessage>> allMessages;
 
-	public PrivateMessageChatServlet(ExtendedTS3Api api, HashMap<String, ArrayList<String>> allMessages) {
+	public PrivateMessageChatServlet(ExtendedTS3Api api, HashMap<String, ArrayList<SingleMessage>> allMessages) {
 		this.api = api;
 		this.allMessages = allMessages;
 	}
@@ -81,15 +81,15 @@ public class PrivateMessageChatServlet extends HttpServlet {
 			// case that a message was sent
 			if (jsonFromWebPage.get("message").toString().length() > 0) {
 				api.sendPrivateMessage(clientId, messageFromWebPage);
-
-				ArrayList<String> messagesOfThisCommunication;
+				ArrayList<SingleMessage> messagesOfThisCommunication;
 				if (!allMessages.containsKey(teamspeakUser)) {
-					messagesOfThisCommunication = new ArrayList<String>();
+					messagesOfThisCommunication = new ArrayList<SingleMessage>(); 
 					allMessages.put(teamspeakUser, messagesOfThisCommunication);
 				} else {
 					messagesOfThisCommunication = allMessages.get(teamspeakUser);
 				}
-				messagesOfThisCommunication.add(messageFromWebPage);
+				SingleMessage newSingleMessage = new SingleMessage(messageFromWebPage);
+				messagesOfThisCommunication.add(newSingleMessage);
 			}
 
 			UpdatePrivateChatBoxesServlet update = new UpdatePrivateChatBoxesServlet(allMessages);

@@ -81,6 +81,8 @@ input {
 <script src="/../../javascript/jquery-3.3.1.js"></script>
 <link rel="stylesheet" type="text/css" href="/../css/overallCSS.css">
 <script type="text/javascript">
+	var lastMessage;
+	
 	$(document).ready(function() {
 		var url_string = window.location.href; //window.location.href
 		var url = new URL(url_string);
@@ -106,7 +108,6 @@ input {
 		var url_string = window.location.href; //window.location.href
 		var url = new URL(url_string);
 		var c = url.searchParams.get("User");
-		console.log(c);
 		return c;
 	}
 
@@ -134,16 +135,19 @@ input {
 				var textOfChatBox = $("textarea#chatBox");
 				document.getElementById("chatBox").value = "Chat Messages:";
 				var messagesToDisplay = JSON.parse(data.chatContent);
-				console.log(messagesToDisplay.length)
-				console.log(messagesToDisplay);
+
 
 				for (i = 0; i < messagesToDisplay.length; i++) {
 					textOfChatBox.val(textOfChatBox.val() + "\n"
 							+ messagesToDisplay[i]);
 				}
 
-				console.log(textOfChatBox);
-				console.log("success on ajax call message to server");
+				if(messagesToDisplay[messagesToDisplay.length-1] !== lastMessage){
+					var textarea = document.getElementById('chatBox');
+					textarea.scrollTop = textarea.scrollHeight;	
+					lastMessage = messagesToDisplay[messagesToDisplay.length-1];
+				}
+
 			},
 			failure : function(data) {
 				console.log("ERROR!!!");
@@ -166,7 +170,6 @@ input {
 							}),
 					success : function(data) {
 						var textOfChatBox = $("textarea#chatBox");
-						console.log(data.personExisting);
 						if (data.personExisting === "false") {
 							textOfChatBox
 									.val(textOfChatBox.val()
@@ -178,16 +181,11 @@ input {
 
 						document.getElementById("chatBox").value = "Chat Messages:";
 						var messagesToDisplay = JSON.parse(data.chatContent);
-						console.log(messagesToDisplay.length);
-						console.log(messagesToDisplay);
 
 						for (i = 0; i < messagesToDisplay.length; i++) {
 							textOfChatBox.val(textOfChatBox.val() + "\n"
 									+ messagesToDisplay[i]);
 						}
-
-						console.log(textOfChatBox);
-						console.log("success on ajax call message to server");
 					},
 					failure : function(data) {
 						console.log("ERROR!!!");
