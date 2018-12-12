@@ -46,8 +46,9 @@ function drawChart() {
 		
 	// case that an older/newer date should be displayed
 	} else {
-		// not sure if needed
+		// case that instant resize after first time change of date to a not current date
 		if (historyChartData === undefined) {
+			console.log("historychartdata was undefined");
 			return;
 		}
 		
@@ -56,7 +57,8 @@ function drawChart() {
 			historyChartData[i][0] = new Date(historyChartData[i][0]);// make unix time stamp into date
 		}
 
-		// in case the server did not sent any date for the requested date
+		// in case the server did not sent any data for the requested date, 
+		//it will however always sent the first array entry with [["Time","Number of People on Server at: YYYY-MM-DDT01:00"]]
 		if(historyChartData.length < 2){
 			var list = document.getElementById("curve_chart");
 			if (list.hasChildNodes()) {
