@@ -74,11 +74,11 @@ public class UpdatePrivateChatBoxesServlet extends HttpServlet{
 				}
 				
 				jsonToWebPage.put("chatContent", messages.toString());
-				jsonToWebPage.put("personExisting", "true");
+				jsonToWebPage.put("personExisting", true);
 				response.getWriter().append(jsonToWebPage.toString());
 			} else {
 				JSONObject jsonToWebPage = new JSONObject();
-				jsonToWebPage.put("personExisting", "false");
+				jsonToWebPage.put("personExisting", false);
 				response.getWriter().append(jsonToWebPage.toString());
 			}
 		}

@@ -71,7 +71,7 @@ public class PrivateMessageChatServlet extends HttpServlet {
 		if(allClientsWithGivenName == null) {
 			System.out.println("returned because of wrong parameter name");
 			JSONObject jsonReturnPersonNotExisting = new JSONObject();
-			jsonReturnPersonNotExisting.put("personExisting", "false");
+			jsonReturnPersonNotExisting.put("personExisting", false);
 			response.getWriter().append(jsonReturnPersonNotExisting.toString());
 			return;
 		}

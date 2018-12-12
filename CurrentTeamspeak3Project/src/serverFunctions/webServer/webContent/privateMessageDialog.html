@@ -81,7 +81,7 @@ input {
 <script src="/../../javascript/jquery-3.3.1.js"></script>
 <link rel="stylesheet" type="text/css" href="/../css/overallCSS.css">
 <script type="text/javascript">
-	var lastMessage;
+	var lastMessagesToDisplay;
 	
 	$(document).ready(function() {
 		var url_string = window.location.href; //window.location.href
@@ -129,25 +129,32 @@ input {
 				"teamspeakUser" : getURLparam(),
 			}),
 			success : function(data) {
-				if (data.personExisting === "false") {
+				if (data.personExisting == false) {
 					return;
 				}
+				
+				var messagesToDisplay = JSON.parse(data.chatContent);
+				
+				//if nothing changed do not redraw content
+				if(JSON.stringify(messagesToDisplay) == JSON.stringify(lastMessagesToDisplay)){
+					return;
+				}
+
+				// refill the textarea
 				var textOfChatBox = $("textarea#chatBox");
 				document.getElementById("chatBox").value = "Chat Messages:";
-				var messagesToDisplay = JSON.parse(data.chatContent);
-
-
+	
 				for (i = 0; i < messagesToDisplay.length; i++) {
 					textOfChatBox.val(textOfChatBox.val() + "\n"
 							+ messagesToDisplay[i]);
 				}
-
-				if(messagesToDisplay[messagesToDisplay.length-1] !== lastMessage){
-					var textarea = document.getElementById('chatBox');
-					textarea.scrollTop = textarea.scrollHeight;	
-					lastMessage = messagesToDisplay[messagesToDisplay.length-1];
-				}
-
+				
+				//sroll to bottom
+				var textarea = document.getElementById('chatBox');
+				textarea.scrollTop = textarea.scrollHeight;	
+				
+				//update the last messages that where displayed
+				lastMessagesToDisplay = messagesToDisplay;
 			},
 			failure : function(data) {
 				console.log("ERROR!!!");
@@ -170,12 +177,16 @@ input {
 							}),
 					success : function(data) {
 						var textOfChatBox = $("textarea#chatBox");
-						if (data.personExisting === "false") {
+						if (data.personExisting == false) {
 							textOfChatBox
 									.val(textOfChatBox.val()
 											+ "\n "
 											+ getURLparam()
 											+ " is not currently on the teamspeak Server or has gone offline");
+							
+							var textarea = document.getElementById('chatBox');
+							textarea.scrollTop = textarea.scrollHeight;	
+							
 							return;
 						}
 
@@ -186,6 +197,10 @@ input {
 							textOfChatBox.val(textOfChatBox.val() + "\n"
 									+ messagesToDisplay[i]);
 						}
+						
+						var textarea = document.getElementById('chatBox');
+						textarea.scrollTop = textarea.scrollHeight;	
+						
 					},
 					failure : function(data) {
 						console.log("ERROR!!!");
