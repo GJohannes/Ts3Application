@@ -84,12 +84,9 @@ input {
 	var lastMessagesToDisplay;
 	
 	$(document).ready(function() {
-		var url_string = window.location.href; //window.location.href
-		var url = new URL(url_string);
-		var c = url.searchParams.get("User");
-		document.getElementById("headLine").innerHTML = "Chatroom with " + c;
+		document.getElementById("headLine").innerHTML = "Chatroom with " + getURLparam("User");
 		updateChatBox();
-		console.log(c + " is the chat partner");
+		console.log(getURLparam("User") + " is the chat partner");
 		refreshMessages();
 	})
 
@@ -104,10 +101,10 @@ input {
 		});
 	});
 
-	function getURLparam() {
+	function getURLparam(parameterName) {
 		var url_string = window.location.href; //window.location.href
 		var url = new URL(url_string);
-		var c = url.searchParams.get("User");
+		var c = url.searchParams.get(parameterName);
 		return c;
 	}
 
@@ -126,7 +123,7 @@ input {
 			type : 'POST',
 			dataType : 'json',
 			data : JSON.stringify({
-				"teamspeakUser" : getURLparam(),
+				"teamspeakUser" : getURLparam("User"),
 			}),
 			success : function(data) {
 				if (data.personExisting == false) {
@@ -173,7 +170,8 @@ input {
 							.stringify({
 								"message" : document
 										.getElementById("messageToServer").value,
-								"teamspeakUser" : getURLparam(),
+								"teamspeakUser" : getURLparam("User"),
+								"webPageUserName" : getURLparam("userName"),
 							}),
 					success : function(data) {
 						var textOfChatBox = $("textarea#chatBox");
@@ -181,7 +179,7 @@ input {
 							textOfChatBox
 									.val(textOfChatBox.val()
 											+ "\n "
-											+ getURLparam()
+											+ getURLparam("User")
 											+ " is not currently on the teamspeak Server or has gone offline");
 							
 							var textarea = document.getElementById('chatBox');

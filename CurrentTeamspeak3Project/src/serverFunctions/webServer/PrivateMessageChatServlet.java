@@ -62,7 +62,8 @@ public class PrivateMessageChatServlet extends HttpServlet {
 		}
 
 		String teamspeakUser = jsonFromWebPage.get("teamspeakUser").toString();
-		String messageFromWebPage = "Message From WebServer: " + jsonFromWebPage.get("message").toString();
+		String webPageUserName = jsonFromWebPage.get("webPageUserName").toString();
+		String messageFromWebPage = "Message From " + webPageUserName + ": " + jsonFromWebPage.get("message").toString();
 		// maybe problematic if two perosns have the same ID
 		
 
