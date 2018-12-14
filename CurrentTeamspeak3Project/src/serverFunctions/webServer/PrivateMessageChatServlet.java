@@ -41,6 +41,7 @@ public class PrivateMessageChatServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		response.setCharacterEncoding("UTF-8");
 	}
 
 	/**
@@ -49,7 +50,8 @@ public class PrivateMessageChatServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		response.setCharacterEncoding("UTF-8");
+		
 		BufferedReader br = request.getReader();
 		JSONObject jsonFromWebPage = new JSONObject();
 
@@ -63,7 +65,11 @@ public class PrivateMessageChatServlet extends HttpServlet {
 
 		String teamspeakUser = jsonFromWebPage.get("teamspeakUser").toString();
 		String webPageUserName = jsonFromWebPage.get("webPageUserName").toString();
-		String messageFromWebPage = "Message From " + webPageUserName + ": " + jsonFromWebPage.get("message").toString();
+		
+//		String s = (String) jsonFromWebPage.get("message");
+//		String testMessage = new String(s.getBytes(), "UTF-8");
+	
+		String messageFromWebPage = "Message From " + webPageUserName + ": " + jsonFromWebPage.get("message");
 		// maybe problematic if two perosns have the same ID
 		
 

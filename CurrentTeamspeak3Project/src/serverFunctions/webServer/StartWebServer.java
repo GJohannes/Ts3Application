@@ -9,6 +9,8 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import org.eclipse.jetty.jsp.JettyJspServlet;
 import org.eclipse.jetty.server.Connector;
@@ -43,10 +45,13 @@ public class StartWebServer implements Runnable {
 	private Server server;
 	private HashMap<String, ArrayList<SingleMessage>> allMessages = new HashMap<>();
 
+	
+	
 	public StartWebServer(ExtendedTS3Api api, int port, int sslPort) {
 		this.api = api;
 		this.port = port;
 		this.sslPort = sslPort;
+		
 	}
 
 	/**

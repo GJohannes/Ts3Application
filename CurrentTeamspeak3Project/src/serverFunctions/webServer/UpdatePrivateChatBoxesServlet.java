@@ -29,10 +29,10 @@ public class UpdatePrivateChatBoxesServlet extends HttpServlet{
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		doUpdateFromServletRequest(request,response);
-
 	}
 	
 	public void doUpdateFromServletRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		response.setCharacterEncoding("UTF-8");
 		BufferedReader br = request.getReader();
 		JSONObject jsonFromWebPage = new JSONObject();
 
@@ -52,6 +52,7 @@ public class UpdatePrivateChatBoxesServlet extends HttpServlet{
 	}
 	
 	private void doUpdate(String teamspeakUser, HttpServletResponse response) throws IOException{
+		response.setCharacterEncoding("UTF-8");
 		synchronized (allMessages) {
 			//UPDATE ONLY (could be set to different servlet exclusively for update)
 			//if not there is no message history that can be sent to the server
@@ -73,13 +74,14 @@ public class UpdatePrivateChatBoxesServlet extends HttpServlet{
 					messages.add(messageHistory.get(i).getMessage());
 				}
 				
-				jsonToWebPage.put("chatContent", messages.toString());
+				jsonToWebPage.put("chatContent", messages.toJSONString());
 				jsonToWebPage.put("personExisting", true);
-				response.getWriter().append(jsonToWebPage.toString());
+				response.getWriter().append(jsonToWebPage.toJSONString());
 			} else {
 				JSONObject jsonToWebPage = new JSONObject();
 				jsonToWebPage.put("personExisting", false);
-				response.getWriter().append(jsonToWebPage.toString());
+				response.getWriter().append(jsonToWebPage.toJSONString());
+				
 			}
 		}
 
