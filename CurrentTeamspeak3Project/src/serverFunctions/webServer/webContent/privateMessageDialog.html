@@ -1,6 +1,6 @@
 <html>
 <head>
-<meta charset="utf-8"/>
+<meta charset="utf-8" />
 <title>Private Message Dialog</title>
 <link rel="shortcut icon" href="/../images/tabIcon.ico">
 <style>
@@ -51,7 +51,6 @@ input {
 	div {
 		font-size: 4vw;
 	}
-	
 	h1 {
 		font-size: 6vw;
 	}
@@ -83,13 +82,18 @@ input {
 <link rel="stylesheet" type="text/css" href="/../css/overallCSS.css">
 <script type="text/javascript">
 	var lastMessagesToDisplay;
-	
-	$(document).ready(function() {
-		document.getElementById("headLine").innerHTML = "Chatroom with " + getURLparam("User");
-		updateChatBox();
-		console.log(getURLparam("User") + " is the chat partner");
-		refreshMessages();
-	})
+	var userOfflineDisplayMessage = "\n " + getURLparam("User") + " is offline";
+
+	$(document)
+			.ready(
+					function() {
+						document.getElementById("headLine").innerHTML = "Chatroom with "
+								+ getURLparam("User");
+						updateChatBox();
+						console.log(getURLparam("User")
+								+ " is the chat partner");
+						refreshMessages();
+					})
 
 	$(function() {
 		$("#messageToServer").keypress(function(e) {
@@ -115,6 +119,47 @@ input {
 		}, 1000);
 	}
 
+	function onTextUpdate(data) {
+		var textOfChatBox = $("textarea#chatBox");
+		if (data.personOnline == false) {
+			if (!textOfChatBox.val().toString().includes(userOfflineDisplayMessage)) {
+				textOfChatBox.val(textOfChatBox.val() + userOfflineDisplayMessage);
+				var textarea = document.getElementById('chatBox');
+				textarea.scrollTop = textarea.scrollHeight;
+			}
+			return;
+		} else {
+			if (textOfChatBox.val().toString().includes(userOfflineDisplayMessage)) {
+				console.log("to replace");
+				textOfChatBox.val().replace(userOfflineDisplayMessage, " ");
+				var textarea = document.getElementById('chatBox');
+				textarea.scrollTop = textarea.scrollHeight;
+			}
+		}
+
+		var messagesToDisplay = JSON.parse(data.chatContent);
+
+		//if nothing changed do not redraw content
+		if (JSON.stringify(messagesToDisplay) == JSON
+				.stringify(lastMessagesToDisplay)) {
+			return;
+		}
+
+		// refill the textarea
+		document.getElementById("chatBox").value = "Chat Messages:";
+		for (i = 0; i < messagesToDisplay.length; i++) {
+			textOfChatBox
+					.val(textOfChatBox.val() + "\n" + messagesToDisplay[i]);
+		}
+
+		//sroll to bottom
+		var textarea = document.getElementById('chatBox');
+		textarea.scrollTop = textarea.scrollHeight;
+
+		//update the last messages that where displayed
+		lastMessagesToDisplay = messagesToDisplay;
+	}
+
 	/*
 	 * update method similar to sendMessageAndUpdate 
 	 */
@@ -127,32 +172,7 @@ input {
 				"teamspeakUser" : getURLparam("User"),
 			}),
 			success : function(data) {
-				if (data.personExisting == false) {
-					return;
-				}
-				
-				var messagesToDisplay = JSON.parse(data.chatContent);
-				
-				//if nothing changed do not redraw content
-				if(JSON.stringify(messagesToDisplay) == JSON.stringify(lastMessagesToDisplay)){
-					return;
-				}
-
-				// refill the textarea
-				var textOfChatBox = $("textarea#chatBox");
-				document.getElementById("chatBox").value = "Chat Messages:";
-	
-				for (i = 0; i < messagesToDisplay.length; i++) {
-					textOfChatBox.val(textOfChatBox.val() + "\n"
-							+ messagesToDisplay[i]);
-				}
-				
-				//sroll to bottom
-				var textarea = document.getElementById('chatBox');
-				textarea.scrollTop = textarea.scrollHeight;	
-				
-				//update the last messages that where displayed
-				lastMessagesToDisplay = messagesToDisplay;
+				onTextUpdate(data);
 			},
 			failure : function(data) {
 				console.log("ERROR!!!");
@@ -162,49 +182,22 @@ input {
 	}
 
 	function sendMessageToServer() {
-		$
-				.ajax({
-					url : '/privateMessage',
-					type : 'POST',
-					dataType : 'json',
-					data : JSON
-							.stringify({
-								"message" : document
-										.getElementById("messageToServer").value,
-								"teamspeakUser" : getURLparam("User"),
-								"webPageUserName" : getURLparam("userName"),
-							}),
-					success : function(data) {
-						var textOfChatBox = $("textarea#chatBox");
-						if (data.personExisting == false) {
-							textOfChatBox
-									.val(textOfChatBox.val()
-											+ "\n "
-											+ getURLparam("User")
-											+ " is not currently on the teamspeak Server or has gone offline");
-							
-							var textarea = document.getElementById('chatBox');
-							textarea.scrollTop = textarea.scrollHeight;	
-							
-							return;
-						}
-
-						document.getElementById("chatBox").value = "Chat Messages:";
-						var messagesToDisplay = JSON.parse(data.chatContent);
-
-						for (i = 0; i < messagesToDisplay.length; i++) {
-							textOfChatBox.val(textOfChatBox.val() + "\n"
-									+ messagesToDisplay[i]);
-						}
-						
-						var textarea = document.getElementById('chatBox');
-						textarea.scrollTop = textarea.scrollHeight;	
-						
-					},
-					failure : function(data) {
-						console.log("ERROR!!!");
-						console.log(data);
-					}
-				})
+		$.ajax({
+			url : '/privateMessage',
+			type : 'POST',
+			dataType : 'json',
+			data : JSON.stringify({
+				"message" : document.getElementById("messageToServer").value,
+				"teamspeakUser" : getURLparam("User"),
+				"webPageUserName" : getURLparam("userName"),
+			}),
+			success : function(data) {
+				onTextUpdate(data);
+			},
+			failure : function(data) {
+				console.log("ERROR!!!");
+				console.log(data);
+			}
+		})
 	}
 </script>

@@ -81,13 +81,9 @@ public class UpdatePrivateChatBoxesServlet extends HttpServlet {
 			}
 
 			jsonToWebPage.put("chatContent", messages.toJSONString());
-			jsonToWebPage.put("personExisting", true);
+			//jsonToWebPage.put("personExisting", true);
 			response.getWriter().append(jsonToWebPage.toJSONString());
-		} else {
-			JSONObject jsonToWebPage = new JSONObject();
-			jsonToWebPage.put("personExisting", false);
-			response.getWriter().append(jsonToWebPage.toJSONString());
-		}
+		} 
 		response.getWriter().flush();
 		response.getWriter().close();
 	}
