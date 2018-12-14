@@ -2,9 +2,11 @@ package serverFunctions.webServer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,9 +25,9 @@ import miscellaneous.ExtendedTS3Api;
 @WebServlet("/privateMessage")
 public class PrivateMessageChatServlet extends HttpServlet {
 	ExtendedTS3Api api;
-	HashMap<String, ArrayList<SingleMessage>> allMessages;
+	HashMap<String, CopyOnWriteArrayList<SingleMessage>> allMessages;
 
-	public PrivateMessageChatServlet(ExtendedTS3Api api, HashMap<String, ArrayList<SingleMessage>> allMessages) {
+	public PrivateMessageChatServlet(ExtendedTS3Api api, HashMap<String, CopyOnWriteArrayList<SingleMessage>> allMessages) {
 		this.api = api;
 		this.allMessages = allMessages;
 	}
@@ -39,8 +41,7 @@ public class PrivateMessageChatServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setCharacterEncoding("UTF-8");
 	}
 
@@ -48,10 +49,9 @@ public class PrivateMessageChatServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setCharacterEncoding("UTF-8");
-		
+
 		BufferedReader br = request.getReader();
 		JSONObject jsonFromWebPage = new JSONObject();
 
@@ -65,71 +65,39 @@ public class PrivateMessageChatServlet extends HttpServlet {
 
 		String teamspeakUser = jsonFromWebPage.get("teamspeakUser").toString();
 		String webPageUserName = jsonFromWebPage.get("webPageUserName").toString();
-		
-//		String s = (String) jsonFromWebPage.get("message");
-//		String testMessage = new String(s.getBytes(), "UTF-8");
-	
 		String messageFromWebPage = "Message From " + webPageUserName + ": " + jsonFromWebPage.get("message");
-		// maybe problematic if two perosns have the same ID
-		
+		// maybe problematic if two persons have the same ID
 
 		List<Client> allClientsWithGivenName = api.getClientsByName(teamspeakUser);
-		//case that parameter name is wrong
-		if(allClientsWithGivenName == null) {
+		// case that parameter name is wrong
+		if (allClientsWithGivenName == null) {
 			System.out.println("returned because of wrong parameter name");
 			JSONObject jsonReturnPersonNotExisting = new JSONObject();
 			jsonReturnPersonNotExisting.put("personExisting", false);
 			response.getWriter().append(jsonReturnPersonNotExisting.toString());
 			return;
 		}
-		int clientId = allClientsWithGivenName.get(0).getId();
 		
+		int clientId = allClientsWithGivenName.get(0).getId();
+		CopyOnWriteArrayList<SingleMessage> messagesOfThisCommunication;
+		
+		// sending message from another thread so that there is now time wasted for waiting for a response
+		MessageToTS3ServerThread messageSender = new MessageToTS3ServerThread(api, messageFromWebPage, clientId);
+		Thread messageSenderThread = new Thread(messageSender);
+		messageSenderThread.start();
+
 		synchronized (allMessages) {
-			// case that a message was sent
-			if (jsonFromWebPage.get("message").toString().length() > 0) {
-				api.sendPrivateMessage(clientId, messageFromWebPage);
-				ArrayList<SingleMessage> messagesOfThisCommunication;
-				if (!allMessages.containsKey(teamspeakUser)) {
-					messagesOfThisCommunication = new ArrayList<SingleMessage>(); 
-					allMessages.put(teamspeakUser, messagesOfThisCommunication);
-				} else {
-					messagesOfThisCommunication = allMessages.get(teamspeakUser);
-				}
-				SingleMessage newSingleMessage = new SingleMessage(messageFromWebPage);
-				messagesOfThisCommunication.add(newSingleMessage);
+			if (allMessages.containsKey(teamspeakUser)) {
+				messagesOfThisCommunication = allMessages.get(teamspeakUser);
+			} else {
+				messagesOfThisCommunication = new CopyOnWriteArrayList<SingleMessage>();
+				allMessages.put(teamspeakUser, messagesOfThisCommunication);
 			}
-
-			UpdatePrivateChatBoxesServlet update = new UpdatePrivateChatBoxesServlet(allMessages);
-			update.doUpdateFromOtherServlet(teamspeakUser, response);
-
-//			//UPDATE ONLY (could be set to different servlet exclusively for update)
-//			//if not there is no message history that can be sent to the server
-//			if(allMessages.containsKey(teamspeakUser)) {
-//				JSONObject jsonToWebPage = new JSONObject();
-//				JSONArray lastTenMessages = new JSONArray();
-//				ArrayList<String> messageHistory = allMessages.get(teamspeakUser);
-//				
-//				if(messageHistory.size() > 10) {
-//					for(int i = messageHistory.size()-10 ; i < messageHistory.size(); i++) {
-//						lastTenMessages.add(messageHistory.get(i));
-//					}
-//				} else {
-//					for(int i = 0; i < messageHistory.size(); i++) {
-//						lastTenMessages.add(messageHistory.get(i));
-//					}
-//				}
-//				
-//				System.out.println("Last 10 Messages " + lastTenMessages);
-//				
-//				jsonToWebPage.put("chatContent", lastTenMessages.toString());
-//				response.getWriter().append(jsonToWebPage.toString());
-//			}
-//		}
-//
-//		response.getWriter().flush();
-//		response.getWriter().close();
-
 		}
+		SingleMessage newSingleMessage = new SingleMessage(messageFromWebPage);
+		messagesOfThisCommunication.add(newSingleMessage);
+		
+		UpdatePrivateChatBoxesServlet update = new UpdatePrivateChatBoxesServlet(allMessages);
+		update.doUpdateFromOtherServlet(teamspeakUser, response);
 	}
-
 }

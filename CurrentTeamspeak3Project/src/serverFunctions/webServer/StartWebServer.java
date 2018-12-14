@@ -9,6 +9,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
@@ -43,7 +44,7 @@ public class StartWebServer implements Runnable {
 	private int port;
 	private int sslPort;
 	private Server server;
-	private HashMap<String, ArrayList<SingleMessage>> allMessages = new HashMap<>();
+	private HashMap<String, CopyOnWriteArrayList<SingleMessage>> allMessages = new HashMap<>();
 
 	
 	
@@ -250,11 +251,11 @@ public class StartWebServer implements Runnable {
 				if (!(messageToBotEvent.getMessage().startsWith("!")
 						|| messageToBotEvent.getMessage().startsWith("?"))) {
 					synchronized (allMessages) {
-						ArrayList<SingleMessage> messagesOfThisPerson;
+						CopyOnWriteArrayList<SingleMessage> messagesOfThisPerson;
 						if (allMessages.keySet().contains(messageToBotEvent.getInvokerName())) {
 							messagesOfThisPerson = allMessages.get(messageToBotEvent.getInvokerName());
 						} else {
-							messagesOfThisPerson = new ArrayList<>();
+							messagesOfThisPerson = new CopyOnWriteArrayList<>();
 							allMessages.put(messageToBotEvent.getInvokerName(), messagesOfThisPerson);
 						}
 						SingleMessage newSingleMessage = new SingleMessage("Message From " + messageToBotEvent.getInvokerName() + ": "
