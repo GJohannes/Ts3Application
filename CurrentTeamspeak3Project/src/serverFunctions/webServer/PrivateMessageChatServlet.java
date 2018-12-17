@@ -42,7 +42,7 @@ public class PrivateMessageChatServlet extends HttpServlet {
 	 *      response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setCharacterEncoding("UTF-8");
+		ServletResponseSettings.setServletResponseSettings(response);
 	}
 
 	/**
@@ -50,7 +50,7 @@ public class PrivateMessageChatServlet extends HttpServlet {
 	 *      response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setCharacterEncoding("UTF-8");
+		ServletResponseSettings.setServletResponseSettings(response);
 
 		BufferedReader br = request.getReader();
 		JSONObject jsonFromWebPage = new JSONObject();

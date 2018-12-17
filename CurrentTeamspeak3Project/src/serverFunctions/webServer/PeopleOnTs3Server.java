@@ -62,7 +62,7 @@ public class PeopleOnTs3Server extends HttpServlet {
 	 *      response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setCharacterEncoding("UTF-8");
+		ServletResponseSettings.setServletResponseSettings(response);
 		String whichMethod = request.getParameter("method");
 		if (whichMethod.equals("refreshUsers")) {
 			this.updateOnlinePeople(response);
@@ -79,7 +79,7 @@ public class PeopleOnTs3Server extends HttpServlet {
 	 *      response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setCharacterEncoding("UTF-8");
+		ServletResponseSettings.setServletResponseSettings(response);
 		String whichMethod = request.getParameter("method");
 		if (whichMethod.equals("sendServerMessage")) {
 			this.sendServerMessage(request, response);

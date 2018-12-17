@@ -31,7 +31,7 @@ public class UpdatePrivateChatBoxesServlet extends HttpServlet {
 	}
 
 	public void doUpdateFromServletRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		response.setCharacterEncoding("UTF-8");
+		ServletResponseSettings.setServletResponseSettings(response);
 		BufferedReader br = request.getReader();
 		JSONObject jsonFromWebPage = new JSONObject();
 
@@ -51,7 +51,7 @@ public class UpdatePrivateChatBoxesServlet extends HttpServlet {
 	}
 
 	private void doUpdate(String teamspeakUser, HttpServletResponse response) throws IOException {
-		response.setCharacterEncoding("UTF-8");
+		ServletResponseSettings.setServletResponseSettings(response);
 		boolean teamspeakUserExisting;
 
 		synchronized (allMessages) {
@@ -82,7 +82,7 @@ public class UpdatePrivateChatBoxesServlet extends HttpServlet {
 
 			jsonToWebPage.put("chatContent", messages.toJSONString());
 			//jsonToWebPage.put("personExisting", true);
-			response.getWriter().append(jsonToWebPage.toJSONString());
+			response.getWriter().append(jsonToWebPage.toJSONString());	
 		} 
 		response.getWriter().flush();
 		response.getWriter().close();

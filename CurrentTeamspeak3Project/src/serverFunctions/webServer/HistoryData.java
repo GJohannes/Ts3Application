@@ -25,7 +25,7 @@ public class HistoryData extends HttpServlet {
 	private JSONArray allEventsOfOneDay;
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setCharacterEncoding("UTF-8");
+		ServletResponseSettings.setServletResponseSettings(response);
 		LocalDateTime requestedDate = LocalDateTime.now();
 		try {
 			requestedDate = LocalDateTime.ofInstant(Instant.ofEpochMilli(Long.parseLong(request.getParameter("dateInMilis"))), ZoneId.systemDefault());			
@@ -61,6 +61,6 @@ public class HistoryData extends HttpServlet {
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setCharacterEncoding("UTF-8");
+		ServletResponseSettings.setServletResponseSettings(response);
 	}
 }
