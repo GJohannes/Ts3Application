@@ -23,10 +23,10 @@ import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.SslConnectionFactory;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.DefaultServlet;
+import org.eclipse.jetty.servlet.ErrorPageErrorHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
-
 
 import com.github.theholywaffle.teamspeak3.api.event.TextMessageEvent;
 
@@ -46,17 +46,16 @@ public class StartWebServer implements Runnable {
 	private Server server;
 	private HashMap<String, CopyOnWriteArrayList<SingleMessage>> allMessages = new HashMap<>();
 
-	
-	
 	public StartWebServer(ExtendedTS3Api api, int port, int sslPort) {
 		this.api = api;
 		this.port = port;
 		this.sslPort = sslPort;
-		
+
 	}
 
 	/**
 	 * only public for debugging usage. Start as a threat that will call this method
+	 * 
 	 * @throws Exception
 	 */
 	public void startWebServer() throws Exception {
@@ -105,7 +104,7 @@ public class StartWebServer implements Runnable {
 		privateMessageHolder.setName("privateMessageDialog.html");
 		privateMessageHolder.setForcedPath("/privateMessageDialog.html");
 		servletContextHandler.addServlet(privateMessageHolder, "/OnlinePeople/privateMessage");
-		
+
 		ServletHolder impressumHolder = new ServletHolder();
 		impressumHolder.setName("impressum.html");
 		impressumHolder.setForcedPath("/impressum.html");
@@ -129,11 +128,15 @@ public class StartWebServer implements Runnable {
 		ServletHolder updatePrivateChatBoxesServletHolder = new ServletHolder();
 		updatePrivateChatBoxesServletHolder.setServlet(updatePrivateChatBoxesServlet);
 		servletContextHandler.addServlet(updatePrivateChatBoxesServletHolder, "/updatePrivateChatBoxes");
-		
+
 		HistoryData historyData = new HistoryData();
 		ServletHolder historyDataHolder = new ServletHolder();
 		historyDataHolder.setServlet(historyData);
 		servletContextHandler.addServlet(historyDataHolder, "/historyData");
+
+		ErrorPageErrorHandler errorHandler = new ErrorPageErrorHandler();
+		errorHandler.addErrorPage(404, "/someTest.html");
+		servletContextHandler.setErrorHandler(errorHandler);
 
 		// Default Servlet (always last, always named "default")
 		ServletHolder holderDefault = new ServletHolder("default", DefaultServlet.class);
@@ -201,7 +204,7 @@ public class StartWebServer implements Runnable {
 		servletContextHandler.addServlet(holderJsp, "*.jsp");
 
 	}
-	
+
 	/*
 	 * https://dzone.com/articles/adding-ssl-support-embedded
 	 */
@@ -214,8 +217,7 @@ public class StartWebServer implements Runnable {
 		sslContextFactory.setKeyStorePath(StartWebServer.class.getResource("/keystore.jks").toExternalForm());
 		sslContextFactory.setKeyStorePassword("wasdwasd");
 		sslContextFactory.setKeyManagerPassword("wasdwasd");
-		ServerConnector sslConnector = new ServerConnector(server,
-				new SslConnectionFactory(sslContextFactory, "http/1.1"), new HttpConnectionFactory(https));
+		ServerConnector sslConnector = new ServerConnector(server, new SslConnectionFactory(sslContextFactory, "http/1.1"), new HttpConnectionFactory(https));
 		sslConnector.setPort(this.sslPort);
 		server.setConnectors(new Connector[] { connector, sslConnector });
 	}
@@ -238,9 +240,8 @@ public class StartWebServer implements Runnable {
 		}
 	}
 
-	
 	/**
-	 * Event adapter for chatting of WebServer and TS3Server   
+	 * Event adapter for chatting of WebServer and TS3Server
 	 */
 	private ExtendedTS3EventAdapter getWebServerChat(ExtendedTS3Api api) {
 		ExtendedTS3EventAdapter webServerChat = new ExtendedTS3EventAdapter(AllExistingEventAdapter.WEB_SERVER_CHAT) {
@@ -248,8 +249,7 @@ public class StartWebServer implements Runnable {
 			public void onTextMessage(TextMessageEvent messageToBotEvent) {
 				// do not send to server since it is a bot command if the message starts with !
 				// or ?
-				if (!(messageToBotEvent.getMessage().startsWith("!")
-						|| messageToBotEvent.getMessage().startsWith("?"))) {
+				if (!(messageToBotEvent.getMessage().startsWith("!") || messageToBotEvent.getMessage().startsWith("?"))) {
 					synchronized (allMessages) {
 						CopyOnWriteArrayList<SingleMessage> messagesOfThisPerson;
 						if (allMessages.keySet().contains(messageToBotEvent.getInvokerName())) {
@@ -258,8 +258,7 @@ public class StartWebServer implements Runnable {
 							messagesOfThisPerson = new CopyOnWriteArrayList<>();
 							allMessages.put(messageToBotEvent.getInvokerName(), messagesOfThisPerson);
 						}
-						SingleMessage newSingleMessage = new SingleMessage("Message From " + messageToBotEvent.getInvokerName() + ": "
-								+ messageToBotEvent.getMessage());
+						SingleMessage newSingleMessage = new SingleMessage("Message From " + messageToBotEvent.getInvokerName() + ": " + messageToBotEvent.getMessage());
 						messagesOfThisPerson.add(newSingleMessage);
 					}
 				}
@@ -268,13 +267,13 @@ public class StartWebServer implements Runnable {
 		};
 		return webServerChat;
 	}
-	
-	
+
 	/**
-	 * WebServer which is using the WebContent folder for the HTML
-	 * files instead of servlets for JSP HTML files
+	 * WebServer which is using the WebContent folder for the HTML files instead of
+	 * servlets for JSP HTML files
 	 */
 	private ArrayList<String> test;
+
 	private void otherServer() throws Exception {
 		Server server = new Server(7000);
 
@@ -289,7 +288,7 @@ public class StartWebServer implements Runnable {
 
 		ServletHolder holderPwd = new ServletHolder("default", DefaultServlet.class);
 		holderPwd.setInitParameter("dirAllowed", "true");
-		//context.setResourceBase("webContent"); 
+		// context.setResourceBase("webContent");
 		context.setWelcomeFiles(new String[] { "index.html" });
 		ServletContextHandler servletContextHandler = new ServletContextHandler();
 		servletContextHandler.setResourceBase("webContent");
