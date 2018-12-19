@@ -135,7 +135,7 @@ public class StartWebServer implements Runnable {
 		servletContextHandler.addServlet(historyDataHolder, "/historyData");
 
 		ErrorPageErrorHandler errorHandler = new ErrorPageErrorHandler();
-		errorHandler.addErrorPage(404, "/someTest.html");
+		errorHandler.addErrorPage(404, "/404Page.html");
 		servletContextHandler.setErrorHandler(errorHandler);
 
 		// Default Servlet (always last, always named "default")
@@ -277,6 +277,8 @@ public class StartWebServer implements Runnable {
 	private void otherServer() throws Exception {
 		Server server = new Server(7000);
 
+		
+		
 //		URI url = getWebRootResourceUri();
 //
 //		URI webRootUri = url;

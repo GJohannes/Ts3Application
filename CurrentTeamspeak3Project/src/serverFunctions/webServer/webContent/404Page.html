@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="css/overallCSS.css">
+<script src="javascript/jquery-3.3.1.js"></script>
+<link rel="shortcut icon" href="images/tabIcon.ico">
+<title>404 Page Not Found</title>
+</head>
+<body>
+	<div style="font-size: 5vw; color: white; text-align: center;">
+		<p>Space! Space! Not even a 404 page but empty space. Click the Space core to get back! </p>
+		<br> <img onmouseover="startCoreFunctionality()" onmouseout="stopCoreFunctionality()" onclick="wasd()" src="images/spaceCoreBig.gif" id="core">
+		<audio autoplay preload="auto" id="audioContainer" loop src="images/spaceSound.mp3"></audio>
+	</div>
+</body>
+
+<script>
+var toggle = true;
+var coreFunctionalityRunning = false;
+var coreImage = document.getElementById("core");
+var vid = document.getElementById("audioContainer");
+
+	$(document).ready(function() {
+		coreFunctionality();
+	});
+
+	function wasd() {
+		console.log("clicked image");
+		window.location.href = "index.html";
+	}
+
+	function startCoreFunctionality() {
+		coreFunctionalityRunning = true;
+	}
+
+	function stopCoreFunctionality() {
+		coreFunctionalityRunning = false;
+	}
+
+	function coreFunctionality() {
+		setInterval(function() {
+			console.log(window.location.hostname);
+			startAudioPlaying();
+			if (coreFunctionalityRunning) {
+				setFullVolume();
+				if (toggle) {
+					coreImage.src = "images/spaceCoreBig.gif";
+					toggle = false;
+				} else {
+					coreImage.src = "images/spaceCoreSmall.gif";
+					toggle = true;
+				}
+			} else {
+				setVolumeZero();
+			}
+		}, 150);
+	}
+
+	function startAudioPlaying() {	
+		vid.play();
+	}
+
+	function setVolumeZero() {
+		vid.volume = 0.0;
+	}
+
+	function setFullVolume() {
+		vid.volume = 1.0;
+	}
+</script>
+</html>
