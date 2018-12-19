@@ -10,7 +10,7 @@
 <body>
 	<div style="font-size: 5vw; color: white; text-align: center;">
 		<p>Space! Space! Not even a 404 page but empty space. Click the Space core to get back! </p>
-		<br> <img onmouseover="startCoreFunctionality()" onmouseout="stopCoreFunctionality()" onclick="wasd()" src="images/spaceCoreBig.gif" id="core">
+		<br> <img onmouseover="startCoreFunctionality()" onmouseout="stopCoreFunctionality()" onclick="backToFrontPage()" src="images/spaceCoreBig.gif" id="core">
 		<audio autoplay preload="auto" id="audioContainer" loop src="images/spaceSound.mp3"></audio>
 	</div>
 </body>
@@ -25,9 +25,13 @@ var vid = document.getElementById("audioContainer");
 		coreFunctionality();
 	});
 
-	function wasd() {
-		console.log("clicked image");
-		window.location.href = "index.html";
+	function backToFrontPage() {
+		if(window.location.toString().startsWith("https")){
+			var welcomePageLocation = "https://" + window.location.hostname + ":" + window.location.port;
+		} else {
+			var welcomePageLocation = "http://" + window.location.hostname + ":" + window.location.port;
+		}
+		window.open(welcomePageLocation,"_self");
 	}
 
 	function startCoreFunctionality() {
