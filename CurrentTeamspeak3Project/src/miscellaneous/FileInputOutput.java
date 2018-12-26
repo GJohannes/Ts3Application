@@ -169,16 +169,14 @@ public class FileInputOutput {
 				file.createNewFile();
 			}
 			Path path = Paths.get(file.getAbsolutePath());
-			allLines = Files.readAllLines(path);
+			allLines = Files.readAllLines(path, StandardCharsets.UTF_8);
 
-			FileWriter fileWriter = new FileWriter(file);
-			BufferedWriter writer = new BufferedWriter(fileWriter);
-
+			BufferedWriter writer = Files.newBufferedWriter(file.toPath(),StandardCharsets.UTF_8); 
+			
 			for (int i = 0; i < allLines.size(); i++) {
 				writer.write(allLines.get(i));
 				writer.newLine();
 			}
-
 			writer.write(json.toJSONString());
 			writer.flush();
 			writer.close();
@@ -212,7 +210,7 @@ public class FileInputOutput {
 		JSONParser parser = new JSONParser();
 
 		try {
-			List<String> allEvents = Files.readAllLines(path, StandardCharsets.ISO_8859_1);
+			List<String> allEvents = Files.readAllLines(path, StandardCharsets.UTF_8);
 			for (int i = 0; i < allEvents.size(); i++) {
 				try {
 					allEventsAsJSON.add((JSONObject) parser.parse(allEvents.get(i).trim()));
