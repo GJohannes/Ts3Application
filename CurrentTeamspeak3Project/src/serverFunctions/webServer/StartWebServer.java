@@ -135,7 +135,7 @@ public class StartWebServer implements Runnable {
 		servletContextHandler.addServlet(historyDataHolder, "/historyData");
 
 		ErrorPageErrorHandler errorHandler = new ErrorPageErrorHandler();
-		errorHandler.addErrorPage(404, "/404Page.html");
+		errorHandler.addErrorPage(404, "/redirectTo404page.html");
 		servletContextHandler.setErrorHandler(errorHandler);
 
 		// Default Servlet (always last, always named "default")
