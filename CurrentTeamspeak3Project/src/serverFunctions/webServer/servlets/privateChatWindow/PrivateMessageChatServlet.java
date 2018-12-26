@@ -1,4 +1,4 @@
-package serverFunctions.webServer;
+package serverFunctions.webServer.servlets.privateChatWindow;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,6 +21,7 @@ import org.json.simple.parser.ParseException;
 import com.github.theholywaffle.teamspeak3.api.wrapper.Client;
 
 import miscellaneous.ExtendedTS3Api;
+import serverFunctions.webServer.ServletResponseSettings;
 
 @WebServlet("/privateMessage")
 public class PrivateMessageChatServlet extends HttpServlet {

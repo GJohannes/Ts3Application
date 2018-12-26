@@ -1,4 +1,4 @@
-package serverFunctions.webServer;
+package serverFunctions.webServer.servlets.privateChatWindow;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,6 +15,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
+import serverFunctions.webServer.ServletResponseSettings;
 
 public class UpdatePrivateChatBoxesServlet extends HttpServlet {
 

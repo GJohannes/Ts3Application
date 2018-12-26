@@ -1,4 +1,4 @@
-package serverFunctions.webServer;
+package serverFunctions.webServer.servlets.privateChatWindow;
 
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;

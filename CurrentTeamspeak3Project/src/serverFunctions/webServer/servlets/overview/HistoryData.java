@@ -1,4 +1,4 @@
-package serverFunctions.webServer;
+package serverFunctions.webServer.servlets.overview;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -17,6 +17,7 @@ import org.json.simple.JSONObject;
 
 import miscellaneous.FileInputOutput;
 import serverFunctions.loggerForServer.LoggedServerEvents;
+import serverFunctions.webServer.ServletResponseSettings;
 
 @WebServlet("/historyDataIrrelevantString")
 public class HistoryData extends HttpServlet {

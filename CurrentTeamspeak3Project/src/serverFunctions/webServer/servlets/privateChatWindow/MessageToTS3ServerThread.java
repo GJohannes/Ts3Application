@@ -1,4 +1,4 @@
-package serverFunctions.webServer;
+package serverFunctions.webServer.servlets.privateChatWindow;
 
 import miscellaneous.ExtendedTS3Api;
 

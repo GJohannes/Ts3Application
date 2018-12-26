@@ -10,8 +10,6 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 
 import org.eclipse.jetty.jsp.JettyJspServlet;
 import org.eclipse.jetty.server.Connector;
@@ -33,6 +31,11 @@ import com.github.theholywaffle.teamspeak3.api.event.TextMessageEvent;
 import miscellaneous.AllExistingEventAdapter;
 import miscellaneous.ExtendedTS3Api;
 import miscellaneous.ExtendedTS3EventAdapter;
+import serverFunctions.webServer.servlets.overview.HistoryData;
+import serverFunctions.webServer.servlets.overview.PeopleOnTs3Server;
+import serverFunctions.webServer.servlets.privateChatWindow.PrivateMessageChatServlet;
+import serverFunctions.webServer.servlets.privateChatWindow.SingleMessage;
+import serverFunctions.webServer.servlets.privateChatWindow.UpdatePrivateChatBoxesServlet;
 
 public class StartWebServer implements Runnable {
 	private static final String WEBROOT_INDEX = "webContent"; // !! different navigation inside IDE (eclipse) and

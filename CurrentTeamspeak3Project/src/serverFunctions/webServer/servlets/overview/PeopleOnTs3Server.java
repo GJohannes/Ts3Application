@@ -1,4 +1,4 @@
-package serverFunctions.webServer;
+package serverFunctions.webServer.servlets.overview;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -23,6 +23,7 @@ import com.github.theholywaffle.teamspeak3.api.wrapper.Client;
 import miscellaneous.AllExistingEventAdapter;
 import miscellaneous.ExtendedTS3Api;
 import miscellaneous.ExtendedTS3EventAdapter;
+import serverFunctions.webServer.ServletResponseSettings;
 
 /**
  * Servlet implementation class Update
