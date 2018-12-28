@@ -10,9 +10,9 @@
 <script>
 	function redirect() {
 		if(window.location.toString().startsWith("https")){
-			var notFoundPageLocation = "https://" + window.location.hostname + ":" + window.location.port + "/404Page.html";
+			var notFoundPageLocation = "https://" + window.location.hostname + ":" + window.location.port + "/404Page.html?missingPage=" + window.location;
 		} else {
-			var notFoundPageLocation = "http://" + window.location.hostname + ":" + window.location.port + "/404Page.html";
+			var notFoundPageLocation = "http://" + window.location.hostname + ":" + window.location.port + "/404Page.html?missingPage=" + window.location;
 		}
 		window.open(notFoundPageLocation,"_self");
 	}
