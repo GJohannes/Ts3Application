@@ -71,7 +71,6 @@ public class AppMain extends Application {
 	public static void main(String[] args) throws IOException, ParseException {
 		launch(args);	
 		
-		
 //		System.out.println("Vlc Opening!");
 //        Runtime runTime = Runtime.getRuntime();
 //        String []command = {"C:\\Program Files\\VideoLAN\\VLC\\vlc.exe", "C:\\Users\\Johannes\\Desktop\\TeamspeakProject\\Doh.mp3"}; 
