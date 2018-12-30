@@ -13,6 +13,7 @@ public class JspStarter extends AbstractLifeCycle implements ServletContextHandl
     {
         this.sci = new JettyJasperInitializer();
         this.context = context;
+        this.context.setAttribute("org.apache.tomcat.JarScanner", new StandardJarScanner());
     }
 
     @Override

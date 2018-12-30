@@ -174,9 +174,38 @@ public class StartWebServer implements Runnable {
 	 * @throws IOException if unable to configure
 	 */
 	private void enableEmbeddedJspSupport(ServletContextHandler servletContextHandler) throws IOException {
+		// Establish Scratch directory for the servlet context (used by JSP compilation)
+		File tempDir = new File(System.getProperty("java.io.tmpdir"));
+		File scratchDir = new File(tempDir.toString(), "embedded-jetty-jsp");
+
+		if (!scratchDir.exists()) {
+			if (!scratchDir.mkdirs()) {
+				throw new IOException("Unable to create scratch directory: " + scratchDir);
+			}
+		}
+		servletContextHandler.setAttribute("javax.servlet.context.tempdir", scratchDir);
+
+		// Set Classloader of Context to be sane (needed for JSTL)
+		// JSP requires a non-System classloader, this simply wraps the
+		// embedded System classloader in a way that makes it suitable
+		// for JSP to use
+		ClassLoader jspClassLoader = new URLClassLoader(new URL[0], this.getClass().getClassLoader());
+		servletContextHandler.setClassLoader(jspClassLoader);
+
+		// Manually call JettyJasperInitializer on context startup
 		servletContextHandler.addBean(new JspStarter(servletContextHandler));
+
+		// Create / Register JSP Servlet (must be named "jsp" per spec)
 		ServletHolder holderJsp = new ServletHolder("jsp", JettyJspServlet.class);
+		holderJsp.setInitOrder(0);
+		holderJsp.setInitParameter("logVerbosityLevel", "DEBUG");
+		holderJsp.setInitParameter("fork", "false");
+		holderJsp.setInitParameter("xpoweredBy", "false");
+		holderJsp.setInitParameter("compilerTargetVM", "1.8");
+		holderJsp.setInitParameter("compilerSourceVM", "1.8");
+		holderJsp.setInitParameter("keepgenerated", "true");
 		servletContextHandler.addServlet(holderJsp, "*.jsp");
+
 	}
 
 	/*
