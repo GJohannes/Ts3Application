@@ -2,13 +2,13 @@ package serverFunctions.riotApi;
 
 public class RiotApiUser {
 
-	private long accountId;
+	private String encryptedAccountId;
 	private String caseCorrectNickName;
 	private long lastGameId;
 
-	public RiotApiUser(long Id, String name, long lastGameId) {
-		accountId = Id;
-		caseCorrectNickName = name;
+	public RiotApiUser(String encryptedAccountId, String caseCorrectNickName, long lastGameId) {
+		this.encryptedAccountId = encryptedAccountId;
+		this.caseCorrectNickName = caseCorrectNickName;
 		this.lastGameId = lastGameId;
 	}
 
@@ -17,14 +17,14 @@ public class RiotApiUser {
 	}
 
 	public long getLastGameId() {
-		return lastGameId;
+		return this.lastGameId;
 	}
 
 	public String getCaseCorrectNickName() {
-		return caseCorrectNickName;
+		return this.caseCorrectNickName;
 	}
 
-	public long getAccountId() {
-		return accountId;
+	public String getEncryptedAccountId() {
+		return this.encryptedAccountId;
 	}
 }

@@ -85,10 +85,10 @@ public class RiotApiNotification implements Runnable {
 				return false;
 			}
 		}
-		AccountIdAndCaseCorrectNickNameHolder holder = riotInterface.getIdAndCaseCorrectNickNameByNickName(nickName, apiKey); 
-		long accountId = holder.getAccountId();
+		EncryptedAccountIdAndCaseCorrectNickNameHolder holder = riotInterface.getIdAndCaseCorrectNickNameByNickName(nickName, apiKey); 
+		String accountId = holder.getEncryptedAccountId();
 		String caseCorrectNickName = holder.getCaseCorrectNickName();
-		long lastGameId = riotInterface.getLastGameIdByAccId(accountId, apiKey);
+		long lastGameId = riotInterface.getLastGameIdByEncryptedAccId(accountId, apiKey);
 		RiotApiUser newUser = new RiotApiUser(accountId, caseCorrectNickName, lastGameId);
 		userList.add(newUser);
 		return true;
@@ -177,7 +177,7 @@ public class RiotApiNotification implements Runnable {
 		while (threadRunningFlag) {
 			for (RiotApiUser user : userList) {
 				try {
-					long newGameId = riotInterface.getLastGameIdByAccId(user.getAccountId(), apiKey);
+					long newGameId = riotInterface.getLastGameIdByEncryptedAccId(user.getEncryptedAccountId(), apiKey);
 					if (newGameId != user.getLastGameId()) {
 						String message = "";
 						

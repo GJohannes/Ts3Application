@@ -4,18 +4,18 @@ package serverFunctions.riotApi;
  * Simple holder to have method return two values.
  * Two method call would make additional network calls
  */
-public class AccountIdAndCaseCorrectNickNameHolder {
+public class EncryptedAccountIdAndCaseCorrectNickNameHolder {
 
-	private long accountId;
+	private String encryptedAccountId;
 	private String caseCorrectNickName;
 	
-	public AccountIdAndCaseCorrectNickNameHolder(long accountId, String caseCorrectNickName) {
-		this.accountId = accountId;
+	public EncryptedAccountIdAndCaseCorrectNickNameHolder(String encryptedAccountId, String caseCorrectNickName) {
+		this.encryptedAccountId = encryptedAccountId;
 		this.caseCorrectNickName = caseCorrectNickName;
 	}
 
-	public long getAccountId() {
-		return accountId;
+	public String getEncryptedAccountId() {
+		return encryptedAccountId;
 	}
 
 	public String getCaseCorrectNickName() {

@@ -13,22 +13,22 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 public class RiotApiInterface {
-	
-	public AccountIdAndCaseCorrectNickNameHolder getIdAndCaseCorrectNickNameByNickName(String nickName, String ApiKey) throws IOException, ParseException {
+	public EncryptedAccountIdAndCaseCorrectNickNameHolder getIdAndCaseCorrectNickNameByNickName(String nickName, String ApiKey) throws IOException, ParseException {
 		//URL can not contain spaces which are possible in nicknames
 		if(nickName.contains(" ")) {
 			nickName = nickName.replace(" ", "%20");
 		}
-		URL url = new URL("https://euw1.api.riotgames.com/lol/summoner/v3/summoners/by-name/" + nickName + "?api_key=" + ApiKey);
+		// deprecated v3 call returned: {"id":84941,"accountId":90255,"name":"XZephiraX","profileIconId":10,"revisionDate":1545243549000,"summonerLevel":45}
+		URL url = new URL("https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/" + nickName + "?api_key=" + ApiKey);
 		JSONObject summenorData  = getJSONFromUrl(url);		
-		long accountId =  (long) summenorData.get("accountId");
+		String encryptedAccountId =  (String) summenorData.get("accountId");
 		String caseCorrectNickName =  (String) summenorData.get("name");
-		AccountIdAndCaseCorrectNickNameHolder holder = new AccountIdAndCaseCorrectNickNameHolder(accountId, caseCorrectNickName);
+		EncryptedAccountIdAndCaseCorrectNickNameHolder holder = new EncryptedAccountIdAndCaseCorrectNickNameHolder(encryptedAccountId, caseCorrectNickName);
 		return holder;		
 	}
 		
-	public long getLastGameIdByAccId(long accId,String ApiKey) throws IOException, ParseException {
-		URL url = new URL("https://euw1.api.riotgames.com/lol/match/v3/matchlists/by-account/" + accId + "?api_key=" + ApiKey);
+	public long getLastGameIdByEncryptedAccId(String accId,String ApiKey) throws IOException, ParseException {
+		URL url = new URL("https://euw1.api.riotgames.com/lol/match/v4/matchlists/by-account/" + accId + "?api_key=" + ApiKey);
 		JSONObject matchData = getJSONFromUrl(url);
 		JSONArray matchlist =   (JSONArray) matchData.get("matches");
 		
@@ -39,7 +39,7 @@ public class RiotApiInterface {
 	 * returns true if last game was won; returns false if last game was lost
 	 */
 	public WinKdaMostDamageHolder getWinAndKdaFromGameId(long gameId, String ApiKey, String nickName) throws IOException, ParseException {		
-		URL url = new URL("https://euw1.api.riotgames.com/lol/match/v3/matches/" + gameId + "?api_key=" + ApiKey);
+		URL url = new URL("https://euw1.api.riotgames.com/lol/match/v4/matches/" + gameId + "?api_key=" + ApiKey);
 		JSONObject match = getJSONFromUrl(url); 
 		JSONArray participantIdentities = (JSONArray) match.get("participantIdentities");
 		long participantId = -1;
