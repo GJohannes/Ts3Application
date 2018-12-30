@@ -3,6 +3,7 @@ package miscellaneous;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -44,8 +45,8 @@ import login.LoginController;
 import login.Ts3Client;
 import serverFunctions.riotApi.RiotApiInterface;
 import serverFunctions.riotApi.RiotApiNotification;
-import serverFunctions.webServer.HistoryData;
 import serverFunctions.webServer.StartWebServer;
+import serverFunctions.webServer.servlets.overview.HistoryData;
 
 public class AppMain extends Application {
 
@@ -82,36 +83,36 @@ public class AppMain extends Application {
 //		//Process wasd = new ProcessBuilder("C:\\Program Files\\VideoLAN\\VLC\\vlc.exe").start();
 //		Process wasd2 = new ProcessBuilder("C:\\Program Files\\Mozilla Firefox\\firefox.exe").start();
 
-		ExtendedTS3Config config = new ExtendedTS3Config("[::1]");
-		ExtendedTS3Query query = new ExtendedTS3Query(config);
-		ExtendedTS3Api api = new ExtendedTS3Api(query);
-
+//		ExtendedTS3Config config = new ExtendedTS3Config("[::1]");
+//		ExtendedTS3Query query = new ExtendedTS3Query(config);
+//		ExtendedTS3Api api = new ExtendedTS3Api(query);
+//
 //		config.setHost("127.0.0.1");
-		config.setHost("[::1]");
-		config.setDebugLevel(Level.ALL);
-
-		// throws exception if no connection could be established
-		query.connect();
-		api.logToCommandline("Connected to Server");
-		// api.login(this.serverQueryName, this.serverQueryPassword);
-		// is true if connect was successful
-
-		api.login("Ai_Overlord_Rudolf", "HndeFy2F", "Zephira", "giwLzOcXMB1fi+DVtV6uSDzCqGo=");
-		
-		api.selectVirtualServerByPort(9987);
-		api.setNickname("Ai_Overlord_Rudolf");
-		api.registerAllEvents();
-		api.sendServerMessage(api.getConnectedConfigValues().getclientName() + "is now online!");
-		api.logToCommandline("Logged in to Server Instance");
-	
-		StartWebServer webServerStart = new StartWebServer(api, 8081, 8082);
-		Thread thread = new Thread(webServerStart);
-		try {
-			thread.start();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		config.setHost("[::1]");
+//		config.setDebugLevel(Level.ALL);
+//
+//		// throws exception if no connection could be established
+//		query.connect();
+//		api.logToCommandline("Connected to Server");
+//		// api.login(this.serverQueryName, this.serverQueryPassword);
+//		// is true if connect was successful
+//
+//		api.login("Ai_Overlord_Rudolf", "HndeFy2F", "Zephira", "giwLzOcXMB1fi+DVtV6uSDzCqGo=");
+//		
+//		api.selectVirtualServerByPort(9987);
+//		api.setNickname("Ai_Overlord_Rudolf");
+//		api.registerAllEvents();
+//		api.sendServerMessage(api.getConnectedConfigValues().getclientName() + "is now online!");
+//		api.logToCommandline("Logged in to Server Instance");
+//	
+//		StartWebServer webServerStart = new StartWebServer(api, 8081, 8082);
+//		Thread thread = new Thread(webServerStart);
+//		try {
+//			thread.start();
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 
 //		RiotApiInterface riotApi = new RiotApiInterface();
 //		RiotApiNotification riotN =new RiotApiNotification(null);
