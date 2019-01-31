@@ -44,8 +44,8 @@ public class IPv4IPv6Validator {
 		// ask for a hex number that occurs between 0 and 4 times without the following :
 		//(([0-9]|[a-fA-F]){0,4}?)
 		
-		//regular case that there are no :: blocks. 99.988% this is the relevant part. rest are edge cases with :: blocks
-		//exact number is 100 - 1.2206379344092586E-4 (exact % that IPv6 has a 0) *100 = 99.987793620655907414%
+		//regular case that there are no :: blocks. ca. 8/65536 --> 99.98779296875% this is the relevant part. rest are edge cases with :: blocks
+		//exact number is: 100 - 1.2206379344092586E-4 (exact % that IPv6 has a 0) * 100 = 99.987793620655907414% : chance that no entire block is 0
 		if(Pattern.matches("(((([0-9]|[a-fA-F]){1,4}?):){7})(([0-9]|[a-fA-F]){1,4}?)", s)) {
 			return true;
 		//case that :: followed by 1-7 blocks (e.g.: ::d014:c34:f9ef:b893:ab:aa:aa)
