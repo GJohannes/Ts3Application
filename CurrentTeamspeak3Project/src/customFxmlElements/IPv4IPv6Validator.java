@@ -45,6 +45,7 @@ public class IPv4IPv6Validator {
 		//(([0-9]|[a-fA-F]){0,4}?)
 		
 		//regular case that there are no :: blocks. 99.988% this is the relevant part. rest are edge cases with :: blocks
+		//exact number is 100 - 1.2206379344092586E-4 (exact % that IPv6 has a 0) *100 = 99.987793620655907414%
 		if(Pattern.matches("(((([0-9]|[a-fA-F]){1,4}?):){7})(([0-9]|[a-fA-F]){1,4}?)", s)) {
 			return true;
 		//case that :: followed by 1-7 blocks (e.g.: ::d014:c34:f9ef:b893:ab:aa:aa)
@@ -117,5 +118,21 @@ public class IPv4IPv6Validator {
 		box.getChildren().add(label);
 		newWindow.setScene(secondScene);
 		newWindow.show();
+	}
+	
+	/*
+	 * Unused helper method which was used to calculate the exact percentage in 
+	 * which the basic regEx is not needed but one of the extensions
+	 */
+	public void calculateProbabilityThatNumberHasAZeroIfRandomlyChoosen() {
+		
+		double midResult = 0;
+		double numeralSystem = 65536; // numeral system in which a "digit" of ipv6 is given (ffff)
+		
+		//number of "digits" () in an ipv6 adress has
+		for(int numberOfDigits = 0; numberOfDigits < 8; numberOfDigits++) {
+			midResult  = (1 / numeralSystem) - midResult * (1 / numeralSystem) + midResult;
+			System.out.println(midResult);
+		}
 	}
 }
