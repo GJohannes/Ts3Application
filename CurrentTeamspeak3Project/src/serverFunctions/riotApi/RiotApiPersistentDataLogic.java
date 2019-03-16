@@ -2,27 +2,27 @@ package serverFunctions.riotApi;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
-import InputOutput.FileInputOutput;
 import InputOutput.RiotApiIO;
 import miscellaneous.ExtendedTS3Api;
+import serverFunctions.riotApi.DataObjects.RiotApiPersitentUserInformation;
+import serverFunctions.riotApi.DataObjects.RiotApiUser;
+import serverFunctions.riotApi.DataObjects.WinKdaMostDamageHolder;
 
-public class RiotApiPersistentData {
+public class RiotApiPersistentDataLogic {
 	private RiotApiIO riotApiIO;
 	private ExtendedTS3Api api;
 
-	public RiotApiPersistentData(ExtendedTS3Api api) {
+	public RiotApiPersistentDataLogic(ExtendedTS3Api api) {
 		this.riotApiIO = riotApiIO.getInstance();
 		this.api = api;
 	}
 
 	public void initializeApiCheckUsers(RiotApiNotification apiNotification, int initializerId) {
-		ArrayList<RiotApiPersitentObject> readRiotApiPersitance = riotApiIO.readRiotApiPersitance();
-		for (RiotApiPersitentObject riotApiPersitentObject : readRiotApiPersitance) {
+		ArrayList<RiotApiPersitentUserInformation> readRiotApiPersitance = riotApiIO.readRiotApiPersitance();
+		for (RiotApiPersitentUserInformation riotApiPersitentObject : readRiotApiPersitance) {
 			try {
 				if(riotApiPersitentObject.isPartOfRepeatedApiCheck()) {
 					apiNotification.addUser(riotApiPersitentObject.getCaseCorrectNickName());
@@ -45,36 +45,37 @@ public class RiotApiPersistentData {
 	 * @return returns the average kda (includs the new kda)
 	 */
 	public double updatePersistentAverageKda(RiotApiUser user, WinKdaMostDamageHolder kdaHolder) {
-		RiotApiPersitentObject userOnHardDrive = this.getThePersistentUser(user);
+		RiotApiPersitentUserInformation userOnHardDrive = this.getThePersistentUser(user);
 		double averageKDAonHDD = userOnHardDrive.getAverageKDA();
 		long numberOfGamesonHDD = userOnHardDrive.getNumberOfGamesPlayed();
 		double newKDA = kdaHolder.getKda();
 		long numberOfNewGames = 1;
 		double newAverageKDA = ((averageKDAonHDD * numberOfGamesonHDD) + (newKDA * numberOfNewGames)) / (numberOfGamesonHDD + numberOfNewGames);
-
-		RiotApiPersitentObject newPersistenceOnHDD = new RiotApiPersitentObject(user.getCaseCorrectNickName(), newAverageKDA, numberOfGamesonHDD + numberOfNewGames,
-				userOnHardDrive.isPartOfRepeatedApiCheck());
+		long newNumberOfGames =  numberOfGamesonHDD + numberOfNewGames;
+		
+		RiotApiPersitentUserInformation newPersistenceOnHDD = 
+				new RiotApiPersitentUserInformation(user.getCaseCorrectNickName(), newAverageKDA,newNumberOfGames,userOnHardDrive.isPartOfRepeatedApiCheck(), user.getEncryptedAccountId());
 		riotApiIO.updateRiotApiPersistance(newPersistenceOnHDD);
 
 		return newAverageKDA;
 	}
 
 	public void updatePersistentIsAddedToRepeatingCheckup(RiotApiUser user, boolean isAddedToRepeatingCheckup) {
-		RiotApiPersitentObject thePersistentUser = this.getThePersistentUser(user);
+		RiotApiPersitentUserInformation thePersistentUser = this.getThePersistentUser(user);
 		thePersistentUser.setPartOfRepeatedApiCheck(isAddedToRepeatingCheckup);
 		riotApiIO.updateRiotApiPersistance(thePersistentUser);
 	}
 
-	private RiotApiPersitentObject getThePersistentUser(RiotApiUser user) {
-		RiotApiPersitentObject userPersistentOnHardDrive = null;
-		ArrayList<RiotApiPersitentObject> readRiotApiPersitance = riotApiIO.readRiotApiPersitance();
-		for (RiotApiPersitentObject riotApiPersitentObject : readRiotApiPersitance) {
-			if (riotApiPersitentObject.getCaseCorrectNickName().equals(user.getCaseCorrectNickName())) {
+	private RiotApiPersitentUserInformation getThePersistentUser(RiotApiUser user) {
+		RiotApiPersitentUserInformation userPersistentOnHardDrive = null;
+		ArrayList<RiotApiPersitentUserInformation> readRiotApiPersitance = riotApiIO.readRiotApiPersitance();
+		for (RiotApiPersitentUserInformation riotApiPersitentObject : readRiotApiPersitance) {
+			if (riotApiPersitentObject.getEncryptedAccountId().equals(user.getEncryptedAccountId())) {
 				userPersistentOnHardDrive = riotApiPersitentObject;
 			}
 		}
 		if (userPersistentOnHardDrive == null) {
-			return new RiotApiPersitentObject(user.getCaseCorrectNickName(), 0.0, 0, true);
+			return new RiotApiPersitentUserInformation(user.getCaseCorrectNickName(), 0.0, 0, true,user.getEncryptedAccountId());
 		}
 		return userPersistentOnHardDrive;
 	}

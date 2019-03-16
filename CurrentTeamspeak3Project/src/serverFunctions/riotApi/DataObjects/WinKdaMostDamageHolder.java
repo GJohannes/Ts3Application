@@ -1,4 +1,4 @@
-package serverFunctions.riotApi;
+package serverFunctions.riotApi.DataObjects;
 
 public class WinKdaMostDamageHolder {
 	private boolean win;

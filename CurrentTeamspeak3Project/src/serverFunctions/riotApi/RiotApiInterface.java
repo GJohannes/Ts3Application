@@ -12,6 +12,9 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import serverFunctions.riotApi.DataObjects.EncryptedAccountIdAndCaseCorrectNickNameHolder;
+import serverFunctions.riotApi.DataObjects.WinKdaMostDamageHolder;
+
 public class RiotApiInterface {
 	public EncryptedAccountIdAndCaseCorrectNickNameHolder getIdAndCaseCorrectNickNameByNickName(String nickName, String ApiKey) throws IOException, ParseException {
 		//URL can not contain spaces which are possible in nicknames

@@ -13,6 +13,9 @@ import com.github.theholywaffle.teamspeak3.api.event.TextMessageEvent;
 import miscellaneous.AllExistingEventAdapter;
 import miscellaneous.ExtendedTS3Api;
 import miscellaneous.ExtendedTS3EventAdapter;
+import serverFunctions.riotApi.DataObjects.EncryptedAccountIdAndCaseCorrectNickNameHolder;
+import serverFunctions.riotApi.DataObjects.RiotApiUser;
+import serverFunctions.riotApi.DataObjects.WinKdaMostDamageHolder;
 
 public class RiotApiNotification implements Runnable {
 	private ExtendedTS3Api api;
@@ -22,12 +25,12 @@ public class RiotApiNotification implements Runnable {
 	private CopyOnWriteArrayList<RiotApiUser> userList = new CopyOnWriteArrayList<RiotApiUser>();
 	private RiotApiInterface riotInterface = new RiotApiInterface();
 	private String apiKey = "";
-	private RiotApiPersistentData riotApiPersistentData;
+	private RiotApiPersistentDataLogic riotApiPersistentData;
 	private RiotApiNotification scope = this;
 	
 	public RiotApiNotification(ExtendedTS3Api api) {
 		this.api = api;
-		this.riotApiPersistentData = new RiotApiPersistentData(api);
+		this.riotApiPersistentData = new RiotApiPersistentDataLogic(api);
 	}
 
 	public void setApiKey(String key) {
@@ -188,7 +191,7 @@ public class RiotApiNotification implements Runnable {
 			for (RiotApiUser user : userList) {
 				try {
 					long newGameId = riotInterface.getLastGameIdByEncryptedAccId(user.getEncryptedAccountId(), apiKey);
-					if (newGameId != user.getLastGameId()) {
+					if (newGameId == user.getLastGameId()) {
 						String message = "";
 						
 						user.setLastGameId(newGameId);
@@ -220,7 +223,7 @@ public class RiotApiNotification implements Runnable {
 			try {
 				// check all 60 sec - sleep time - approximated time for all server query
 				// requests
-				int threadSleepTime = 60000 - (userList.size() * 1000) - (250 * userList.size());
+				int threadSleepTime = 30000 - (userList.size() * 1000) - (250 * userList.size());
 				// preventing negative thread sleep time
 				if (threadSleepTime < 0) {
 					threadSleepTime = 0;

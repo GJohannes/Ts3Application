@@ -12,7 +12,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import serverFunctions.riotApi.RiotApiPersitentObject;
+import serverFunctions.riotApi.DataObjects.RiotApiPersitentUserInformation;
 
 public class RiotApiIO {
 
@@ -23,6 +23,7 @@ public class RiotApiIO {
 	private final String averageKDAKey = DefinedStringsRiotApiIO.riotApiJSONKeyAverageKDA.getValue();
 	private final String numberOfGamesPlayedKey = DefinedStringsRiotApiIO.riotApiJSONKeyNumberOfGamesPlayed.getValue();
 	private final String repeatetCheckKey = DefinedStringsRiotApiIO.riotApiJSONKeyIsPartOfRepeatedApiCheck.getValue();
+	private final String encryptedAccountIdKey = DefinedStringsRiotApiIO.riotApiJSONKeyEncryptedAccoutID.getValue();
 	
 	
 	private RiotApiIO() {
@@ -36,14 +37,14 @@ public class RiotApiIO {
 	}
 	
 	
-	public void updateRiotApiPersistance(RiotApiPersitentObject persistenObject) {
-		ArrayList<RiotApiPersitentObject> readRiotApiPersitance = readRiotApiPersitance();
+	public void updateRiotApiPersistance(RiotApiPersitentUserInformation persistenObject) {
+		ArrayList<RiotApiPersitentUserInformation> readRiotApiPersitance = readRiotApiPersitance();
 		boolean creatNewUserLog = true;
 
 		// case that user already is logged
-		Iterator<RiotApiPersitentObject> iterator = readRiotApiPersitance.iterator();
+		Iterator<RiotApiPersitentUserInformation> iterator = readRiotApiPersitance.iterator();
 		while (iterator.hasNext()) {
-			RiotApiPersitentObject riotApiPersitentObject = iterator.next();
+			RiotApiPersitentUserInformation riotApiPersitentObject = iterator.next();
 			if (riotApiPersitentObject.getCaseCorrectNickName().equals(persistenObject.getCaseCorrectNickName())) {
 				iterator.remove();
 				readRiotApiPersitance.add(persistenObject);
@@ -78,11 +79,11 @@ public class RiotApiIO {
 		}
 	}
 
-	private void writeRiotApiPersistanceToHardDrive(ArrayList<RiotApiPersitentObject> allPersistentObjects) {
+	private void writeRiotApiPersistanceToHardDrive(ArrayList<RiotApiPersitentUserInformation> allPersistentObjects) {
 		this.checkAndCreateRiotApiPersistence();
 		File persistentDataFile = new File(this.persistentFolderName +"/"+this.persistentFileName);
 		JSONArray jsonArray = new JSONArray();
-		for (RiotApiPersitentObject riotApiPersitentObject : allPersistentObjects) {
+		for (RiotApiPersitentUserInformation riotApiPersitentObject : allPersistentObjects) {
 			jsonArray.add(riotApiPersitentObject.toJSONObject());
 		}
 
@@ -97,9 +98,9 @@ public class RiotApiIO {
 
 	}
 
-	public ArrayList<RiotApiPersitentObject> readRiotApiPersitance() {
+	public ArrayList<RiotApiPersitentUserInformation> readRiotApiPersitance() {
 		this.checkAndCreateRiotApiPersistence();
-		ArrayList<RiotApiPersitentObject> allRiotApiPersistenObjects = new ArrayList<>();
+		ArrayList<RiotApiPersitentUserInformation> allRiotApiPersistenObjects = new ArrayList<>();
 		try {
 			File persistentDataFile = new File(this.persistentFolderName +"/"+this.persistentFileName);
 			FileReader reader = new FileReader(persistentDataFile);
@@ -107,11 +108,14 @@ public class RiotApiIO {
 			JSONArray allUsers = (JSONArray) parser.parse(reader);
 			for (int i = 0; i < allUsers.size(); i++) {
 				JSONObject singleUser = (JSONObject) allUsers.get(i);
+				
 				String caseCorrectNickName = (String) singleUser.get(this.nickNameKey);
 				double averageKDA = (double) singleUser.get(this.averageKDAKey);
 				long numberOfGamesPlayed = (long) singleUser.get(this.numberOfGamesPlayedKey);
 				boolean isPartOfRepeatedApiCheck = (boolean) singleUser.get(this.repeatetCheckKey);
-				RiotApiPersitentObject singleUserAsPersitenObject = new RiotApiPersitentObject(caseCorrectNickName, averageKDA, numberOfGamesPlayed, isPartOfRepeatedApiCheck);
+				String encryptedAccountID = (String) singleUser.get(this.encryptedAccountIdKey);
+				
+				RiotApiPersitentUserInformation singleUserAsPersitenObject = new RiotApiPersitentUserInformation(caseCorrectNickName, averageKDA, numberOfGamesPlayed, isPartOfRepeatedApiCheck,encryptedAccountID);
 				allRiotApiPersistenObjects.add(singleUserAsPersitenObject);
 			}
 			reader.close();

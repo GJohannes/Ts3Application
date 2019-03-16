@@ -1,4 +1,4 @@
-package serverFunctions.riotApi;
+package serverFunctions.riotApi.DataObjects;
 
 /**
  * Simple holder to have method return two values.

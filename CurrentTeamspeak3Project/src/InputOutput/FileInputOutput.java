@@ -22,8 +22,8 @@ import org.json.simple.*;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import serverFunctions.riotApi.RiotApiPersitentObject;
-import serverFunctions.riotApi.RiotApiUser;
+import serverFunctions.riotApi.DataObjects.RiotApiPersitentUserInformation;
+import serverFunctions.riotApi.DataObjects.RiotApiUser;
 
 /**
  * This class is used for all Hard Drive access of the application. Each methdo
