@@ -39,21 +39,21 @@ public class RiotApiIO {
 	
 	public void updateRiotApiPersistance(RiotApiPersitentUserInformation persistenObject) {
 		ArrayList<RiotApiPersitentUserInformation> readRiotApiPersitance = readRiotApiPersitance();
-		boolean creatNewUserLog = true;
+		boolean creatNewPersistentUserInformation = true;
 
 		// case that user already is logged
 		Iterator<RiotApiPersitentUserInformation> iterator = readRiotApiPersitance.iterator();
 		while (iterator.hasNext()) {
 			RiotApiPersitentUserInformation riotApiPersitentObject = iterator.next();
-			if (riotApiPersitentObject.getCaseCorrectNickName().equals(persistenObject.getCaseCorrectNickName())) {
+			if (riotApiPersitentObject.getEncryptedAccountId().equals(persistenObject.getEncryptedAccountId())) {
 				iterator.remove();
 				readRiotApiPersitance.add(persistenObject);
-				creatNewUserLog = false;
+				creatNewPersistentUserInformation = false;
 				break;
 			}
 		}
 
-		if (creatNewUserLog) {
+		if (creatNewPersistentUserInformation) {
 			readRiotApiPersitance.add(persistenObject);
 		}
 		this.writeRiotApiPersistanceToHardDrive(readRiotApiPersitance);
