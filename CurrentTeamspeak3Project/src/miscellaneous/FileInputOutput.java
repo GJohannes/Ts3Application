@@ -2,6 +2,7 @@ package miscellaneous;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -14,17 +15,20 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-
+import java.util.Iterator;
 import java.util.List;
 
 import org.json.simple.*;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import serverFunctions.riotApi.RiotApiPersitentObject;
+import serverFunctions.riotApi.RiotApiUser;
 
 /**
- * This class is used for all Hard Drive access of the application.
- * Each methdo that can be accessd by multiple threads is synchronized to prevent lost updates from happening 
+ * This class is used for all Hard Drive access of the application. Each methdo
+ * that can be accessd by multiple threads is synchronized to prevent lost
+ * updates from happening
  * 
  * 
  * @author Johannes
@@ -32,19 +36,19 @@ import org.json.simple.parser.ParseException;
  */
 public class FileInputOutput {
 
-	 private static FileInputOutput instance = null;
-	
+	private static FileInputOutput instance = null;
+
 	private FileInputOutput() {
-		
+
 	}
-	
+
 	public static FileInputOutput getInstance() {
-		if(instance == null) {
-			instance = new FileInputOutput();			
+		if (instance == null) {
+			instance = new FileInputOutput();
 		}
 		return instance;
 	}
-	
+
 	public JSONObject readFile(String filename) throws IOException, ParseException {
 		JSONParser parser = new JSONParser();
 		InputStreamReader read = new FileReader(filename);
@@ -149,38 +153,38 @@ public class FileInputOutput {
 	}
 
 	/*
-	 * This method can be invoked from multiple threads and therefore has to be 
-	 * synchronized since a lost update for the log files is possible and is suspected for the past (29.11.2018)
+	 * This method can be invoked from multiple threads and therefore has to be
+	 * synchronized since a lost update for the log files is possible and is
+	 * suspected for the past (29.11.2018)
 	 */
 	public synchronized void writeServerLog(JSONObject json) throws IOException {
-			File directory = new File(DefinedStrings.logFolderName.getValue());
-			if (!directory.exists()) {
-				directory.mkdir();
-			}
+		File directory = new File(DefinedStrings.logFolderName.getValue());
+		if (!directory.exists()) {
+			directory.mkdir();
+		}
 
-			List<String> allLines;
-			LocalDateTime now = LocalDateTime.now();
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-			String fileName = now.format(formatter);
-			fileName = DefinedStrings.logFolderName.getValue() + "/" + fileName + ".txt";
+		List<String> allLines;
+		LocalDateTime now = LocalDateTime.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		String fileName = now.format(formatter);
+		fileName = DefinedStrings.logFolderName.getValue() + "/" + fileName + ".txt";
 
-			File file = new File(fileName.toString());
-			if (!file.exists()) {
-				file.createNewFile();
-			}
-			Path path = Paths.get(file.getAbsolutePath());
-			allLines = Files.readAllLines(path, StandardCharsets.UTF_8);
+		File file = new File(fileName.toString());
+		if (!file.exists()) {
+			file.createNewFile();
+		}
+		Path path = Paths.get(file.getAbsolutePath());
+		allLines = Files.readAllLines(path, StandardCharsets.UTF_8);
 
-			BufferedWriter writer = Files.newBufferedWriter(file.toPath(),StandardCharsets.UTF_8); 
-			
-			for (int i = 0; i < allLines.size(); i++) {
-				writer.write(allLines.get(i));
-				writer.newLine();
-			}
-			writer.write(json.toJSONString());
-			writer.flush();
-			writer.close();
+		BufferedWriter writer = Files.newBufferedWriter(file.toPath(), StandardCharsets.UTF_8);
 
+		for (int i = 0; i < allLines.size(); i++) {
+			writer.write(allLines.get(i));
+			writer.newLine();
+		}
+		writer.write(json.toJSONString());
+		writer.flush();
+		writer.close();
 
 		// code if json date has to be read and difference calculated
 		// LocalDateTime now = LocalDateTime.now();
@@ -219,10 +223,94 @@ public class FileInputOutput {
 				}
 			}
 		} catch (NoSuchFileException e) {
-			//System.out.println("Selected a date from which no data was found");
+			// System.out.println("Selected a date from which no data was found");
 			return allEventsAsJSON;
 		}
 
 		return allEventsAsJSON;
+	}
+
+	public void updateRiotApiPersistance(RiotApiPersitentObject persistenObject) {
+		ArrayList<RiotApiPersitentObject> readRiotApiPersitance = readRiotApiPersitance();
+		boolean creatNewUserLog = true;
+
+		// case that user already is logged
+		Iterator<RiotApiPersitentObject> iterator = readRiotApiPersitance.iterator();
+		while (iterator.hasNext()) {
+			RiotApiPersitentObject riotApiPersitentObject = iterator.next();
+			if (riotApiPersitentObject.getCaseCorrectNickName().equals(persistenObject.getCaseCorrectNickName())) {
+				iterator.remove();
+				readRiotApiPersitance.add(persistenObject);
+				creatNewUserLog = false;
+				break;
+			}
+		}
+
+		if (creatNewUserLog) {
+			readRiotApiPersitance.add(persistenObject);
+		}
+		this.writeRiotApiPersistanceToHardDrive(readRiotApiPersitance);
+	}
+
+	public void checkAndCreateRiotApiPersistence() {
+		File dirctory = new File("riotApiPersistence");
+		if (!dirctory.exists()) {
+			dirctory.mkdirs();
+		}
+
+		File file = new File("riotApiPersistence/kdaData.txt");
+		if (!file.exists()) {
+			try {
+				FileWriter writer = new FileWriter(file);
+				JSONArray jsonArray = new JSONArray();
+				writer.write(jsonArray.toJSONString());
+				writer.flush();
+				writer.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private void writeRiotApiPersistanceToHardDrive(ArrayList<RiotApiPersitentObject> allPersistentObjects) {
+		this.checkAndCreateRiotApiPersistence();
+		File file = new File("riotApiPersistence/kdaData.txt");
+		JSONArray jsonArray = new JSONArray();
+		for (RiotApiPersitentObject riotApiPersitentObject : allPersistentObjects) {
+			jsonArray.add(riotApiPersitentObject.toJSONObject());
+		}
+
+		try {
+			FileWriter writer = new FileWriter(file);
+			writer.write(jsonArray.toJSONString());
+			writer.flush();
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public ArrayList<RiotApiPersitentObject> readRiotApiPersitance() {
+		this.checkAndCreateRiotApiPersistence();
+		ArrayList<RiotApiPersitentObject> allRiotApiPersistenObjects = new ArrayList<>();
+		try {
+			FileReader reader = new FileReader("riotApiPersistence/kdaData.txt");
+			JSONParser parser = new JSONParser();
+			JSONArray allUsers = (JSONArray) parser.parse(reader);
+			for (int i = 0; i < allUsers.size(); i++) {
+				JSONObject singleUser = (JSONObject) allUsers.get(i);
+				String caseCorrectNickName = (String) singleUser.get("caseCorrectNickName");
+				double averageKDA = (double) singleUser.get("averageKDA");
+				long numberOfGamesPlayed = (long) singleUser.get("numberOfGamesPlayed");
+				boolean isPartOfRepeatedApiCheck = (boolean) singleUser.get("isPartOfRepeatedApiCheck");
+				RiotApiPersitentObject singleUserAsPersitenObject = new RiotApiPersitentObject(caseCorrectNickName, averageKDA, numberOfGamesPlayed, isPartOfRepeatedApiCheck);
+				allRiotApiPersistenObjects.add(singleUserAsPersitenObject);
+			}
+			reader.close();
+		} catch (IOException | ParseException e) {
+			e.printStackTrace();
+		}
+		return allRiotApiPersistenObjects;
 	}
 }

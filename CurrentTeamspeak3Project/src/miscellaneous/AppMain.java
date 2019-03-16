@@ -29,8 +29,6 @@ import com.github.theholywaffle.teamspeak3.api.event.TS3EventAdapter;
 
 import customFxmlElements.IPv4IPv6Validator;
 
-import java.util.logging.Level;
-
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -70,6 +68,11 @@ public class AppMain extends Application {
 
 	public static void main(String[] args) throws IOException, ParseException {
 		launch(args);	
+		
+//		FileInputOutput.getInstance().checkAndCreateRiotApiPersistence();
+		
+		
+		
 		
 //		System.out.println("Vlc Opening!");
 //        Runtime runTime = Runtime.getRuntime();

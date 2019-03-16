@@ -2,6 +2,7 @@ package serverFunctions.riotApi;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.json.simple.parser.ParseException;
@@ -21,9 +22,12 @@ public class RiotApiNotification implements Runnable {
 	private CopyOnWriteArrayList<RiotApiUser> userList = new CopyOnWriteArrayList<RiotApiUser>();
 	private RiotApiInterface riotInterface = new RiotApiInterface();
 	private String apiKey = "";
-
+	private RiotApiPersistentData riotApiPersistentData;
+	private RiotApiNotification scope = this;
+	
 	public RiotApiNotification(ExtendedTS3Api api) {
 		this.api = api;
+		this.riotApiPersistentData = new RiotApiPersistentData(api);
 	}
 
 	public void setApiKey(String key) {
@@ -40,6 +44,7 @@ public class RiotApiNotification implements Runnable {
 		String nickName = message.split(" ", 2)[1];
 		for (int i = 0; i < userList.size(); i++) {
 			if (userList.get(i).getCaseCorrectNickName().equalsIgnoreCase(nickName)) {
+				riotApiPersistentData.updatePersistentIsAddedToRepeatingCheckup(userList.get(i), false);
 				userList.remove(i);
 				return true;
 			}
@@ -78,7 +83,7 @@ public class RiotApiNotification implements Runnable {
 	 * @throws ParseException
 	 */
 
-	private boolean addUser(String nickName) throws IOException, ParseException {
+	public boolean addUser(String nickName) throws IOException, ParseException {
 		for (int i = 0; i < userList.size(); i++) {
 			if (userList.get(i).getCaseCorrectNickName().equalsIgnoreCase(nickName)) {
 				//case that user already added to the list
@@ -91,6 +96,7 @@ public class RiotApiNotification implements Runnable {
 		long lastGameId = riotInterface.getLastGameIdByEncryptedAccId(accountId, apiKey);
 		RiotApiUser newUser = new RiotApiUser(accountId, caseCorrectNickName, lastGameId);
 		userList.add(newUser);
+		riotApiPersistentData.updatePersistentIsAddedToRepeatingCheckup(newUser, true);
 		return true;
 	}
 
@@ -99,7 +105,7 @@ public class RiotApiNotification implements Runnable {
 			@Override
 			public void onTextMessage(TextMessageEvent messageToBotEvent) {
 				String message = messageToBotEvent.getMessage();
-
+				
 				if (message.startsWith("?")) {
 					message = message.substring(1);
 					if (message.toLowerCase().startsWith("add")) {
@@ -144,7 +150,9 @@ public class RiotApiNotification implements Runnable {
 							// else update the key
 						} else {
 							splittStringAndUpdateKey(message);
+							riotApiPersistentData.initializeApiCheckUsers(scope,messageToBotEvent.getInvokerId());
 							api.sendPrivateMessage(messageToBotEvent.getInvokerId(), "Successful updated Key");
+							
 						}
 					} else {
 						api.sendPrivateMessage(messageToBotEvent.getInvokerId(),
@@ -169,6 +177,8 @@ public class RiotApiNotification implements Runnable {
 
 	@Override
 	public void run() {
+		//TODO Change request. Players save to hdd
+		//when added/removed and calculate an average kda and save it to the harddrive  
 		api.addTS3Listeners(this.getRiotApi(api));
 		this.activeLogic();
 	}
@@ -183,13 +193,15 @@ public class RiotApiNotification implements Runnable {
 						
 						user.setLastGameId(newGameId);
 						WinKdaMostDamageHolder winKdaMostDamageHolder = riotInterface.getWinAndKdaFromGameId(user.getLastGameId(), apiKey, user.getCaseCorrectNickName());
-
+						double averageKda = riotApiPersistentData.updatePersistentAverageKda(user, winKdaMostDamageHolder);
+						String averageKdaVisual = String.format("%.2f", averageKda);
+						
 						if (winKdaMostDamageHolder.isWin()) {
 							message =  user.getCaseCorrectNickName() + 
-									" just WON in League of Legends ( KDA: " + winKdaMostDamageHolder.getKdaVisual() + " )";
+									" just WON in League of Legends ( KDA: " + winKdaMostDamageHolder.getKdaVisual() + "; Ø: "+ averageKdaVisual +" )";
 						} else {
 							message = user.getCaseCorrectNickName() + 
-									" just LOST in League of Legends. What a looser ( KDA: " + winKdaMostDamageHolder.getKdaVisual() + " )";
+									" just LOST in League of Legends. What a looser ( KDA: " + winKdaMostDamageHolder.getKdaVisual()  + "; Ø: "+ averageKdaVisual +" )";
 						}
 						if(winKdaMostDamageHolder.isHighestDamageDealer()) {
 							message = message + " ( Most damage )";
