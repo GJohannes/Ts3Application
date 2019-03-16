@@ -60,10 +60,11 @@ public class RiotApiPersistentDataLogic {
 		return newAverageKDA;
 	}
 
-	public void updatePersistentIsAddedToRepeatingCheckup(RiotApiUser user, boolean isAddedToRepeatingCheckup) {
+	public boolean updatePersistentIsAddedToRepeatingCheckup(RiotApiUser user, boolean isAddedToRepeatingCheckup) {
 		RiotApiPersitentUserInformation thePersistentUser = this.getThePersistentUser(user);
 		thePersistentUser.setPartOfRepeatedApiCheck(isAddedToRepeatingCheckup);
-		riotApiIO.updateRiotApiPersistance(thePersistentUser);
+		boolean riotApiUserWasStoredOnHDDAlready = riotApiIO.updateRiotApiPersistance(thePersistentUser);
+		return riotApiUserWasStoredOnHDDAlready;
 	}
 
 	private RiotApiPersitentUserInformation getThePersistentUser(RiotApiUser user) {

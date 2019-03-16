@@ -34,7 +34,6 @@ public class RiotApiInterface {
 		URL url = new URL("https://euw1.api.riotgames.com/lol/match/v4/matchlists/by-account/" + accId + "?api_key=" + ApiKey);
 		JSONObject matchData = getJSONFromUrl(url);
 		JSONArray matchlist =   (JSONArray) matchData.get("matches");
-		
 		return (long) ((JSONObject) matchlist.get(0)).get("gameId");
 	}
 	

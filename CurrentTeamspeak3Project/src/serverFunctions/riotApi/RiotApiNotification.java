@@ -15,6 +15,7 @@ import miscellaneous.ExtendedTS3Api;
 import miscellaneous.ExtendedTS3EventAdapter;
 import serverFunctions.riotApi.DataObjects.EncryptedAccountIdAndCaseCorrectNickNameHolder;
 import serverFunctions.riotApi.DataObjects.RiotApiUser;
+import serverFunctions.riotApi.DataObjects.UserAddedInformation;
 import serverFunctions.riotApi.DataObjects.WinKdaMostDamageHolder;
 
 public class RiotApiNotification implements Runnable {
@@ -38,7 +39,7 @@ public class RiotApiNotification implements Runnable {
 	}
 
 	// should get message of add and nickname to add
-	private boolean splittStringAndAddUser(String message) throws IOException, ParseException {
+	private UserAddedInformation splittStringAndAddUser(String message) throws IOException, ParseException {
 		String nickName = message.split(" ", 2)[1];
 		return this.addUser(nickName);
 	}
@@ -86,11 +87,11 @@ public class RiotApiNotification implements Runnable {
 	 * @throws ParseException
 	 */
 
-	public boolean addUser(String nickName) throws IOException, ParseException {
+	public UserAddedInformation addUser(String nickName) throws IOException, ParseException {
 		for (int i = 0; i < userList.size(); i++) {
 			if (userList.get(i).getCaseCorrectNickName().equalsIgnoreCase(nickName)) {
 				//case that user already added to the list
-				return false;
+				return new UserAddedInformation(false);
 			}
 		}
 		EncryptedAccountIdAndCaseCorrectNickNameHolder holder = riotInterface.getIdAndCaseCorrectNickNameByNickName(nickName, apiKey); 
@@ -99,8 +100,9 @@ public class RiotApiNotification implements Runnable {
 		long lastGameId = riotInterface.getLastGameIdByEncryptedAccId(accountId, apiKey);
 		RiotApiUser newUser = new RiotApiUser(accountId, caseCorrectNickName, lastGameId);
 		userList.add(newUser);
-		riotApiPersistentData.updatePersistentIsAddedToRepeatingCheckup(newUser, true);
-		return true;
+		boolean riotApiUserWasStoredOnHDDAlready = riotApiPersistentData.updatePersistentIsAddedToRepeatingCheckup(newUser, true);
+		UserAddedInformation information = new UserAddedInformation(true,riotApiUserWasStoredOnHDDAlready);
+		return information;
 	}
 
 	private ExtendedTS3EventAdapter getRiotApi(ExtendedTS3Api api) {
@@ -113,8 +115,13 @@ public class RiotApiNotification implements Runnable {
 					message = message.substring(1);
 					if (message.toLowerCase().startsWith("add")) {
 						try {
-							if (splittStringAndAddUser(message)) {
-								api.sendPrivateMessage(messageToBotEvent.getInvokerId(), "Successfully added");
+							UserAddedInformation information = splittStringAndAddUser(message);
+							if (information.isUserWasSuccessfullyAdded()) {
+								if(information.isUserWasAddedInThePast()) {
+									api.sendPrivateMessage(messageToBotEvent.getInvokerId(), "Successfully added, loaded average kda data from the past");
+								} else {									
+									api.sendPrivateMessage(messageToBotEvent.getInvokerId(), "Successfully added");
+								}
 							} else {
 								api.sendPrivateMessage(messageToBotEvent.getInvokerId(),
 										"User already registered. Duplicates not allowed");
@@ -191,7 +198,7 @@ public class RiotApiNotification implements Runnable {
 			for (RiotApiUser user : userList) {
 				try {
 					long newGameId = riotInterface.getLastGameIdByEncryptedAccId(user.getEncryptedAccountId(), apiKey);
-					if (newGameId != user.getLastGameId()) {
+					if (newGameId == user.getLastGameId()) {
 						String message = "";
 						
 						user.setLastGameId(newGameId);
@@ -223,7 +230,7 @@ public class RiotApiNotification implements Runnable {
 			try {
 				// check all 60 sec - sleep time - approximated time for all server query
 				// requests
-				int threadSleepTime = 60000 - (userList.size() * 1000) - (250 * userList.size());
+				int threadSleepTime = 30000 - (userList.size() * 1000) - (250 * userList.size());
 				// preventing negative thread sleep time
 				if (threadSleepTime < 0) {
 					threadSleepTime = 0;
