@@ -7,20 +7,21 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
+import InputOutput.FileInputOutput;
+import InputOutput.RiotApiIO;
 import miscellaneous.ExtendedTS3Api;
-import miscellaneous.FileInputOutput;
 
 public class RiotApiPersistentData {
-	private FileInputOutput inOut;
+	private RiotApiIO riotApiIO;
 	private ExtendedTS3Api api;
 
 	public RiotApiPersistentData(ExtendedTS3Api api) {
-		this.inOut = FileInputOutput.getInstance();
+		this.riotApiIO = riotApiIO.getInstance();
 		this.api = api;
 	}
 
 	public void initializeApiCheckUsers(RiotApiNotification apiNotification, int initializerId) {
-		ArrayList<RiotApiPersitentObject> readRiotApiPersitance = inOut.readRiotApiPersitance();
+		ArrayList<RiotApiPersitentObject> readRiotApiPersitance = riotApiIO.readRiotApiPersitance();
 		for (RiotApiPersitentObject riotApiPersitentObject : readRiotApiPersitance) {
 			try {
 				if(riotApiPersitentObject.isPartOfRepeatedApiCheck()) {
@@ -53,7 +54,7 @@ public class RiotApiPersistentData {
 
 		RiotApiPersitentObject newPersistenceOnHDD = new RiotApiPersitentObject(user.getCaseCorrectNickName(), newAverageKDA, numberOfGamesonHDD + numberOfNewGames,
 				userOnHardDrive.isPartOfRepeatedApiCheck());
-		inOut.updateRiotApiPersistance(newPersistenceOnHDD);
+		riotApiIO.updateRiotApiPersistance(newPersistenceOnHDD);
 
 		return newAverageKDA;
 	}
@@ -61,12 +62,12 @@ public class RiotApiPersistentData {
 	public void updatePersistentIsAddedToRepeatingCheckup(RiotApiUser user, boolean isAddedToRepeatingCheckup) {
 		RiotApiPersitentObject thePersistentUser = this.getThePersistentUser(user);
 		thePersistentUser.setPartOfRepeatedApiCheck(isAddedToRepeatingCheckup);
-		inOut.updateRiotApiPersistance(thePersistentUser);
+		riotApiIO.updateRiotApiPersistance(thePersistentUser);
 	}
 
 	private RiotApiPersitentObject getThePersistentUser(RiotApiUser user) {
 		RiotApiPersitentObject userPersistentOnHardDrive = null;
-		ArrayList<RiotApiPersitentObject> readRiotApiPersitance = inOut.readRiotApiPersitance();
+		ArrayList<RiotApiPersitentObject> readRiotApiPersitance = riotApiIO.readRiotApiPersitance();
 		for (RiotApiPersitentObject riotApiPersitentObject : readRiotApiPersitance) {
 			if (riotApiPersitentObject.getCaseCorrectNickName().equals(user.getCaseCorrectNickName())) {
 				userPersistentOnHardDrive = riotApiPersitentObject;

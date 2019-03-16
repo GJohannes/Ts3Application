@@ -1,11 +1,11 @@
-package miscellaneous;
+package InputOutput;
 
-public enum DefinedStrings {
+public enum DefinedStringsTSServerLog {
 	logFolderName("log");
 	
 	private final String keyValue;
 	
-	DefinedStrings(String s) {
+	DefinedStringsTSServerLog(String s) {
 		keyValue = s;
 	}
 	

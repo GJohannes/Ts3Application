@@ -1,6 +1,6 @@
 package login;
 
-import miscellaneous.FileInputOutput;
+import InputOutput.FileInputOutput;
 
 public class Ts3Client {
 	public void startTs3Client(String ts3Path) throws Exception {

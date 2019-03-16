@@ -22,12 +22,12 @@ import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import miscellaneous.FileInputOutput;
 import serverControllers.ServerWindowController;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
+import InputOutput.FileInputOutput;
 import clientControllers.MainWindowController;
 import customFxmlElements.IpAdressTextField;
 import customFxmlElements.PortTextField;

@@ -1,4 +1,4 @@
-package miscellaneous;
+package InputOutput;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -158,7 +158,7 @@ public class FileInputOutput {
 	 * suspected for the past (29.11.2018)
 	 */
 	public synchronized void writeServerLog(JSONObject json) throws IOException {
-		File directory = new File(DefinedStrings.logFolderName.getValue());
+		File directory = new File(DefinedStringsTSServerLog.logFolderName.getValue());
 		if (!directory.exists()) {
 			directory.mkdir();
 		}
@@ -167,7 +167,7 @@ public class FileInputOutput {
 		LocalDateTime now = LocalDateTime.now();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		String fileName = now.format(formatter);
-		fileName = DefinedStrings.logFolderName.getValue() + "/" + fileName + ".txt";
+		fileName = DefinedStringsTSServerLog.logFolderName.getValue() + "/" + fileName + ".txt";
 
 		File file = new File(fileName.toString());
 		if (!file.exists()) {
@@ -207,7 +207,7 @@ public class FileInputOutput {
 		String fileName = localDateTime.toString().split("T")[0];
 		fileName = fileName + ".txt";
 
-		String folderName = DefinedStrings.logFolderName.getValue();
+		String folderName = DefinedStringsTSServerLog.logFolderName.getValue();
 		File file = new File(folderName + "/" + fileName);
 		Path path = Paths.get(file.getAbsolutePath());
 		ArrayList<JSONObject> allEventsAsJSON = new ArrayList<>(100);
@@ -230,87 +230,5 @@ public class FileInputOutput {
 		return allEventsAsJSON;
 	}
 
-	public void updateRiotApiPersistance(RiotApiPersitentObject persistenObject) {
-		ArrayList<RiotApiPersitentObject> readRiotApiPersitance = readRiotApiPersitance();
-		boolean creatNewUserLog = true;
-
-		// case that user already is logged
-		Iterator<RiotApiPersitentObject> iterator = readRiotApiPersitance.iterator();
-		while (iterator.hasNext()) {
-			RiotApiPersitentObject riotApiPersitentObject = iterator.next();
-			if (riotApiPersitentObject.getCaseCorrectNickName().equals(persistenObject.getCaseCorrectNickName())) {
-				iterator.remove();
-				readRiotApiPersitance.add(persistenObject);
-				creatNewUserLog = false;
-				break;
-			}
-		}
-
-		if (creatNewUserLog) {
-			readRiotApiPersitance.add(persistenObject);
-		}
-		this.writeRiotApiPersistanceToHardDrive(readRiotApiPersitance);
-	}
-
-	public void checkAndCreateRiotApiPersistence() {
-		File dirctory = new File("riotApiPersistence");
-		if (!dirctory.exists()) {
-			dirctory.mkdirs();
-		}
-
-		File file = new File("riotApiPersistence/kdaData.txt");
-		if (!file.exists()) {
-			try {
-				FileWriter writer = new FileWriter(file);
-				JSONArray jsonArray = new JSONArray();
-				writer.write(jsonArray.toJSONString());
-				writer.flush();
-				writer.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	private void writeRiotApiPersistanceToHardDrive(ArrayList<RiotApiPersitentObject> allPersistentObjects) {
-		this.checkAndCreateRiotApiPersistence();
-		File file = new File("riotApiPersistence/kdaData.txt");
-		JSONArray jsonArray = new JSONArray();
-		for (RiotApiPersitentObject riotApiPersitentObject : allPersistentObjects) {
-			jsonArray.add(riotApiPersitentObject.toJSONObject());
-		}
-
-		try {
-			FileWriter writer = new FileWriter(file);
-			writer.write(jsonArray.toJSONString());
-			writer.flush();
-			writer.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-	}
-
-	public ArrayList<RiotApiPersitentObject> readRiotApiPersitance() {
-		this.checkAndCreateRiotApiPersistence();
-		ArrayList<RiotApiPersitentObject> allRiotApiPersistenObjects = new ArrayList<>();
-		try {
-			FileReader reader = new FileReader("riotApiPersistence/kdaData.txt");
-			JSONParser parser = new JSONParser();
-			JSONArray allUsers = (JSONArray) parser.parse(reader);
-			for (int i = 0; i < allUsers.size(); i++) {
-				JSONObject singleUser = (JSONObject) allUsers.get(i);
-				String caseCorrectNickName = (String) singleUser.get("caseCorrectNickName");
-				double averageKDA = (double) singleUser.get("averageKDA");
-				long numberOfGamesPlayed = (long) singleUser.get("numberOfGamesPlayed");
-				boolean isPartOfRepeatedApiCheck = (boolean) singleUser.get("isPartOfRepeatedApiCheck");
-				RiotApiPersitentObject singleUserAsPersitenObject = new RiotApiPersitentObject(caseCorrectNickName, averageKDA, numberOfGamesPlayed, isPartOfRepeatedApiCheck);
-				allRiotApiPersistenObjects.add(singleUserAsPersitenObject);
-			}
-			reader.close();
-		} catch (IOException | ParseException e) {
-			e.printStackTrace();
-		}
-		return allRiotApiPersistenObjects;
-	}
+	
 }
