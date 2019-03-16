@@ -193,7 +193,7 @@ public class MusikBot {
 						+ "\n -Youtube Links playable"
 						+ "\n -webradio DasDing"
 						+ "\n -stop playing music (!killMusic) command"
-						+ "\n -Repository: https://github.com/GJohannes/Ts3Application/");
+						+ "\n -Repository: www.github.com/GJohannes/Ts3Application/");
 			}
 
 			private void playYoutubeLink(String youtubeLocation, TextMessageEvent messageToBotEvent) {
