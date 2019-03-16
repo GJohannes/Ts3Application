@@ -13,28 +13,21 @@ import serverFunctions.riotApi.DataObjects.WinKdaMostDamageHolder;
 
 public class RiotApiPersistentDataLogic {
 	private RiotApiIO riotApiIO;
-	private ExtendedTS3Api api;
+	
 
-	public RiotApiPersistentDataLogic(ExtendedTS3Api api) {
+	public RiotApiPersistentDataLogic() {
 		this.riotApiIO = riotApiIO.getInstance();
-		this.api = api;
 	}
 
-	public void initializeApiCheckUsers(RiotApiNotification apiNotification, int initializerId) {
+	public ArrayList<String> getNicknamesOfAllAddedUsersFromHDD() {
 		ArrayList<RiotApiPersitentUserInformation> readRiotApiPersitance = riotApiIO.readRiotApiPersitance();
+		ArrayList<String> usersToAdd = new ArrayList<>();
 		for (RiotApiPersitentUserInformation riotApiPersitentObject : readRiotApiPersitance) {
-			try {
-				if(riotApiPersitentObject.isPartOfRepeatedApiCheck()) {
-					apiNotification.addUser(riotApiPersitentObject.getCaseCorrectNickName());
-					api.sendPrivateMessage(initializerId, "Added: " + riotApiPersitentObject.getCaseCorrectNickName() + " to Riot api Check");					
-				} else {
-					api.sendPrivateMessage(initializerId, "NOT Added: " + riotApiPersitentObject.getCaseCorrectNickName() + " because he is set as not part of checkup");
-				}
-			} catch (IOException | ParseException e) {
-				api.logToCommandline("Error adding the following user to Riot api check:" + riotApiPersitentObject.getCaseCorrectNickName());
-				e.printStackTrace();
+			if (riotApiPersitentObject.isPartOfRepeatedApiCheck()) {
+				usersToAdd.add(riotApiPersitentObject.getCaseCorrectNickName());
 			}
 		}
+		return usersToAdd;
 	}
 
 	/**
@@ -51,10 +44,10 @@ public class RiotApiPersistentDataLogic {
 		double newKDA = kdaHolder.getKda();
 		long numberOfNewGames = 1;
 		double newAverageKDA = ((averageKDAonHDD * numberOfGamesonHDD) + (newKDA * numberOfNewGames)) / (numberOfGamesonHDD + numberOfNewGames);
-		long newNumberOfGames =  numberOfGamesonHDD + numberOfNewGames;
-		
-		RiotApiPersitentUserInformation newPersistenceOnHDD = 
-				new RiotApiPersitentUserInformation(user.getCaseCorrectNickName(), newAverageKDA,newNumberOfGames,userOnHardDrive.isPartOfRepeatedApiCheck(), user.getEncryptedAccountId());
+		long newNumberOfGames = numberOfGamesonHDD + numberOfNewGames;
+
+		RiotApiPersitentUserInformation newPersistenceOnHDD = new RiotApiPersitentUserInformation(user.getCaseCorrectNickName(), newAverageKDA, newNumberOfGames,
+				userOnHardDrive.isPartOfRepeatedApiCheck(), user.getEncryptedAccountId());
 		riotApiIO.updateRiotApiPersistance(newPersistenceOnHDD);
 
 		return newAverageKDA;
@@ -76,7 +69,7 @@ public class RiotApiPersistentDataLogic {
 			}
 		}
 		if (userPersistentOnHardDrive == null) {
-			return new RiotApiPersitentUserInformation(user.getCaseCorrectNickName(), 0.0, 0, true,user.getEncryptedAccountId());
+			return new RiotApiPersitentUserInformation(user.getCaseCorrectNickName(), 0.0, 0, true, user.getEncryptedAccountId());
 		}
 		return userPersistentOnHardDrive;
 	}

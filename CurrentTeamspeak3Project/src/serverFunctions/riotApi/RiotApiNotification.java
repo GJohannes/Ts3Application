@@ -3,8 +3,10 @@ package serverFunctions.riotApi;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.apache.jasper.tagplugins.jstl.core.ForEach;
 import org.json.simple.parser.ParseException;
 
 import com.github.theholywaffle.teamspeak3.api.event.ClientJoinEvent;
@@ -31,7 +33,7 @@ public class RiotApiNotification implements Runnable {
 	
 	public RiotApiNotification(ExtendedTS3Api api) {
 		this.api = api;
-		this.riotApiPersistentData = new RiotApiPersistentDataLogic(api);
+		this.riotApiPersistentData = new RiotApiPersistentDataLogic();
 	}
 
 	public void setApiKey(String key) {
@@ -160,7 +162,17 @@ public class RiotApiNotification implements Runnable {
 							// else update the key
 						} else {
 							splittStringAndUpdateKey(message);
-							riotApiPersistentData.initializeApiCheckUsers(scope,messageToBotEvent.getInvokerId());
+							ArrayList<String> nicknamesOfAllAddedUsersFromHDD = riotApiPersistentData.getNicknamesOfAllAddedUsersFromHDD();
+							for (String oneUserToAdd : nicknamesOfAllAddedUsersFromHDD) {
+								try {
+									UserAddedInformation userAddedInformation = addUser(oneUserToAdd);
+									if(userAddedInformation.isUserWasSuccessfullyAdded()) {
+										api.sendPrivateMessage(messageToBotEvent.getInvokerId(), "Addded: " + oneUserToAdd  + " to the api check");										
+									}
+								} catch (IOException | ParseException e) {
+									e.printStackTrace();
+								}
+							}
 							api.sendPrivateMessage(messageToBotEvent.getInvokerId(), "Successful updated Key");
 							
 						}
