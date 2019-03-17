@@ -83,6 +83,6 @@ public class RiotApiPersistentDataLogic {
 		}
 		
 		//case that user was not on hdd stored 
-		return new RiotApiUser(encryptedAccountId, caseCorrectNickName, -1, 0.0, 0, true);
+		return new RiotApiUser(encryptedAccountId, caseCorrectNickName, -1, 0.0, 0, true,System.currentTimeMillis());
 	}
 }

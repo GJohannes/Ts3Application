@@ -23,7 +23,7 @@ public class RiotApiIO {
 	private final String numberOfGamesPlayedKey = DefinedStringsRiotApiIO.riotApiJSONKeyNumberOfGamesPlayed.getValue();
 	private final String repeatetCheckKey = DefinedStringsRiotApiIO.riotApiJSONKeyIsPartOfRepeatedApiCheck.getValue();
 	private final String encryptedAccountIdKey = DefinedStringsRiotApiIO.riotApiJSONKeyEncryptedAccoutID.getValue();
-	
+	private final String userFirstCreatedKey = DefinedStringsRiotApiIO.riotApiJSONKeyUserFirstCreated.getValue();
 	
 	private RiotApiIO() {
 	}
@@ -40,7 +40,7 @@ public class RiotApiIO {
 	 * @param user
 	 * @return true if user was already stored before, false if a new user was set on the HDD
 	 */
-	public synchronized boolean updateUserPersistance(RiotApiUser user) {
+	public boolean updateUserPersistance(RiotApiUser user) {
 		ArrayList<RiotApiUser> readRiotApiPersitantUsers = readAllRiotApiPersitantUsers();
 		boolean riotApiUserWasStoredOnHDDAlready;
 		if(this.isRiotApiUserAlreadyStoredPersistantlyLogic(user)) {
@@ -137,8 +137,9 @@ public class RiotApiIO {
 				long numberOfGamesPlayed = (long) singleUser.get(this.numberOfGamesPlayedKey);
 				boolean isPartOfRepeatedApiCheck = (boolean) singleUser.get(this.repeatetCheckKey);
 				String encryptedAccountID = (String) singleUser.get(this.encryptedAccountIdKey);
+				long  userFirstCreated = (long) singleUser.get(this.userFirstCreatedKey);
 				
-				RiotApiUser user = new RiotApiUser(encryptedAccountID, caseCorrectNickName, -1, averageKDA, numberOfGamesPlayed, isPartOfRepeatedApiCheck); // TODO???
+				RiotApiUser user = new RiotApiUser(encryptedAccountID, caseCorrectNickName, -1, averageKDA, numberOfGamesPlayed, isPartOfRepeatedApiCheck, userFirstCreated);
 				allRiotApiPersistenObjects.add(user);
 			}
 			reader.close();

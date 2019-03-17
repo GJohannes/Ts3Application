@@ -7,7 +7,8 @@ public enum DefinedStringsRiotApiIO {
 	riotApiJSONKeyAverageKDA("averageKDA"),
 	riotApiJSONKeyNumberOfGamesPlayed("numberOfGamesPlayed"),
 	riotApiJSONKeyIsPartOfRepeatedApiCheck("isPartOfRepeatedApiCheck"),
-	riotApiJSONKeyEncryptedAccoutID("encryptedAccountID");
+	riotApiJSONKeyEncryptedAccoutID("encryptedAccountID"),
+	riotApiJSONKeyUserFirstCreated("userCreatedOn");
 	
 	private final String keyValue;
 	

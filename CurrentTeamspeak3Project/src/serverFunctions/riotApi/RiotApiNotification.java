@@ -110,7 +110,7 @@ public class RiotApiNotification implements Runnable {
 			newUser.setPartOfRepeatedApiCheck(true);
 			information = new UserAddedInformation(true, true);
 		} else {
-			newUser = new RiotApiUser(encryptedAccountId, caseCorrectNickName, lastGameId, 0.0, 0, true);
+			newUser = new RiotApiUser(encryptedAccountId, caseCorrectNickName, lastGameId, 0.0, 0, true,System.currentTimeMillis());
 			information = new UserAddedInformation(true, false);
 		}
 		riotApiPersistentData.updateUserPersistantInformationOnHDD(newUser);
