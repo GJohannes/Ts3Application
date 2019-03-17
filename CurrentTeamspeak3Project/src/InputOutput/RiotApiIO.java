@@ -11,8 +11,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
-import serverFunctions.riotApi.DataObjects.RiotApiPersitentUserInformation;
 import serverFunctions.riotApi.DataObjects.RiotApiUser;
 
 public class RiotApiIO {
@@ -39,38 +37,38 @@ public class RiotApiIO {
 	
 	/**
 	 * 
-	 * @param persistenObject
+	 * @param user
 	 * @return true if user was already stored before, false if a new user was set on the HDD
 	 */
-	public synchronized boolean updateRiotApiPersistance(RiotApiPersitentUserInformation persistenObject) {
-		ArrayList<RiotApiPersitentUserInformation> readRiotApiPersitance = readRiotApiPersitance();
+	public synchronized boolean updateUserPersistance(RiotApiUser user) {
+		ArrayList<RiotApiUser> readRiotApiPersitantUsers = readAllRiotApiPersitantUsers();
 		boolean riotApiUserWasStoredOnHDDAlready;
-		if(this.isRiotApiUserAlreadyStoredPersistantlyLogic(persistenObject)) {
+		if(this.isRiotApiUserAlreadyStoredPersistantlyLogic(user)) {
 			riotApiUserWasStoredOnHDDAlready = true;
-			Iterator<RiotApiPersitentUserInformation> iterator = readRiotApiPersitance.iterator();
+			Iterator<RiotApiUser> iterator = readRiotApiPersitantUsers.iterator();
 			while (iterator.hasNext()) {
-				RiotApiPersitentUserInformation riotApiPersitentObject = iterator.next();
-				if (riotApiPersitentObject.getEncryptedAccountId().equals(persistenObject.getEncryptedAccountId())) {
+				RiotApiUser riotApiPersitentObject = iterator.next();
+				if (riotApiPersitentObject.getEncryptedAccountId().equals(user.getEncryptedAccountId())) {
 					iterator.remove();
-					readRiotApiPersitance.add(persistenObject);
+					readRiotApiPersitantUsers.add(user);
 					break;
 				}
 			}
 		} else {
 			riotApiUserWasStoredOnHDDAlready = false;
-			readRiotApiPersitance.add(persistenObject);			
+			readRiotApiPersitantUsers.add(user);			
 		}
 		
-		this.writeRiotApiPersistanceToHardDrive(readRiotApiPersitance);
+		this.writeRiotApiPersistanceToHardDrive(readRiotApiPersitantUsers);
 		return riotApiUserWasStoredOnHDDAlready;
 	}
 	
-	private boolean isRiotApiUserAlreadyStoredPersistantlyLogic(RiotApiPersitentUserInformation information) {
-		ArrayList<RiotApiPersitentUserInformation> readRiotApiPersitance = readRiotApiPersitance();
-		Iterator<RiotApiPersitentUserInformation> iterator = readRiotApiPersitance.iterator();
+	private boolean isRiotApiUserAlreadyStoredPersistantlyLogic(RiotApiUser user) {
+		ArrayList<RiotApiUser> readRiotApiPersitance = readAllRiotApiPersitantUsers();
+		Iterator<RiotApiUser> iterator = readRiotApiPersitance.iterator();
 		while (iterator.hasNext()) {
-			RiotApiPersitentUserInformation riotApiPersitentObject = iterator.next();
-			if (riotApiPersitentObject.getEncryptedAccountId().equals(information.getEncryptedAccountId())) {
+			RiotApiUser riotApiPersitentObject = iterator.next();
+			if (riotApiPersitentObject.getEncryptedAccountId().equals(user.getEncryptedAccountId())) {
 				return true;
 			}
 		}
@@ -79,7 +77,7 @@ public class RiotApiIO {
 	
 	
 
-	public void checkAndCreateRiotApiPersistence() {
+	public void checkAndCreateRiotApiPersistenceFileSystemStructure() {
 		File dirctory = new File(this.persistentFolderName);
 		if (!dirctory.exists()) {
 			dirctory.mkdirs();
@@ -99,11 +97,16 @@ public class RiotApiIO {
 		}
 	}
 
-	private synchronized void writeRiotApiPersistanceToHardDrive(ArrayList<RiotApiPersitentUserInformation> allPersistentObjects) {
-		this.checkAndCreateRiotApiPersistence();
+	/**
+	 * !Overwrites existing information. be careful with this method!
+	 * 
+	 * @param allPersistentUsers are going to be stored on the HDD
+	 */
+	private synchronized void writeRiotApiPersistanceToHardDrive(ArrayList<RiotApiUser> allPersistentUsers) {
+		this.checkAndCreateRiotApiPersistenceFileSystemStructure();
 		File persistentDataFile = new File(this.persistentFolderName +"/"+this.persistentFileName);
 		JSONArray jsonArray = new JSONArray();
-		for (RiotApiPersitentUserInformation riotApiPersitentObject : allPersistentObjects) {
+		for (RiotApiUser riotApiPersitentObject : allPersistentUsers) {
 			jsonArray.add(riotApiPersitentObject.toJSONObject());
 		}
 
@@ -118,9 +121,9 @@ public class RiotApiIO {
 
 	}
 
-	public ArrayList<RiotApiPersitentUserInformation> readRiotApiPersitance() {
-		this.checkAndCreateRiotApiPersistence();
-		ArrayList<RiotApiPersitentUserInformation> allRiotApiPersistenObjects = new ArrayList<>();
+	public ArrayList<RiotApiUser> readAllRiotApiPersitantUsers() {
+		this.checkAndCreateRiotApiPersistenceFileSystemStructure();
+		ArrayList<RiotApiUser> allRiotApiPersistenObjects = new ArrayList<>();
 		try {
 			File persistentDataFile = new File(this.persistentFolderName +"/"+this.persistentFileName);
 			FileReader reader = new FileReader(persistentDataFile);
@@ -135,8 +138,8 @@ public class RiotApiIO {
 				boolean isPartOfRepeatedApiCheck = (boolean) singleUser.get(this.repeatetCheckKey);
 				String encryptedAccountID = (String) singleUser.get(this.encryptedAccountIdKey);
 				
-				RiotApiPersitentUserInformation singleUserAsPersitenObject = new RiotApiPersitentUserInformation(caseCorrectNickName, averageKDA, numberOfGamesPlayed, isPartOfRepeatedApiCheck,encryptedAccountID);
-				allRiotApiPersistenObjects.add(singleUserAsPersitenObject);
+				RiotApiUser user = new RiotApiUser(encryptedAccountID, caseCorrectNickName, -1, averageKDA, numberOfGamesPlayed, isPartOfRepeatedApiCheck); // TODO???
+				allRiotApiPersistenObjects.add(user);
 			}
 			reader.close();
 		} catch (IOException | ParseException e) {

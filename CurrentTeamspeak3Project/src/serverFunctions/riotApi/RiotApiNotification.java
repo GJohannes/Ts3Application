@@ -29,8 +29,9 @@ public class RiotApiNotification implements Runnable {
 	private RiotApiInterface riotInterface = new RiotApiInterface();
 	private String apiKey = "";
 	private RiotApiPersistentDataLogic riotApiPersistentData;
-	private RiotApiNotification scope = this;
-	
+	private int timeBetweenRiotApiQueries = 500;
+	private int averageLatencyOfOneRiotApiCall = 250;
+
 	public RiotApiNotification(ExtendedTS3Api api) {
 		this.api = api;
 		this.riotApiPersistentData = new RiotApiPersistentDataLogic();
@@ -50,7 +51,8 @@ public class RiotApiNotification implements Runnable {
 		String nickName = message.split(" ", 2)[1];
 		for (int i = 0; i < userList.size(); i++) {
 			if (userList.get(i).getCaseCorrectNickName().equalsIgnoreCase(nickName)) {
-				riotApiPersistentData.updatePersistentIsAddedToRepeatingCheckup(userList.get(i), false);
+				userList.get(i).setPartOfRepeatedApiCheck(false);
+				riotApiPersistentData.updateUserPersistantInformationOnHDD(userList.get(i));
 				userList.remove(i);
 				return true;
 			}
@@ -76,8 +78,7 @@ public class RiotApiNotification implements Runnable {
 	}
 
 	private void showHelp(ExtendedTS3Api api, TextMessageEvent e) {
-		api.sendPrivateMessage(e.getInvokerId(), " " + "\n ?help" + "\n ?add \"League_Of_Legends_Summoner_Name\""
-				+ "\n ?remove \"League_Of_Legends_Summoner_Name\"" + "\n ?show");
+		api.sendPrivateMessage(e.getInvokerId(), " " + "\n ?help" + "\n ?add \"League_Of_Legends_Summoner_Name\"" + "\n ?remove \"League_Of_Legends_Summoner_Name\"" + "\n ?show");
 	}
 
 	/**
@@ -92,18 +93,28 @@ public class RiotApiNotification implements Runnable {
 	public UserAddedInformation addUser(String nickName) throws IOException, ParseException {
 		for (int i = 0; i < userList.size(); i++) {
 			if (userList.get(i).getCaseCorrectNickName().equalsIgnoreCase(nickName)) {
-				//case that user already added to the list
+				// case that user already added to the list
 				return new UserAddedInformation(false);
 			}
 		}
-		EncryptedAccountIdAndCaseCorrectNickNameHolder holder = riotInterface.getIdAndCaseCorrectNickNameByNickName(nickName, apiKey); 
-		String accountId = holder.getEncryptedAccountId();
+		EncryptedAccountIdAndCaseCorrectNickNameHolder holder = riotInterface.getIdAndCaseCorrectNickNameByNickName(nickName, apiKey);
+		String encryptedAccountId = holder.getEncryptedAccountId();
 		String caseCorrectNickName = holder.getCaseCorrectNickName();
-		long lastGameId = riotInterface.getLastGameIdByEncryptedAccId(accountId, apiKey);
-		RiotApiUser newUser = new RiotApiUser(accountId, caseCorrectNickName, lastGameId);
+		long lastGameId = riotInterface.getLastGameIdByEncryptedAccId(encryptedAccountId, apiKey);
+
+		RiotApiUser newUser;
+		UserAddedInformation information;
+		if (riotApiPersistentData.userAlreadyStoredOnHDD(encryptedAccountId)) {
+			newUser = riotApiPersistentData.getRiotApiUserFromHDD(encryptedAccountId, caseCorrectNickName);
+			newUser.setLastGameId(lastGameId);
+			newUser.setPartOfRepeatedApiCheck(true);
+			information = new UserAddedInformation(true, true);
+		} else {
+			newUser = new RiotApiUser(encryptedAccountId, caseCorrectNickName, lastGameId, 0.0, 0, true);
+			information = new UserAddedInformation(true, false);
+		}
+		riotApiPersistentData.updateUserPersistantInformationOnHDD(newUser);
 		userList.add(newUser);
-		boolean riotApiUserWasStoredOnHDDAlready = riotApiPersistentData.updatePersistentIsAddedToRepeatingCheckup(newUser, true);
-		UserAddedInformation information = new UserAddedInformation(true,riotApiUserWasStoredOnHDDAlready);
 		return information;
 	}
 
@@ -112,38 +123,33 @@ public class RiotApiNotification implements Runnable {
 			@Override
 			public void onTextMessage(TextMessageEvent messageToBotEvent) {
 				String message = messageToBotEvent.getMessage();
-				
+
 				if (message.startsWith("?")) {
 					message = message.substring(1);
 					if (message.toLowerCase().startsWith("add")) {
 						try {
 							UserAddedInformation information = splittStringAndAddUser(message);
 							if (information.isUserWasSuccessfullyAdded()) {
-								if(information.isUserWasAddedInThePast()) {
+								if (information.isUserWasAddedInThePast()) {
 									api.sendPrivateMessage(messageToBotEvent.getInvokerId(), "Successfully added, loaded average kda data from the past");
-								} else {									
+								} else {
 									api.sendPrivateMessage(messageToBotEvent.getInvokerId(), "Successfully added");
 								}
 							} else {
-								api.sendPrivateMessage(messageToBotEvent.getInvokerId(),
-										"User already registered. Duplicates not allowed");
+								api.sendPrivateMessage(messageToBotEvent.getInvokerId(), "User already registered. Duplicates not allowed");
 							}
 						} catch (FileNotFoundException w) {
-							api.sendPrivateMessage(messageToBotEvent.getInvokerId(),
-									"Could not find User, check spelling");
+							api.sendPrivateMessage(messageToBotEvent.getInvokerId(), "Could not find User, check spelling");
 						} catch (IOException e) {
-							api.sendPrivateMessage(messageToBotEvent.getInvokerId(),
-									"Could not add user because API Key expired");
+							api.sendPrivateMessage(messageToBotEvent.getInvokerId(), "Could not add user because API Key expired");
 						} catch (ParseException e) {
-							api.sendPrivateMessage(messageToBotEvent.getInvokerId(),
-									"Internal Error - Should not happen");
+							api.sendPrivateMessage(messageToBotEvent.getInvokerId(), "Internal Error - Should not happen");
 						}
 					} else if (message.toLowerCase().startsWith("remove")) {
 						if (splittStringAndRemoveNickName(message)) {
 							api.sendPrivateMessage(messageToBotEvent.getInvokerId(), "Successful removed user");
 						} else {
-							api.sendPrivateMessage(messageToBotEvent.getInvokerId(),
-									"Could not remove user, check spelling ");
+							api.sendPrivateMessage(messageToBotEvent.getInvokerId(), "Could not remove user, check spelling ");
 						}
 					} else if (message.toLowerCase().startsWith("show")) {
 						showAllRegisteredToClient(api, messageToBotEvent);
@@ -156,37 +162,50 @@ public class RiotApiNotification implements Runnable {
 								riotInterface.getIdAndCaseCorrectNickNameByNickName("XZephiraX", apiKey);
 								api.sendPrivateMessage(messageToBotEvent.getInvokerId(), "Key is still valid");
 							} catch (IOException | ParseException e) {
-								api.sendPrivateMessage(messageToBotEvent.getInvokerId(),
-										"Invalid Key - Please Update to proceed");
+								api.sendPrivateMessage(messageToBotEvent.getInvokerId(), "Invalid Key - Please Update to proceed");
 							}
 							// else update the key
 						} else {
 							splittStringAndUpdateKey(message);
-							ArrayList<String> nicknamesOfAllAddedUsersFromHDD = riotApiPersistentData.getNicknamesOfAllAddedUsersFromHDD();
-							for (String oneUserToAdd : nicknamesOfAllAddedUsersFromHDD) {
+							ArrayList<RiotApiUser> allAddedUsersFromHDD = riotApiPersistentData.getAllRepeatedApiCheckAddedUsersFromHDD();
+
+							api.sendPrivateMessage(messageToBotEvent.getInvokerId(), "Successful updated Key");
+
+							try {
+								riotInterface.getIdAndCaseCorrectNickNameByNickName("XZephiraX", apiKey);
+								api.sendPrivateMessage(messageToBotEvent.getInvokerId(), "Key is valid");
+							} catch (IOException | ParseException e) {
+								api.sendPrivateMessage(messageToBotEvent.getInvokerId(), "Key is NOT valid");
+								return;
+							}
+
+							for (RiotApiUser oneUserToAdd : allAddedUsersFromHDD) {
 								try {
-									UserAddedInformation userAddedInformation = addUser(oneUserToAdd);
-									if(userAddedInformation.isUserWasSuccessfullyAdded()) {
-										api.sendPrivateMessage(messageToBotEvent.getInvokerId(), "Addded: " + oneUserToAdd  + " to the api check");										
+									UserAddedInformation userAddedInformation = addUser(oneUserToAdd.getCaseCorrectNickName());
+									if (userAddedInformation.isUserWasSuccessfullyAdded()) {
+										api.sendPrivateMessage(messageToBotEvent.getInvokerId(), "To the api check was addded: " + oneUserToAdd.getCaseCorrectNickName());
 									}
 								} catch (IOException | ParseException e) {
+									//shuld not happen
+									api.sendPrivateMessage(messageToBotEvent.getInvokerId(), "Invalid Api Key while trying to add " + oneUserToAdd.getCaseCorrectNickName());
+								}
+
+								try {
+									Thread.sleep(timeBetweenRiotApiQueries);
+								} catch (InterruptedException e) {
 									e.printStackTrace();
 								}
 							}
-							api.sendPrivateMessage(messageToBotEvent.getInvokerId(), "Successful updated Key");
-							
 						}
 					} else {
-						api.sendPrivateMessage(messageToBotEvent.getInvokerId(),
-								"Syntaxerror - could not read command");
+						api.sendPrivateMessage(messageToBotEvent.getInvokerId(), "Syntaxerror - could not read command");
 					}
 				}
 			}
 
 			@Override
 			public void onClientJoin(ClientJoinEvent e) {
-				api.sendPrivateMessage(e.getClientId(),
-						"League of Legends interface is Online - Type ?help for information");
+				api.sendPrivateMessage(e.getClientId(), "League of Legends interface is Online - Type ?help for information");
 			}
 		};
 		return riotApiAdapter;
@@ -199,8 +218,8 @@ public class RiotApiNotification implements Runnable {
 
 	@Override
 	public void run() {
-		//TODO Change request. Players save to hdd
-		//when added/removed and calculate an average kda and save it to the harddrive  
+		// TODO Change request. Players save to hdd
+		// when added/removed and calculate an average kda and save it to the harddrive
 		api.addTS3Listeners(this.getRiotApi(api));
 		this.activeLogic();
 	}
@@ -210,39 +229,42 @@ public class RiotApiNotification implements Runnable {
 			for (RiotApiUser user : userList) {
 				try {
 					long newGameId = riotInterface.getLastGameIdByEncryptedAccId(user.getEncryptedAccountId(), apiKey);
-					if (newGameId == user.getLastGameId()) {
+					if (newGameId != user.getLastGameId()) {
 						String message = "";
-						
+
 						user.setLastGameId(newGameId);
 						WinKdaMostDamageHolder winKdaMostDamageHolder = riotInterface.getWinAndKdaFromGameId(user.getLastGameId(), apiKey, user.getCaseCorrectNickName());
-						double averageKda = riotApiPersistentData.updatePersistentAverageKda(user, winKdaMostDamageHolder);
+						double averageKda = riotApiPersistentData.updateAverageKdaAndGamesPlayedOnHDD(user, winKdaMostDamageHolder);
 						String averageKdaVisual = String.format("%.2f", averageKda);
-						
+
 						if (winKdaMostDamageHolder.isWin()) {
-							message =  user.getCaseCorrectNickName() + 
-									" just WON in League of Legends ( KDA: " + winKdaMostDamageHolder.getKdaVisual() + "; Ø: "+ averageKdaVisual +" )";
+							message = user.getCaseCorrectNickName() + " just WON in League of Legends ( KDA: " + winKdaMostDamageHolder.getKdaVisual() + "; Ø: " + averageKdaVisual
+									+ " )";
 						} else {
-							message = user.getCaseCorrectNickName() + 
-									" just LOST in League of Legends. What a looser ( KDA: " + winKdaMostDamageHolder.getKdaVisual()  + "; Ø: "+ averageKdaVisual +" )";
+							message = user.getCaseCorrectNickName() + " just LOST in League of Legends. What a looser ( KDA: " + winKdaMostDamageHolder.getKdaVisual() + "; Ø: "
+									+ averageKdaVisual + " )";
 						}
-						if(winKdaMostDamageHolder.isHighestDamageDealer()) {
+						if (winKdaMostDamageHolder.isHighestDamageDealer()) {
 							message = message + " ( Most damage )";
 						}
-						
+
 						api.sendServerMessage(message);
 					}
-					Thread.sleep(1000);
-				} catch (IOException | ParseException | InterruptedException e) {
+				} catch (IOException | ParseException e) {
 					api.logToCommandline("Internal Error - Check Key expiration date");
 				}
-
+				try {
+					Thread.sleep(this.timeBetweenRiotApiQueries);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 			api.logToCommandline("Thread for Riot api is still running");
 
 			try {
 				// check all 60 sec - sleep time - approximated time for all server query
 				// requests
-				int threadSleepTime = 30000 - (userList.size() * 1000) - (250 * userList.size());
+				int threadSleepTime = 60000 - (userList.size() * this.timeBetweenRiotApiQueries) - (averageLatencyOfOneRiotApiCall * userList.size());
 				// preventing negative thread sleep time
 				if (threadSleepTime < 0) {
 					threadSleepTime = 0;

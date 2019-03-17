@@ -2,32 +2,43 @@ package serverFunctions.riotApi;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.json.simple.parser.ParseException;
 
 import InputOutput.RiotApiIO;
 import miscellaneous.ExtendedTS3Api;
-import serverFunctions.riotApi.DataObjects.RiotApiPersitentUserInformation;
 import serverFunctions.riotApi.DataObjects.RiotApiUser;
 import serverFunctions.riotApi.DataObjects.WinKdaMostDamageHolder;
 
 public class RiotApiPersistentDataLogic {
 	private RiotApiIO riotApiIO;
-	
 
 	public RiotApiPersistentDataLogic() {
 		this.riotApiIO = riotApiIO.getInstance();
 	}
 
-	public ArrayList<String> getNicknamesOfAllAddedUsersFromHDD() {
-		ArrayList<RiotApiPersitentUserInformation> readRiotApiPersitance = riotApiIO.readRiotApiPersitance();
-		ArrayList<String> usersToAdd = new ArrayList<>();
-		for (RiotApiPersitentUserInformation riotApiPersitentObject : readRiotApiPersitance) {
-			if (riotApiPersitentObject.isPartOfRepeatedApiCheck()) {
-				usersToAdd.add(riotApiPersitentObject.getCaseCorrectNickName());
+	public boolean userAlreadyStoredOnHDD(String encryptedAccountID) {
+		ArrayList<RiotApiUser> readRiotApiPersitance = riotApiIO.readAllRiotApiPersitantUsers();
+		for (RiotApiUser riotApiPersitentUserInformation : readRiotApiPersitance) {
+			if (riotApiPersitentUserInformation.getEncryptedAccountId().equals(encryptedAccountID)) {
+				return true;
 			}
 		}
-		return usersToAdd;
+		return false;
+	}
+
+	public ArrayList<RiotApiUser> getAllRepeatedApiCheckAddedUsersFromHDD() {
+		ArrayList<RiotApiUser> readRiotApiPersitance = riotApiIO.readAllRiotApiPersitantUsers();
+		
+		Iterator<RiotApiUser> it = readRiotApiPersitance.iterator();
+		while(it.hasNext()) {
+			RiotApiUser user = it.next();
+			if(!user.isPartOfRepeatedApiCheck()) {
+				it.remove();
+			}
+		}
+		return readRiotApiPersitance;
 	}
 
 	/**
@@ -37,40 +48,41 @@ public class RiotApiPersistentDataLogic {
 	 * @param kdaHolder holds the newest kda
 	 * @return returns the average kda (includs the new kda)
 	 */
-	public double updatePersistentAverageKda(RiotApiUser user, WinKdaMostDamageHolder kdaHolder) {
-		RiotApiPersitentUserInformation userOnHardDrive = this.getThePersistentUser(user);
-		double averageKDAonHDD = userOnHardDrive.getAverageKDA();
-		long numberOfGamesonHDD = userOnHardDrive.getNumberOfGamesPlayed();
+	public double updateAverageKdaAndGamesPlayedOnHDD(RiotApiUser user, WinKdaMostDamageHolder kdaHolder) {
+		double averageKDAonHDD = user.getAverageKDA();
+		long numberOfGamesonHDD = user.getNumberOfGamesPlayed();
 		double newKDA = kdaHolder.getKda();
 		long numberOfNewGames = 1;
 		double newAverageKDA = ((averageKDAonHDD * numberOfGamesonHDD) + (newKDA * numberOfNewGames)) / (numberOfGamesonHDD + numberOfNewGames);
 		long newNumberOfGames = numberOfGamesonHDD + numberOfNewGames;
-
-		RiotApiPersitentUserInformation newPersistenceOnHDD = new RiotApiPersitentUserInformation(user.getCaseCorrectNickName(), newAverageKDA, newNumberOfGames,
-				userOnHardDrive.isPartOfRepeatedApiCheck(), user.getEncryptedAccountId());
-		riotApiIO.updateRiotApiPersistance(newPersistenceOnHDD);
-
+		
+		user.setAverageKDA(newAverageKDA);
+		user.incrementNumberOfGamesPlayed();
+		
+		riotApiIO.updateUserPersistance(user);
 		return newAverageKDA;
 	}
-
-	public boolean updatePersistentIsAddedToRepeatingCheckup(RiotApiUser user, boolean isAddedToRepeatingCheckup) {
-		RiotApiPersitentUserInformation thePersistentUser = this.getThePersistentUser(user);
-		thePersistentUser.setPartOfRepeatedApiCheck(isAddedToRepeatingCheckup);
-		boolean riotApiUserWasStoredOnHDDAlready = riotApiIO.updateRiotApiPersistance(thePersistentUser);
-		return riotApiUserWasStoredOnHDDAlready;
+	
+	public void updateUserPersistantInformationOnHDD(RiotApiUser user) {
+		riotApiIO.updateUserPersistance(user);
 	}
 
-	private RiotApiPersitentUserInformation getThePersistentUser(RiotApiUser user) {
-		RiotApiPersitentUserInformation userPersistentOnHardDrive = null;
-		ArrayList<RiotApiPersitentUserInformation> readRiotApiPersitance = riotApiIO.readRiotApiPersitance();
-		for (RiotApiPersitentUserInformation riotApiPersitentObject : readRiotApiPersitance) {
-			if (riotApiPersitentObject.getEncryptedAccountId().equals(user.getEncryptedAccountId())) {
-				userPersistentOnHardDrive = riotApiPersitentObject;
+	/**
+	 * get the user from hdd. if no one is existing a new user is created with the given data
+	 * 
+	 * @param encryptedAccountId used to find a mathc of existing users
+	 * @param caseCorrectNickName used to 
+	 * @return existing/new user
+	 */
+	public RiotApiUser getRiotApiUserFromHDD(String encryptedAccountId, String caseCorrectNickName) {
+		ArrayList<RiotApiUser> readAllRiotApiPersitantUsers = riotApiIO.readAllRiotApiPersitantUsers();
+		for (RiotApiUser riotApiUser : readAllRiotApiPersitantUsers) {
+			if(riotApiUser.getEncryptedAccountId().equals(encryptedAccountId)) {
+				return riotApiUser;
 			}
 		}
-		if (userPersistentOnHardDrive == null) {
-			return new RiotApiPersitentUserInformation(user.getCaseCorrectNickName(), 0.0, 0, true, user.getEncryptedAccountId());
-		}
-		return userPersistentOnHardDrive;
+		
+		//case that user was not on hdd stored 
+		return new RiotApiUser(encryptedAccountId, caseCorrectNickName, -1, 0.0, 0, true);
 	}
 }

@@ -2,7 +2,6 @@ package InputOutput;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -15,15 +14,13 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import org.json.simple.*;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import serverFunctions.riotApi.DataObjects.RiotApiPersitentUserInformation;
-import serverFunctions.riotApi.DataObjects.RiotApiUser;
+
 
 /**
  * This class is used for all Hard Drive access of the application. Each methdo
