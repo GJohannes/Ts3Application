@@ -15,6 +15,7 @@ import com.github.theholywaffle.teamspeak3.api.event.TextMessageEvent;
 import miscellaneous.AllExistingEventAdapter;
 import miscellaneous.ExtendedTS3Api;
 import miscellaneous.ExtendedTS3EventAdapter;
+import miscellaneous.InsultGenerator;
 import serverFunctions.riotApi.DataObjects.EncryptedAccountIdAndCaseCorrectNickNameHolder;
 import serverFunctions.riotApi.DataObjects.RiotApiUser;
 import serverFunctions.riotApi.DataObjects.UserAddedInformation;
@@ -31,6 +32,7 @@ public class RiotApiNotification implements Runnable {
 	private RiotApiPersistentDataLogic riotApiPersistentData;
 	private int timeBetweenRiotApiQueries = 500;
 	private int averageLatencyOfOneRiotApiCall = 250;
+	private InsultGenerator insultGenerator = new InsultGenerator();
 
 	public RiotApiNotification(ExtendedTS3Api api) {
 		this.api = api;
@@ -110,7 +112,7 @@ public class RiotApiNotification implements Runnable {
 			newUser.setPartOfRepeatedApiCheck(true);
 			information = new UserAddedInformation(true, true);
 		} else {
-			newUser = new RiotApiUser(encryptedAccountId, caseCorrectNickName, lastGameId, 0.0, 0, true,System.currentTimeMillis());
+			newUser = new RiotApiUser(encryptedAccountId, caseCorrectNickName, lastGameId, 0.0, 0, true, System.currentTimeMillis());
 			information = new UserAddedInformation(true, false);
 		}
 		riotApiPersistentData.updateUserPersistantInformationOnHDD(newUser);
@@ -186,7 +188,7 @@ public class RiotApiNotification implements Runnable {
 										api.sendPrivateMessage(messageToBotEvent.getInvokerId(), "To the api check was addded: " + oneUserToAdd.getCaseCorrectNickName());
 									}
 								} catch (IOException | ParseException e) {
-									//shuld not happen
+									// shuld not happen
 									api.sendPrivateMessage(messageToBotEvent.getInvokerId(), "Invalid Api Key while trying to add " + oneUserToAdd.getCaseCorrectNickName());
 								}
 
@@ -241,8 +243,8 @@ public class RiotApiNotification implements Runnable {
 							message = user.getCaseCorrectNickName() + " just WON in League of Legends ( KDA: " + winKdaMostDamageHolder.getKdaVisual() + "; Ø: " + averageKdaVisual
 									+ " )";
 						} else {
-							message = user.getCaseCorrectNickName() + " just LOST in League of Legends. What a looser ( KDA: " + winKdaMostDamageHolder.getKdaVisual() + "; Ø: "
-									+ averageKdaVisual + " )";
+							message = user.getCaseCorrectNickName() + " just LOST in League of Legends. What a " + insultGenerator.getRandomInsult() + " ( KDA: "
+									+ winKdaMostDamageHolder.getKdaVisual() + "; Ø: " + averageKdaVisual + " )";
 						}
 						if (winKdaMostDamageHolder.isHighestDamageDealer()) {
 							message = message + " ( Most damage )";
