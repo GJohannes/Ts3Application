@@ -231,7 +231,7 @@ public class RiotApiNotification implements Runnable {
 			for (RiotApiUser user : userList) {
 				try {
 					long newGameId = riotInterface.getLastGameIdByEncryptedAccId(user.getEncryptedAccountId(), apiKey);
-					if (newGameId == user.getLastGameId()) {
+					if (newGameId != user.getLastGameId()) {
 						String message = "";
 
 						user.setLastGameId(newGameId);
@@ -266,7 +266,7 @@ public class RiotApiNotification implements Runnable {
 			try {
 				// check all 60 sec - sleep time - approximated time for all server query
 				// requests
-				int threadSleepTime = 30000 - (userList.size() * this.timeBetweenRiotApiQueries) - (averageLatencyOfOneRiotApiCall * userList.size());
+				int threadSleepTime = 60000 - (userList.size() * this.timeBetweenRiotApiQueries) - (averageLatencyOfOneRiotApiCall * userList.size());
 				// preventing negative thread sleep time
 				if (threadSleepTime < 0) {
 					threadSleepTime = 0;
