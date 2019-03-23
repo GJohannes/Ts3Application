@@ -10,7 +10,7 @@
 - (4.0 Ajax) time and server events are now stored as Strings
 - (4.1 Ajax) UTF-8 encoding
 
-## MusicBot
+## MusicBot (!Requires additional Software!)
 1.0 Rudolf --->> 2.0 Lilith -->> 3.0 Kinzie -->> 4.0 Ajax
 
 1. Ajax
