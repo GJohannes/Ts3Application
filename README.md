@@ -39,6 +39,7 @@ Register a Summoner to check every 60 seconds if he won/lost a game. If so it wi
  - (4.0 Ajax) displaying kda and most damage 
  - (4.1 Ajax) using api v4
  - (4.2 Ajax) showing average kda
+ - (4.3 Ajax) applying datamodel + Endpoints for rioaApi v5. Displaying Most damage removed temporarily
 
 ## Web Server (Since 3.0 Kinzie)
 A web server which runs on port 80 (HTTP-default) /  443 (HTTPS-Default). 
