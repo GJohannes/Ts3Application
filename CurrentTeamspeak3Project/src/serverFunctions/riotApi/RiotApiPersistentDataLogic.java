@@ -74,7 +74,7 @@ public class RiotApiPersistentDataLogic {
 	 * @param caseCorrectNickName used to 
 	 * @return existing/new user
 	 */
-	public RiotApiUser getRiotApiUserFromHDD(String encryptedAccountId, String caseCorrectNickName) {
+	public RiotApiUser getRiotApiUserFromHDD(String encryptedAccountId, String caseCorrectNickName, String playerUuid) {
 		ArrayList<RiotApiUser> readAllRiotApiPersitantUsers = riotApiIO.readAllRiotApiPersitantUsers();
 		for (RiotApiUser riotApiUser : readAllRiotApiPersitantUsers) {
 			if(riotApiUser.getEncryptedAccountId().equals(encryptedAccountId)) {
@@ -83,6 +83,6 @@ public class RiotApiPersistentDataLogic {
 		}
 		
 		//case that user was not on hdd stored 
-		return new RiotApiUser(encryptedAccountId, caseCorrectNickName, -1, 0.0, 0, true,System.currentTimeMillis());
+		return new RiotApiUser(encryptedAccountId, caseCorrectNickName, "somePlaceholderString", 0.0, 0, true,System.currentTimeMillis(),playerUuid);
 	}
 }

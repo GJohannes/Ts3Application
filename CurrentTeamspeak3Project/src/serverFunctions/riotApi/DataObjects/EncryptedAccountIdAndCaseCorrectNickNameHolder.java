@@ -8,12 +8,18 @@ public class EncryptedAccountIdAndCaseCorrectNickNameHolder {
 
 	private String encryptedAccountId;
 	private String caseCorrectNickName;
+	private String playerUuid;
 	
-	public EncryptedAccountIdAndCaseCorrectNickNameHolder(String encryptedAccountId, String caseCorrectNickName) {
+	public EncryptedAccountIdAndCaseCorrectNickNameHolder(String encryptedAccountId, String caseCorrectNickName, String playerUuid) {
 		this.encryptedAccountId = encryptedAccountId;
 		this.caseCorrectNickName = caseCorrectNickName;
+		this.playerUuid = playerUuid;
 	}
 
+	public String getPlayerUuid() {
+		return playerUuid;
+	}
+	
 	public String getEncryptedAccountId() {
 		return encryptedAccountId;
 	}

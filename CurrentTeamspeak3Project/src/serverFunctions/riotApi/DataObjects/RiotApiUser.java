@@ -9,7 +9,8 @@ public class RiotApiUser {
 
 	private String encryptedAccountId; //stored on hdd
 	private String caseCorrectNickName; //stored on hdd
-	private long lastGameId;
+	private String lastGameId;
+	private String playerUuid;
 	
 	private double averageKDA; //stored on hdd
 	private long numberOfGamesPlayed; //stored on hdd
@@ -22,9 +23,9 @@ public class RiotApiUser {
 	private final String repeatetCheckKey = DefinedStringsRiotApiIO.riotApiJSONKeyIsPartOfRepeatedApiCheck.getValue();
 	private final String encryptedAccountIdKey = DefinedStringsRiotApiIO.riotApiJSONKeyEncryptedAccoutID.getValue();
 	private final String userFirstCreatedKey = DefinedStringsRiotApiIO.riotApiJSONKeyUserFirstCreated.getValue();
-	
+	private final String playerUuidKey = DefinedStringsRiotApiIO.riotApiJSONKeyPlayerUuid.getValue();
 
-	public RiotApiUser(String encryptedAccountId, String caseCorrectNickName, long lastGameId, double averageKDA, long numberOfGamesPlayed, boolean isPartOfRepeatedApiCheck, long userFirstCreated) {
+	public RiotApiUser(String encryptedAccountId, String caseCorrectNickName, String lastGameId, double averageKDA, long numberOfGamesPlayed, boolean isPartOfRepeatedApiCheck, long userFirstCreated, String playerUuid) {
 		this.encryptedAccountId = encryptedAccountId;
 		this.caseCorrectNickName = caseCorrectNickName;
 		this.lastGameId = lastGameId;
@@ -32,16 +33,21 @@ public class RiotApiUser {
 		this.numberOfGamesPlayed = numberOfGamesPlayed;
 		this.isPartOfRepeatedApiCheck = isPartOfRepeatedApiCheck;
 		this.userFirstCreated = userFirstCreated;
+		this.playerUuid = playerUuid;
 	}
 
-	public void setLastGameId(long gameId) {
+	public void setLastGameId(String gameId) {
 		this.lastGameId = gameId;
 	}
 
-	public long getLastGameId() {
+	public String getLastGameId() {
 		return this.lastGameId;
 	}
 
+	public String getPlayerUuid() {
+		return this.playerUuid;
+	}
+	
 	public String getCaseCorrectNickName() {
 		return this.caseCorrectNickName;
 	}

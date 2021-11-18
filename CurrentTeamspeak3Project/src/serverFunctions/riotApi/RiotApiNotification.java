@@ -102,17 +102,18 @@ public class RiotApiNotification implements Runnable {
 		EncryptedAccountIdAndCaseCorrectNickNameHolder holder = riotInterface.getIdAndCaseCorrectNickNameByNickName(nickName, apiKey);
 		String encryptedAccountId = holder.getEncryptedAccountId();
 		String caseCorrectNickName = holder.getCaseCorrectNickName();
-		long lastGameId = riotInterface.getLastGameIdByEncryptedAccId(encryptedAccountId, apiKey);
+		String playerUuid = holder.getPlayerUuid();
+		String lastGameId = riotInterface.getLastGameIdByEncryptedAccId(encryptedAccountId,playerUuid, apiKey);
 
 		RiotApiUser newUser;
 		UserAddedInformation information;
 		if (riotApiPersistentData.userAlreadyStoredOnHDD(encryptedAccountId)) {
-			newUser = riotApiPersistentData.getRiotApiUserFromHDD(encryptedAccountId, caseCorrectNickName);
+			newUser = riotApiPersistentData.getRiotApiUserFromHDD(encryptedAccountId, caseCorrectNickName, playerUuid);
 			newUser.setLastGameId(lastGameId);
 			newUser.setPartOfRepeatedApiCheck(true);
 			information = new UserAddedInformation(true, true);
 		} else {
-			newUser = new RiotApiUser(encryptedAccountId, caseCorrectNickName, lastGameId, 0.0, 0, true, System.currentTimeMillis());
+			newUser = new RiotApiUser(encryptedAccountId, caseCorrectNickName, lastGameId, 0.0, 0, true, System.currentTimeMillis(), holder.getPlayerUuid());
 			information = new UserAddedInformation(true, false);
 		}
 		riotApiPersistentData.updateUserPersistantInformationOnHDD(newUser);
@@ -146,6 +147,8 @@ public class RiotApiNotification implements Runnable {
 							api.sendPrivateMessage(messageToBotEvent.getInvokerId(), "Could not add user because API Key expired");
 						} catch (ParseException e) {
 							api.sendPrivateMessage(messageToBotEvent.getInvokerId(), "Internal Error - Should not happen");
+						} catch (Exception e) {
+							System.out.println(e);
 						}
 					} else if (message.toLowerCase().startsWith("remove")) {
 						if (splittStringAndRemoveNickName(message)) {
@@ -230,7 +233,7 @@ public class RiotApiNotification implements Runnable {
 		while (threadRunningFlag) {
 			for (RiotApiUser user : userList) {
 				try {
-					long newGameId = riotInterface.getLastGameIdByEncryptedAccId(user.getEncryptedAccountId(), apiKey);
+					String newGameId = riotInterface.getLastGameIdByEncryptedAccId(user.getEncryptedAccountId(),user.getPlayerUuid(), apiKey);
 					if (newGameId != user.getLastGameId()) {
 						String message = "";
 
