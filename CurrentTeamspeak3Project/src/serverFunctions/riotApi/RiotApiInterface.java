@@ -43,7 +43,6 @@ public class RiotApiInterface {
 	public WinKdaMostDamageHolder getWinAndKdaFromGameId(String gameId, String ApiKey, String nickName, String playerUuid) throws IOException, ParseException {		
 		URL url = new URL("https://europe.api.riotgames.com/lol/match/v5/matches/" + gameId + "?api_key=" + ApiKey);
 		JSONObject match = getJSONFromUrl(url); 
-		System.out.println("Match: " + match);
 		JSONArray participants =(JSONArray) ((JSONObject) match.get("info")).get("participants");
 		
 		double kda = -1;
@@ -86,12 +85,10 @@ public class RiotApiInterface {
 	public String getlastMatchIdFromJsonArray(URL url) throws IOException, ParseException {
 		HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
 		conn.setRequestMethod("GET");
-		System.out.println("url " + url);
 		// Input-Stream from HTTP-Request
 		InputStreamReader in = new InputStreamReader(conn.getInputStream());
 		JSONParser parser = new JSONParser();
 		JSONArray resultingJSONArray = (JSONArray) parser.parse(in);
-		System.out.println("resultung json array " + resultingJSONArray);
 		return (String) resultingJSONArray.get(0);
 	}
 	

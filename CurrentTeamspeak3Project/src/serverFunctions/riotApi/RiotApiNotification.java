@@ -233,19 +233,13 @@ public class RiotApiNotification implements Runnable {
 		while (threadRunningFlag) {
 			for (RiotApiUser user : userList) {
 				try {
-					System.out.println("now getting last game id");
 					String newGameId = riotInterface.getLastGameIdByEncryptedAccId(user.getEncryptedAccountId(),user.getPlayerUuid(), apiKey);
-					System.out.println("last game id " + newGameId);
-					System.out.println("!!!" + user.getLastGameId());
-					System.out.println("!!!" + newGameId);
 					if (!newGameId.equals(user.getLastGameId())) {
 						String message = "";
 
 						user.setLastGameId(newGameId);
 						WinKdaMostDamageHolder winKdaMostDamageHolder = riotInterface.getWinAndKdaFromGameId(user.getLastGameId(), apiKey, user.getCaseCorrectNickName(),user.getPlayerUuid());
-						System.out.println(winKdaMostDamageHolder + "wind and kda holder data ");
 						double averageKda = riotApiPersistentData.updateAverageKdaAndGamesPlayedOnHDD(user, winKdaMostDamageHolder);
-						System.out.println("done updaze on hdd");
 						String averageKdaVisual = String.format("%.2f", averageKda);
 
 						if (winKdaMostDamageHolder.isWin()) {
@@ -275,7 +269,7 @@ public class RiotApiNotification implements Runnable {
 			try {
 				// check all 60 sec - sleep time - approximated time for all server query
 				// requests
-				int threadSleepTime = 20000 - (userList.size() * this.timeBetweenRiotApiQueries) - (averageLatencyOfOneRiotApiCall * userList.size());
+				int threadSleepTime = 60000 - (userList.size() * this.timeBetweenRiotApiQueries) - (averageLatencyOfOneRiotApiCall * userList.size());
 				// preventing negative thread sleep time
 				if (threadSleepTime < 0) {
 					threadSleepTime = 0;
