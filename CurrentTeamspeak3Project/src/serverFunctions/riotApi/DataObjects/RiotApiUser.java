@@ -24,6 +24,7 @@ public class RiotApiUser {
 	private final String encryptedAccountIdKey = DefinedStringsRiotApiIO.riotApiJSONKeyEncryptedAccoutID.getValue();
 	private final String userFirstCreatedKey = DefinedStringsRiotApiIO.riotApiJSONKeyUserFirstCreated.getValue();
 	private final String playerUuidKey = DefinedStringsRiotApiIO.riotApiJSONKeyPlayerUuid.getValue();
+	private final String lastGameIdKey = DefinedStringsRiotApiIO.riotApiJSONKeyLastGameId.getValue();
 
 	public RiotApiUser(String encryptedAccountId, String caseCorrectNickName, String lastGameId, double averageKDA, long numberOfGamesPlayed, boolean isPartOfRepeatedApiCheck, long userFirstCreated, String playerUuid) {
 		this.encryptedAccountId = encryptedAccountId;
@@ -88,6 +89,8 @@ public class RiotApiUser {
 		object.put(this.repeatetCheckKey, this.isPartOfRepeatedApiCheck);
 		object.put(this.encryptedAccountIdKey, this.encryptedAccountId);
 		object.put(this.userFirstCreatedKey, this.userFirstCreated);
+		object.put(this.playerUuidKey, this.playerUuid);
+		object.put(this.lastGameIdKey, this.lastGameId);
 		return object;		
 	}
 }

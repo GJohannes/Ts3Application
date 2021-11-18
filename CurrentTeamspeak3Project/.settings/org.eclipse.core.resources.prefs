@@ -1,0 +1,4 @@
+eclipse.preferences.version=1
+encoding//src/miscellaneous/AppMain.java=UTF-8
+encoding//src/serverFunctions/webServer/StartWebServer.java=UTF-8
+encoding//src/serverFunctions/webServer/servlets/privateChatWindow/UpdatePrivateChatBoxesServlet.java=UTF-8

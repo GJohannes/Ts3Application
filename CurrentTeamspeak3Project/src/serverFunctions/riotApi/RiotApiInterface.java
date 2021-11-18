@@ -40,59 +40,34 @@ public class RiotApiInterface {
 	/*
 	 * returns true if last game was won; returns false if last game was lost
 	 */
-	public WinKdaMostDamageHolder getWinAndKdaFromGameId(String gameId, String ApiKey, String nickName) throws IOException, ParseException {		
-		URL url = new URL("https://europe.api.riotgames.com/lol/match/v4/matches/" + gameId + "?api_key=" + ApiKey);
+	public WinKdaMostDamageHolder getWinAndKdaFromGameId(String gameId, String ApiKey, String nickName, String playerUuid) throws IOException, ParseException {		
+		URL url = new URL("https://europe.api.riotgames.com/lol/match/v5/matches/" + gameId + "?api_key=" + ApiKey);
 		JSONObject match = getJSONFromUrl(url); 
-		JSONArray participantIdentities = (JSONArray) match.get("participantIdentities");
-		long participantId = -1;
+		System.out.println("Match: " + match);
+		JSONArray participants =(JSONArray) ((JSONObject) match.get("info")).get("participants");
+		
 		double kda = -1;
 		boolean win = false;
 		
 		WinKdaMostDamageHolder winAndKdaHolder = new WinKdaMostDamageHolder(win, kda);
 		
-		//get each player that participated in the game until match is found for given nickname
-		for(int i = 0; i < participantIdentities.size(); i++) {
-			JSONObject player = (JSONObject)((JSONObject)participantIdentities.get(i)).get("player");
-			if(player.get("summonerName").toString().equalsIgnoreCase(nickName)) {
-				participantId = (long) ((JSONObject)participantIdentities.get(i)).get("participantId");
-			}
-		}
-		
-		if(participantId == -1) {
-			//defensive programmed should never be executed because a the summoner has to be found  
-			return winAndKdaHolder;
-		}
-		
-		JSONArray participants = (JSONArray) match.get("participants");
-		long mostTotalDamageDealtFromPlayer = 0;
-		long playerIdOfMostDamageDealt = -1;
-		
-		for(int i = 0; i < participants.size(); i++) {
-			JSONObject oneParticipant = (JSONObject) participants.get(i);
-			
-			//make sure that 
-			if(mostTotalDamageDealtFromPlayer < (long)((JSONObject) oneParticipant.get("stats")).get("totalDamageDealtToChampions")) {
-				mostTotalDamageDealtFromPlayer = (long)((JSONObject) oneParticipant.get("stats")).get("totalDamageDealtToChampions");
-				playerIdOfMostDamageDealt = (long)((JSONObject) oneParticipant.get("stats")).get("participantId");
-			}
-			
-			if(((long)(oneParticipant.get("participantId"))) == participantId){
-				long kills = (long) ((JSONObject)oneParticipant.get("stats")).get("kills");
-				long deaths =  (long) ((JSONObject)oneParticipant.get("stats")).get("deaths");
-				long assists = (long) ((JSONObject)oneParticipant.get("stats")).get("assists");
+		for (int i = 0; i < participants .size(); i++ ) {
+			if(((JSONObject) participants.get(i)).get("summonerName").toString().equalsIgnoreCase(nickName)) {
+				JSONObject relevantParticipant = (JSONObject) participants.get(i);
+				
+				long kills = (long) relevantParticipant.get("kills");
+				long deaths =  (long) relevantParticipant.get("deaths");
+				long assists = (long) relevantParticipant.get("assists");
 				
 				if(deaths == 0) {
 					deaths = 1; // to prevent math error while calculating kda
 				}
 				kda = (double) (kills + assists) / deaths;
-				win = (boolean) ((JSONObject)oneParticipant.get("stats")).get("win");
+				win = (boolean) relevantParticipant.get("win");
 				winAndKdaHolder = new WinKdaMostDamageHolder(win, kda);
 			}
 		}
 		
-		if(participantId == playerIdOfMostDamageDealt) {
-			winAndKdaHolder.setHighestDamageDealer(true);
-		}
 		return winAndKdaHolder;
 	}
 	
@@ -111,12 +86,12 @@ public class RiotApiInterface {
 	public String getlastMatchIdFromJsonArray(URL url) throws IOException, ParseException {
 		HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
 		conn.setRequestMethod("GET");
-		
+		System.out.println("url " + url);
 		// Input-Stream from HTTP-Request
 		InputStreamReader in = new InputStreamReader(conn.getInputStream());
 		JSONParser parser = new JSONParser();
 		JSONArray resultingJSONArray = (JSONArray) parser.parse(in);
-		
+		System.out.println("resultung json array " + resultingJSONArray);
 		return (String) resultingJSONArray.get(0);
 	}
 	
